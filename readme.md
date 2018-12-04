@@ -63,4 +63,13 @@ PaymantCovenant:
 - Front is React
 - Front back ASP.NET Core
 - Database?
-- 
+- docx, doc, pdf parsing libs?
+
+# Solutions
+- Will store native document to allow download and reparce original. So not client side (fat client) parsing
+- Store document text in database or as file?
+
+# Todo
+- sketch dummy data and API and interfaces on MVC side to allow parallel start
+- sketch dummy react view (read data stored in json file) to show document random highligh and to press on yellow to get dashboard item (all in raw text-json blobs, no real sructure)
+- Update React to latest?
