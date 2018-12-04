@@ -10,6 +10,10 @@ Should work in `Visual Studio 2017.8.9` and in `Visual Studio Code 1.29.1`.
 ## On Windows 10
 - https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.500-windows-x64-installer 
 
+#Team
+
+https://web.telegram.org/#/im?p=g283474501
+
 # Domain
 
 [Conventant](https://ru.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B2%D0%B5%D0%BD%D0%B0%D0%BD%D1%82_(%D1%8E%D1%80%D0%B8%D1%81%D0%BF%D1%80%D1%83%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D1%8F)
