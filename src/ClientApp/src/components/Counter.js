@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { increment } from '../state/actions';
+import { withRouter } from 'react-router-dom';
 
-export class Counter extends Component {
-  displayName = Counter.name
-
-  constructor(props) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
-
-  incrementCounter() {
-    this.setState({
-      currentCount: this.state.currentCount + 1
-    });
-  }
+class Counter extends Component {
+  displayName = Counter.name;
 
   render() {
     return (
@@ -22,10 +13,16 @@ export class Counter extends Component {
 
         <p>This is a simple example of a React component.</p>
 
-        <p>Current count: <strong>{this.state.currentCount}</strong></p>
+        <p>Current count: <strong>{this.props.counter.counter}</strong></p>
 
-        <button onClick={this.incrementCounter}>Increment</button>
+        <button onClick={this.props.increment}>Increment</button>
       </div>
     );
   }
 }
+
+export default withRouter(connect(
+    store => ({ counter: store.counter }),
+    { increment }
+)(Counter));
+
