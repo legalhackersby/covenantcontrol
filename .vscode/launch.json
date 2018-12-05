@@ -41,6 +41,14 @@
             "type": "coreclr",
             "request": "attach",
             "processId": "${command:pickProcess}"
-        }
+        },
+        {
+            "name": "Launch localhost (Firefox)",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": true,
+            "url": "https://localhost:5001",
+            "webRoot": "${workspaceFolder}/src/ClientApp/"
+        }        
     ,]
 }
