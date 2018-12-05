@@ -1,6 +1,6 @@
 namespace src.Service
 {
-    public interface IParceToIndexes
+    public interface IUploadToDatabaseAndFileSystem
     {
          
     }

@@ -11,14 +11,17 @@
 
 
 
-# Front
+## Front
 - [React Dev tools](https://fb.me/react-devtools)
   
-# All On Windows 10 
-- [node-v10.14.1](https://nodejs.org/dist/v10.14.1/node-v10.14.1-x64.msi)
-- [.NET Core SDK 2.1.500 ](https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.500-windows-x64-installer) for ASP.NET Core
+## All On Windows 10 
+- Client build on server [Node 10.14.1](https://nodejs.org/dist/v10.14.1/node-v10.14.1-x64.msi)
+- Server runtime [.NET Core SDK 2.1.500 ](https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.500-windows-x64-installer) for ASP.NET Core
+- Database [MongoDB Community Edition 4.0.4](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
+- Converter and extractor [Libre Office 6.1.3](https://www.libreoffice.org/download/download/)
 
-
+## All on Ubuntu
+- You already very cool and can resolve all on your own.
 
 # Team
 
