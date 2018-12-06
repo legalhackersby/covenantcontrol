@@ -39,11 +39,11 @@ TODO: we will be given with real covenantas
 
 - User uploads document
 - Document is parsed
-- Positions of found
-- Document with highlightet covenants is shown
-- User clicks on covenat
-- Covenant is added to board
-- Covenant may be acted upon
+- Positions of covenants are found
+- Document with highlighted covenants are  shown
+- User clicks on covenant
+- Covenant is added to task board
+- Covenant may be acted upon (e.g. set notification)
 
 ## Example
 
@@ -63,6 +63,7 @@ PaymantCovenant:
 - position is `{start char index, end char index, type of data index}`
 - only found can be added; next allow manual highlight
 - show in dashboard; next:allow attach action to dashboard item
+- text only view; next: near native view;
 
 
 # Solutions
