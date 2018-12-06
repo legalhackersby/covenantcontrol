@@ -3,9 +3,9 @@
 
 # Build
 
-- Works in `Visual Studio Code 1.29.1` with Fifefox, Omnisharp plugins.
+- Works in `Visual Studio Code 1.29.1` with Firefox, Omnisharp, Editorconfi plugins.
 - `Visual Studio 2017.8.9`?
-- WebStorm?
+- Jetbrains Raider/WebStorm?
 
 # SDK and runtime
 
@@ -15,6 +15,7 @@
 - [React Dev tools](https://fb.me/react-devtools)
   
 ## All On Windows 10 
+- If new to git than [Github for Desktop](https://desktop.github.com/)
 - Client build on server [Node 10.14.1](https://nodejs.org/dist/v10.14.1/node-v10.14.1-x64.msi)
 - Server runtime [.NET Core SDK 2.1.500 ](https://www.microsoft.com/net/download/thank-you/dotnet-sdk-2.1.500-windows-x64-installer) for ASP.NET Core
 - Database [MongoDB Community Edition 4.0.4](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/)
