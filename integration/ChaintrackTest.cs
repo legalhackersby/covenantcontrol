@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,7 +10,7 @@ namespace integration
         [Fact]
         public async Task Ping()
         {
-          var local = "http://localhost:5000/";
+          var local = "http://localhost:56248/";
           var api = "api/health/ping";
           var httpClient = new HttpClient();
           var result = await httpClient.GetStringAsync(local + api);
@@ -20,7 +20,7 @@ namespace integration
         [Fact]
         public async Task File()
         {
-          var local = "http://localhost:5000/";
+          var local = "http://localhost:56248/";
           var api = "api/health/writereadfile";
           var httpClient = new HttpClient();
           var result = await httpClient.GetStringAsync(local + api);
