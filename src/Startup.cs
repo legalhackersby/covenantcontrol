@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using src.Data;
+using src.Service;
 
 namespace src
 {
@@ -21,6 +23,19 @@ namespace src
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var mongoUrl = Configuration.GetValue<string>("MongoUrl");
+            var mongoDatabase = Configuration.GetValue<string>("MongoDatabase");
+
+            services.AddSingleton(_ => new MongoClient(new MongoUrl(mongoUrl)));
+            services.AddScoped(x =>
+            {
+                var client = x.GetRequiredService<MongoClient>();
+                IMongoDatabase database = client.GetDatabase(mongoDatabase);
+                return database;
+            });
+            services.AddTransient<IDocumentProvider, DocumentProvider>();
+            services.AddTransient<IDocumentService, DocumentService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

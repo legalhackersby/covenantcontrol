@@ -1,6 +1,6 @@
-namespace src.Service
+﻿namespace src.Service
 {
-    public class IReadAllTasks
+    public interface IReadAllTasks
     {
         
     }
