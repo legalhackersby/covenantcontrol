@@ -12,7 +12,7 @@ namespace src.Service.Upload
 
         // TODO: uses env variables for program, check of uno path, 
         private const string DefaultPathToLiberOffice = @"C:/Program Files/LibreOffice/program/python.exe";
-        private const string DefaultPathToUnoconv = "unoconv/unoconv";
+        private const string DefaultPathToUnoconv = "Converter/unoconv/unoconv";
 
         /// <summary>
         /// Gets or sets the custom unoconv path.
@@ -42,7 +42,7 @@ namespace src.Service.Upload
         // "C:/Program Files/LibreOffice/program/python.exe" src/Converter/unoconv/unoconv --verbose --doctype=document --format=text  --output="data/.data/2_аренда_хакатон.doc.txt"  "data/2_аренда_хакатон.doc"
         // --verbose --doctype=document --format=text  --output="data/.data/2_аренда_хакатон.doc.txt"  "data/2_аренда_хакатон.doc"
 
-        public async Task<string> Convert(string inputFilePath)
+        public async Task<string> ConvertAsync(string inputFilePath)
         {
             if (!File.Exists(inputFilePath))
             {
@@ -86,10 +86,11 @@ namespace src.Service.Upload
         {
             return Task.Run(() =>
             {
-                DataReceivedEventHandler errorRecievedEventHandler = (sender, args) => Debug.WriteLine(args.Data);
-                DataReceivedEventHandler outputStringBuilderHandler = (sender, args) => Debug.WriteLine(args.Data);
+                DataReceivedEventHandler errorRecievedEventHandler = 
+                (sender, args) => Console.WriteLine(args.Data);
+                DataReceivedEventHandler outputStringBuilderHandler = (sender, args) => Console.WriteLine(args.Data);
 
-                process.Exited += (s, ea) => Debug.WriteLine(process);
+                process.Exited += (s, ea) => Console.WriteLine(process);
 
                 if (process.Start())
                 {

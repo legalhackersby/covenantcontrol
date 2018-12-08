@@ -11,17 +11,19 @@ namespace src.Service
     {
         public IMongoDatabase mongoDatabase;
         private IStorage storage;
+        private IConvertToTxt converter;
 
-        public UploadDocumentService(IMongoDatabase mongoDatabase, IStorage storage)
+        public UploadDocumentService(IMongoDatabase mongoDatabase, IStorage storage, IConvertToTxt converter)
         {
             this.mongoDatabase = mongoDatabase;
             this.storage = storage;
+            this.converter = converter;
         }
 
         public async Task<string> CreateDocument(UploadFileRequest file)
         {
             var id = ObjectId.GenerateNewId();
-            await storage.SaveAsync(id.ToString(), file.Content, file.Name);
+            var path = await storage.SaveAsync(id.ToString(), file.Content, file.Name);
             var mongoDocument = new DocumentMetadata
             {
                 Id = ObjectId.GenerateNewId(),
@@ -29,6 +31,8 @@ namespace src.Service
                 FileLength = file.Length,
                 FileName = file.Name,
             };
+
+            mongoDocument.FileNameTxt = await converter.ConvertAsync(path);
 
             // autocreates collection locally
             var collection = mongoDatabase.GetCollection<DocumentMetadata>("documents");
