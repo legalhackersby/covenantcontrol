@@ -10,8 +10,6 @@ namespace src.Controllers
     [Route("api/[controller]")]
     public class DocumentController : Controller
     {
-
-
         [HttpGet("{documentId}")]
         public async Task<string> Get(string documentId, [FromServices]IDocumentService reader)
         {

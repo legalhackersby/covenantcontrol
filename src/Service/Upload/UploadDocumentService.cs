@@ -26,7 +26,7 @@ namespace src.Service
             var path = await storage.SaveAsync(id.ToString(), file.Content, file.Name);
             var mongoDocument = new DocumentMetadata
             {
-                Id = ObjectId.GenerateNewId(),
+                Id = id,
                 FileContentType = file.ContentType,
                 FileLength = file.Length,
                 FileName = file.Name,
@@ -35,7 +35,7 @@ namespace src.Service
             mongoDocument.FileNameTxt = await converter.ConvertAsync(path);
 
             // autocreates collection locally
-            var collection = mongoDatabase.GetCollection<DocumentMetadata>(nameof(DocumentMetadata));
+            var collection = mongoDatabase.GetCollection<DocumentMetadata>("documents");
 
             await collection.InsertOneAsync(mongoDocument);
 
