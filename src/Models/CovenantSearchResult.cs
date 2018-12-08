@@ -36,13 +36,13 @@ namespace src.Models
         /// </value>
         public string CovenantType { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CovenantSearchResult) obj);
-        }
+        /// <summary>
+        /// Gets or sets the covenant mathes key word.
+        /// </summary>
+        /// <value>
+        /// The covenant mathes key word.
+        /// </value>
+        public string CovenantMathesKeyWord { get; set; }
 
         public override int GetHashCode()
         {
@@ -55,7 +55,17 @@ namespace src.Models
 
         public bool Equals(CovenantSearchResult other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return StartIndex == other.StartIndex && EndIndex == other.EndIndex && string.Equals(CovenantValue, other.CovenantValue) && string.Equals(CovenantType, other.CovenantType);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CovenantSearchResult) obj);
         }
     }
 }

@@ -32,10 +32,10 @@ namespace src.Service.Document
                     {
                         foreach (var covenantKeyWord in covenant.KeyWords.OrderByDescending(_ => _.Length))
                         {
-                            var covenantIndex = input.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
-                            if (covenantIndex > -1)
+                            var covenantStartIndex = input.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
+                            if (covenantStartIndex > -1)
                             {
-                                var covenantSearchResult = GetCovenantResult(input, covenantIndex, covenantKeyWord, covenant.CovenantName);
+                                var covenantSearchResult = GetCovenantResult(input, covenantStartIndex, covenant.CovenantName, covenantKeyWord);
                                 if (covenantSearchResult != null && !covenantSearchResults.Contains(covenantSearchResult))
                                 {
                                     covenantSearchResults.Add(covenantSearchResult);
@@ -54,28 +54,45 @@ namespace src.Service.Document
             return covenantSearchResults;
         }
 
-        private CovenantSearchResult GetCovenantResult(string input, int covenantIndex, string covenantKeyWord, string covenantName)
+        private CovenantSearchResult GetCovenantResult(string input, int covenantStartIndex, string covenantName, string covenantKeyWord)
         {
             CovenantSearchResult result = null;
-            if (covenantIndex > -1)
+            if (covenantStartIndex > -1)
             {
-                var newInput = input.Substring(covenantIndex, input.Length - covenantIndex);
+                covenantStartIndex = GetAdjustedStartCovenantIndex(input, covenantStartIndex);
+                var newInput = input.Substring(covenantStartIndex, input.Length - covenantStartIndex);
                 var match = GetCovenantMatchResult(newInput);
                 if (match != null)
                 {
-                    var covenantEndIndex = covenantIndex + match.Index + match.Length;
+                    var covenantEndIndex = covenantStartIndex + match.Index + match.Length;
 
                     result = new CovenantSearchResult
                     {
-                        StartIndex = covenantIndex,
+                        StartIndex = covenantStartIndex,
                         EndIndex = covenantEndIndex,
                         CovenantValue = match.Value,
-                        CovenantType = covenantName
+                        CovenantType = covenantName,
+                        CovenantMathesKeyWord = covenantKeyWord
                     };
                 }
             }
 
             return result;
+        }
+
+        private int GetAdjustedStartCovenantIndex(string input, int covenantIndex)
+        {
+            for (int i = covenantIndex; i > 0; i--)
+            {
+                var dotSymbol = input[i];
+                if (dotSymbol == '.')
+                {
+                    covenantIndex = i+1;
+                    break;
+                }
+            }
+
+            return covenantIndex;
         }
 
         private Match GetCovenantMatchResult(string input)
