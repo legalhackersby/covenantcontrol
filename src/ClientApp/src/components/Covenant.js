@@ -19,10 +19,10 @@ export class Covenant extends Component {
                   </Row>
                   <Row>
                       <Col sm={6}>
-                          <Button className={'btn-secondary'}>Удалить</Button>
+                          <Button className={'btn-secondary'} onClick={this.props.skip}>Пропустить</Button>
                       </Col>
                       <Col sm={6}>
-                          <Button className={'btn-primary'}>Добавить</Button>
+                          <Button className={'btn-primary'} onClick={this.props.add}>Добавить</Button>
                       </Col>
                   </Row>
               </Panel.Body>
