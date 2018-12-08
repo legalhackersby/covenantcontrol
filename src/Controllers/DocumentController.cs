@@ -3,19 +3,19 @@ using System.IO;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Http;
-
+using src.Service;
 
 namespace src.Controllers
 {
     [Route("api/[controller]")]
     public class DocumentController : Controller
     {
-
-
         [HttpGet("{documentId}")]
-        public async Task<string> Get(Guid documentId)
+        public async Task<string> Get(string documentId, [FromServices]IDocumentService reader)
         {
-            return documentBody.Replace(Environment.NewLine, "<br>" ).Replace("\n", "<br>");
+            if (string.IsNullOrEmpty(documentId)) throw new ArgumentException(nameof(documentId));
+            return (await reader.ReadDocument(documentId) ??
+             documentBody).Replace(Environment.NewLine, "<br>" ).Replace("\n", "<br>").Replace("\r", "<br>");
         }
 
         private string documentBody = @"
