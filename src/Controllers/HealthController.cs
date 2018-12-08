@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using src.Service.Upload;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace src.Controllers
@@ -7,24 +9,14 @@ namespace src.Controllers
     [Route("api/[controller]")]
     public class HealthController : Controller
     {
-        private const string StorageDirectory = ".storage";
-
         [HttpGet("[action]")]
         public string Ping() => "Pong";
 
         [HttpGet("[action]")]
-        public async Task<string> WriteReadFile()
+        public async Task<string> WriteReadFile([FromServices]IStorage storage)
         {
-            if (!Directory.Exists(StorageDirectory))
-            {
-                Directory.CreateDirectory(StorageDirectory);
-            }
-
-            string filePath = Path.Combine(StorageDirectory, "Ping.txt");
-
-            await System.IO.File.WriteAllTextAsync(filePath, "Pong");
-
-            return await System.IO.File.ReadAllTextAsync(filePath);
+            var path = await storage.SaveAsync(".tmp", Encoding.UTF8.GetBytes("Pong"), "Ping.txt");
+            return await storage.ReadAsync(".tmp", "Ping.txt");
         }
     }
 }

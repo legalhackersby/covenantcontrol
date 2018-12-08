@@ -4,27 +4,26 @@ import { Col, Grid, Panel, Row, Form } from 'react-bootstrap';
 import './Home.css'
 import { TaskList } from './TaskList';
 
+import { Config } from '../Config';
+
 export class Home extends Component {
     displayName = Home.name
 
     handleSelect(event) {
-        
-        console.log(event);
-        
-        debugger;
+
+        let file = event.target.files[0];
 
         const data = new FormData()
-        data.append('file', this.state.selectedFile, this.state.selectedFile.name)
-            
-        axios.post("http://localhost:56248/api/upload", data, {
+        data.append('file', file)
+
+        axios
+            .post(Config.apiHost + "/api/upload", data, {
                 onUploadProgress: ProgressEvent => {
-                    this.setState({
-                        loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
-                    })
+                    console.log(ProgressEvent);
                 },
             })
-            .then(res => {
-                console.log(res.statusText)
+            .then(response => {
+                console.log(response);
             })
     }
 

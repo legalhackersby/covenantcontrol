@@ -7,9 +7,6 @@ namespace src.Data
     {
         public ObjectId Id { get; set; }
 
-        [BsonElement("FileContent")]
-        public byte[] FileContent { get; set; }
-
         [BsonElement("FileContentType")]
         public string FileContentType { get; set; }
 
