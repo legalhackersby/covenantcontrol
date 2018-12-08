@@ -2,14 +2,16 @@
 
 namespace src.Models.Covenants
 {
-    public class KapitalniyRemontCovenant : BaseCovenant
+    public class Remont : BaseCovenant
     {
-        public KapitalniyRemontCovenant()
+        public Remont()
         {
-            CovenantName = CovenantType.KapitalniyRemont;
+            CovenantName = CovenantType.Remont;
 
             KeyWords = new List<string>
             {
+                "Арендатор обязан не менее одного раза",
+                "текущий ремонт",
                 "Арендодатель обязан обеспечивать надлежащее функционирование систем жизнеобеспечения и инженерных систем Помещения",
                 "обеспечивать надлежащее функционирование систем жизнеобеспечения и инженерных систем Помещения",
                 "капитальный ремонт"

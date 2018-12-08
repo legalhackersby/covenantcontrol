@@ -8,9 +8,9 @@
         public const string SrokPredostavleniyaSchetov = "Срок предоставления счетов";
         public const string PravoSubarendy = "Право предоставления в субаренду";
         public const string PravoIzmeneniyaArendy = "Право изменения объекта аренды";
-        public const string TekushiyRemont = "Обязанность осуществления текущего ремонта";
-        public const string KapitalniyRemont = "Обязанность осуществления капитального ремонта";
+        public const string Remont = "Распределение обязанностей по текущему или капитальному ремонту";
         public const string VozmeshenieEnhancement = "Возмещение неотделимых улучшений";
+        public const string PoluchenieSoglasovaniya = "Получение согласования";
         public const string General = "Общий ковенант";
     }
 }

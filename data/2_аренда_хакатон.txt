@@ -1,25 +1,4 @@
-﻿using src.Service.Document;
-using Xunit;
-
-namespace tests
-{
-    public class RegexTests
-    {
-        private ITextParserService textParserService;
-
-        public RegexTests()
-        {
-            textParserService = new TextParserService();
-        }
-
-        [Fact]
-        public void GetCovenantResults()
-        {
-            var result = textParserService.GetCovenantResults(text);
-            Assert.True(result.Count == 16);
-        }
-
-        private string text = @"ДОГОВОР АРЕНДЫ 
+﻿ДОГОВОР АРЕНДЫ 
  нежилого помещения 
 № 234
 
@@ -128,6 +107,3 @@ namespace tests
 
 
 ___________________			                                           ________________ 
-";
-    }
-}
