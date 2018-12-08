@@ -1,7 +1,9 @@
-﻿namespace src.Service.Document
+﻿using src.Models;
+
+namespace src.Service.Document
 {
     public interface ITextParserService
     {
-        string FindTextByInput(string input);
+        CovenantSearchResult GetCovenantResult(string text, string covenant);
     }
 }
