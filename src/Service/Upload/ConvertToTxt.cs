@@ -22,9 +22,6 @@ namespace src.Service.Upload
         /// </value>
         public string CustomUnoconvPath { get; set; }
 
-        public string InputFilePath { get; set; }
-        public string OutputFilePath { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ConvertToTxt"/> class.
         /// </summary>
@@ -37,30 +34,27 @@ namespace src.Service.Upload
         /// Initializes a new instance of the <see cref="ConvertToTxt"/> class.
         /// </summary>
         /// <param name="rootFolder">The root folder.</param>
-        public ConvertToTxt(string rootFolder, string inputFileDirectory, string outputFileDirectory)
+        public ConvertToTxt(string rootFolder)
         {
             this.CustomUnoconvPath = rootFolder + DefaultPathToUnoconv;
-            this.InputFilePath = inputFileDirectory;
-            this.OutputFilePath = outputFileDirectory;
         }
 
         // "C:/Program Files/LibreOffice/program/python.exe" src/Converter/unoconv/unoconv --verbose --doctype=document --format=text  --output="data/.data/2_аренда_хакатон.doc.txt"  "data/2_аренда_хакатон.doc"
         // --verbose --doctype=document --format=text  --output="data/.data/2_аренда_хакатон.doc.txt"  "data/2_аренда_хакатон.doc"
 
-        public async Task<string> Convert(string inputFilePath, string outputDirectoryPath)
+        public async Task<string> Convert(string inputFilePath)
         {
             if (!File.Exists(inputFilePath))
             {
                 throw new FileNotFoundException(inputFilePath);
             }
 
-            string arguments = string.Format("{0} {1} {2} {3} {4}{5} {6}",
+            string arguments = string.Format("{0} {1} {2} {3} {4}{5}",
                 CustomUnoconvPath ?? DefaultPathToUnoconv,
                 ConverterArgs.VerboseParamArg,
                 ConverterArgs.DotTypeDocumentParamArg,
                 ConverterArgs.FormatTextParamArg,
                 ConverterArgs.OutputParamArg,
-                outputDirectoryPath,
                 inputFilePath);
 
             var startInfo = new ProcessStartInfo
