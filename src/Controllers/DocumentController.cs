@@ -18,7 +18,7 @@ namespace src.Controllers
         [HttpGet("{documentId}/covenants")]
         public async Task<string> GetCovenants(string documentId, [FromServices]IDocumentService reader)
         {
-
+                return await Task.FromResult("null");
         }
 
         [HttpGet("{documentId}")]
