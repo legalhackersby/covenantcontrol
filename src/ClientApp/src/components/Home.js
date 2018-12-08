@@ -37,13 +37,9 @@ export class Home extends Component {
                 },
             })
             .then(response => {
-                console.log(response);
+                axios.get(`${Config.apiHost}/api/document/${response.data}`)
+                    .then((res => this.setState({ ...this.state, fileContent: res.data })));
             })
-    }
-
-    componentWillMount() {
-        axios.get(`${Config.apiHost}/api/document/1`)
-             .then(res => this.setState({ ...this.state, fileContent: res.data }));
     }
 
      render() {
@@ -58,7 +54,7 @@ export class Home extends Component {
                                         <Form id="uploadForm" method="POST" action="http://localhost:56248/api/Upload">
                                             <div className="file-upload-container">
                                                 <label className="file-upload btn btn-primary">
-                                                    Upload <input type="file" onChange={this.handleSelect} />
+                                                    Upload <input type="file" onChange={this.handleSelect.bind(this)} />
                                                 </label>
                                             </div>
                                         </Form>
