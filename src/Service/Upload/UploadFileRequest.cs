@@ -1,6 +1,6 @@
-﻿namespace src.Models
+﻿namespace src.Data
 {
-    public class File
+    public class UploadFileRequest
     {
         public byte[] Content { get; set; }
         public string ContentType { get; set; }

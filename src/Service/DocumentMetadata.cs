@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace src.Data
 {
-    public class MongoDocument
+    public class DocumentMetadata
     {
         public ObjectId Id { get; set; }
 

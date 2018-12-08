@@ -34,8 +34,7 @@ namespace src
                 IMongoDatabase database = client.GetDatabase(mongoDatabase);
                 return database;
             });
-            services.AddTransient<IDocumentProvider, DocumentProvider>();
-            services.AddTransient<IDocumentService, DocumentService>();
+            services.AddTransient<IUploadDocumentService, UploadDocumentService>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
