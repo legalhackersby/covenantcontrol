@@ -4,6 +4,8 @@ import { Col, Grid, Panel, Row, Form } from 'react-bootstrap';
 import './Home.css'
 import { CovenantList } from './CovenantList';
 
+import { Config } from '../Config';
+
 export class Home extends Component {
     displayName = Home.name
 
@@ -19,11 +21,12 @@ export class Home extends Component {
         const data = new FormData()
         data.append('file', file)
 
-        axios.post("http://localhost:56248/api/upload", data, {
-            onUploadProgress: ProgressEvent => {
-                console.log(ProgressEvent);
-            },
-        })
+        axios
+            .post(Config.apiHost + "/api/upload", data, {
+                onUploadProgress: ProgressEvent => {
+                    console.log(ProgressEvent);
+                },
+            })
             .then(response => {
                 console.log(response);
             })
