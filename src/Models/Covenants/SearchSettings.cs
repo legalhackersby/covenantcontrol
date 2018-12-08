@@ -10,8 +10,6 @@
         /// </summary>
         public SearchSettings()
         {
-            this.KeywordsCountPerAttempt = 1;
-            this.Reverse = false;
             this.Separator = " ";
         }
 

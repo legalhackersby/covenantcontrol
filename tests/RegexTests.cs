@@ -19,7 +19,7 @@ namespace tests
         /// </summary>
         public RegexTests()
         {
-            this.textParserService = new TextParserService();
+            this.textParserService = new TextParserService(new ExactMatchCovenantSearchStrategy());
         }
 
         /// <summary>
@@ -29,8 +29,10 @@ namespace tests
         public void Contract1_GetCovenantResults()
         {
             var result = this.textParserService.GetCovenantResults(ContractTextHelper.Contract1);
-            Assert.True(result.Count == 16);
+            Assert.Equal(16, result.Count);
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
+            Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
+            Assert.True(result.Distinct().Count() == result.Count);
         }
 
         /// <summary>
@@ -40,8 +42,10 @@ namespace tests
         public void Contract2_GetCovenantResults()
         {
             var result = this.textParserService.GetCovenantResults(ContractTextHelper.Contract2);
-            Assert.True(result.Count == 23);
+            Assert.Equal(25, result.Count);
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
+            Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
+            Assert.True(result.Distinct().Count() == result.Count);
         }
 
         /// <summary>
@@ -51,8 +55,10 @@ namespace tests
         public void Contract3_GetCovenantResults()
         {
             var result = this.textParserService.GetCovenantResults(ContractTextHelper.Contract3);
-            Assert.True(result.Count == 15);
+            Assert.Equal(17, result.Count);
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
+            Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
+            Assert.True(result.Distinct().Count() == result.Count);
         }
     }
 }
