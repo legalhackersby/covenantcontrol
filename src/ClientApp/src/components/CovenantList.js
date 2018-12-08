@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
-import { Task } from './Task';
+import { Covenant } from './Covenant';
 
-export class TaskList extends Component {
-    displayName = TaskList.name
+export class CovenantList extends Component {
+    displayName = CovenantList.name
 
     render() {
         return (
             <Panel>
                 <Panel.Heading>
-                    Tasks
+                    Covenants
                 </Panel.Heading>
                 <Panel.Body>
-                    <Task/>
-                    <Task/>
+                    <Covenant/>
+                    <Covenant/>
                 </Panel.Body>
             </Panel>
         )

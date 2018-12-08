@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Col, Grid, Panel, Row } from 'react-bootstrap';
 import './Home.css'
-import { TaskList } from './TaskList';
+import { CovenantList } from './CovenantList';
 
 export class Home extends Component {
   displayName = Home.name
@@ -100,7 +100,7 @@ export class Home extends Component {
                     </Panel>
                 </Col>
                 <Col sm={4}>
-                    <TaskList/>
+                    <CovenantList/>
                 </Col>
             </Row>
         </Grid>
