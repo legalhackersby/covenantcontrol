@@ -30,5 +30,50 @@ label.file-upload input[type="file"] {
     background: #fff;
     cursor: inherit;
     display: block;
+}
 
+.paragraphListItem-wrapper-w2PKy0 {
+    padding: 10px 10px 10px 0;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+    background-color: hsla(0, 0%, 95%, .1);
+}
+
+.paragraphListItem-wrapper-w2PKy0:not(last-of-type) {
+    margin-bottom: 25px;
+}
+.main_class {
+    padding: 10px;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+    background-color: #ACDCF3;
+}
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+user agent stylesheet
+div {
+    display: block;
+}
+:root {
+    --darksky: #0368e0;
+    --sky: #157efb;
+    --black: #212121;
+    --color2: #acacac;
+    --color: #606060;
+    --bg: #fff;
+    --shadow: 0 1px 20px rgba(0,0,0,.06);
+    --errorColor: red;
+    --fontFamily2: Tahoma,sans-serif;
+    --fontFamily: "proxima-nova",sans-serif;
+}
+html {
+    line-height: 1.15;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
