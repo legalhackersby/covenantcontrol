@@ -20,7 +20,7 @@ namespace src.Service.Document
 
         public List<CovenantSearchResult> GetCovenantResults(string input)
         {
-            // TODO: input should be get from file such as StreamReader. FOr prototype and unit testing it is easy to use a direct plain text.
+            // TODO: input should be gotten from file such as StreamReader. For prototype and unit testing it is easy to use a direct plain text.
             var covenantSearchResults= new List<CovenantSearchResult>();
 
             try
