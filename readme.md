@@ -59,11 +59,10 @@ TODO: we will be given with real covenantas
 - Covenant is added to task board
 - Covenant may be acted upon (e.g. set notification)
 
-## Example
+## Similar solutions
 
-```yaml
-
-```
+- https://ebrevia.com/
+- https://kirasystems.com/
 
 
 # Proof of Concept

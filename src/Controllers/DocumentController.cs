@@ -15,6 +15,12 @@ namespace src.Controllers
     [Route("api/[controller]")]
     public class DocumentController : Controller
     {
+        [HttpGet("{documentId}/covenants")]
+        public async Task<string> GetCovenants(string documentId, [FromServices]IDocumentService reader)
+        {
+
+        }
+
         [HttpGet("{documentId}")]
         public async Task<string> Get(string documentId, [FromServices]IDocumentService reader)
         {
@@ -57,15 +63,15 @@ namespace src.Controllers
 
         private string dummyCovenant = @"
       
-Automating covenants.
+Automating Covenants.
 
-<mark covenantId=""5c0bc3997ee79ebea0692de7"">
-Increase world social trust captical before 2019.
+<mark covenantId=""0000000000000000000000000"">
+Increase world social trust capatical in 2019.
 </mark>
 
 Thanks!
 
-This is dummy covenant. Upload document to see real cases.
+This is dummy contract. Upload document to see real cases.
 
 ";
     }
