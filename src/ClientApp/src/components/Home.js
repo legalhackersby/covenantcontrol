@@ -9,22 +9,18 @@ export class Home extends Component {
 
     handleSelect(event) {
 
-        console.log(event);
+        let file = event.target.files[0];
 
-        debugger;
-
-        const data = new FormData();
-        data.append('file', this.state.selectedFile, this.state.selectedFile.name)
+        const data = new FormData()
+        data.append('file', file)
 
         axios.post("http://localhost:56248/api/upload", data, {
-                onUploadProgress: ProgressEvent => {
-                    this.setState({
-                        loaded: (ProgressEvent.loaded / ProgressEvent.total * 100),
-                    })
-                },
-            })
-            .then(res => {
-                console.log(res.statusText)
+            onUploadProgress: ProgressEvent => {
+                console.log(ProgressEvent);
+            },
+        })
+            .then(response => {
+                console.log(response);
             })
     }
 
