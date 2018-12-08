@@ -1,0 +1,11 @@
+.cov-date {
+    margin-left: 2px;
+    color: #0065D3;
+    font-weight: bold;
+}
+
+.task-description {
+    max-height: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

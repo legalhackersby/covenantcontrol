@@ -23,7 +23,7 @@ export class NavMenu extends Component {
                 <Glyphicon glyph='home' /> Home
               </NavItem>
             </LinkContainer>
-            <LinkContainer to={'/counter'}>
+            {/*<LinkContainer to={'/counter'}>
               <NavItem>
                 <Glyphicon glyph='education' /> Counter
               </NavItem>
@@ -32,7 +32,7 @@ export class NavMenu extends Component {
               <NavItem>
                 <Glyphicon glyph='th-list' /> Fetch data
               </NavItem>
-            </LinkContainer>
+            </LinkContainer>*/}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
