@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.SrokDogovora;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Договор действует до",
                 "договор действует по",

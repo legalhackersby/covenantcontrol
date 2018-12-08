@@ -9,7 +9,7 @@ namespace integration
         [Fact]
         public async Task GetDocument()
         {
-            var api = "api/document/5c0bc13a11a3e42fb0f53675";
+            var api = "api/document/5c0bda1642b7b2ea94799b3b";
             var httpClient = new HttpClient();
             var result = await httpClient.GetStringAsync(Settings.Host + api);
             Assert.Contains(@"<mark className={'highlight'}>", result);

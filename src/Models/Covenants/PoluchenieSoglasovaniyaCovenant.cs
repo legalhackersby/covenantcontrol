@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.PoluchenieSoglasovaniya;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "предварительного письменного согласования арендодателя",
                 "предварительного письменного согласования с арендодателем",

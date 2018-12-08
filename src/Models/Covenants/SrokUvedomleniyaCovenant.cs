@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.SrokUvedomleniya;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор обязан сообщить в письменном виде Арендодателю",
                 "Арендатор обязан уведомить Арендодателя",

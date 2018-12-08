@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using src.Service;
+using src.Service.Document;
 using src.Service.Upload;
 using System.Security.Authentication;
 
@@ -45,6 +46,8 @@ namespace src
             services.AddTransient<IStorage, Storage>();
             services.AddSingleton<IConvertToTxt>(new ConvertToTxt());
             services.AddTransient<IDocumentService, DocumentService>();
+            services.AddTransient<ITextParserService, TextParserService>();
+            
             
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

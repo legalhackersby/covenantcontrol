@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.SrokPredostavleniyaSchetov;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Возмещение стоимости  коммунальных услуг ",
                 "счет-фактура",

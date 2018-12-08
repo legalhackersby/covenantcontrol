@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.Remont;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор обязан не менее одного раза",
                 "текущий ремонт",

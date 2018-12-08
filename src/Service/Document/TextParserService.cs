@@ -3,11 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using src.Models;
+using src.Models.Covenants;
 
 namespace src.Service.Document
 {
+    /// <summary>
+    /// The text parser service.
+    /// </summary>
+    /// <seealso cref="src.Service.Document.ITextParserService" />
     public class TextParserService : ITextParserService
     {
+        /// <summary>
+        /// Gets or sets the covenants.
+        /// </summary>
+        /// <value>
+        /// The covenants.
+        /// </value>
+        public List<BaseCovenant> Covenants { get; set; }
+
+        /// <summary>
+        /// Gets or sets the search settings.
+        /// </summary>
+        /// <value>
+        /// The search settings.
+        /// </value>
+        public SearchSettings SearchSettings { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextParserService"/> class.
+        /// </summary>
+        public TextParserService()
+        {
+            this.Covenants = new List<BaseCovenant>();
+            this.SearchSettings = new SearchSettings();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextParserService"/> class.
+        /// </summary>
+        /// <param name="searchSettings">The search settings.</param>
+        public TextParserService(SearchSettings searchSettings)
+        {
+            this.Covenants = new List<BaseCovenant>();
+            this.SearchSettings = searchSettings;
+        }
+
         private List<string> DateTimeRegexFormats = new List<string>
         {
             @"(?<day>\d{2})\.(?<month>\d{2})\.(?<year>\d{4})"
@@ -18,19 +58,25 @@ namespace src.Service.Document
             @"^.*?(?=\n)"
         };
 
+        /// <summary>
+        /// Gets the covenant results.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
         public List<CovenantSearchResult> GetCovenantResults(string input)
         {
             // TODO: input should be gotten from file such as StreamReader. For prototype and unit testing it is easy to use a direct plain text.
-            var covenantSearchResults= new List<CovenantSearchResult>();
+            var covenantSearchResults = new List<CovenantSearchResult>();
+
+            this.Covenants.AddRange(CovenantHelper.GetCovenants());
 
             try
             {
                 if (!string.IsNullOrWhiteSpace(input))
                 {
-                    var covenants = CovenantHelper.GetCovenants();
-                    foreach (var covenant in covenants)
+                    foreach (var covenant in this.Covenants)
                     {
-                        foreach (var covenantKeyWord in covenant.KeyWords.OrderByDescending(_ => _.Length))
+                        foreach (var covenantKeyWord in covenant.Keywords.OrderByDescending(_ => _.Length))
                         {
                             var covenantStartIndex = input.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
                             if (covenantStartIndex > -1)
@@ -43,7 +89,11 @@ namespace src.Service.Document
                             }
                         }
                     }
-                    
+
+                    if (this.SearchSettings != null)
+                    {
+
+                    }
                 }
             }
             catch (Exception e)
@@ -60,7 +110,7 @@ namespace src.Service.Document
             if (covenantStartIndex > -1)
             {
                 covenantStartIndex = GetAdjustedStartCovenantIndex(input, covenantStartIndex);
-                var newInput = input.Substring(covenantStartIndex, input.Length - covenantStartIndex);
+                var newInput = input.Substring(covenantStartIndex, input.Length - covenantStartIndex).TrimStart();
                 var match = GetCovenantMatchResult(newInput);
                 if (match != null)
                 {
@@ -87,7 +137,7 @@ namespace src.Service.Document
                 var dotSymbol = input[i];
                 if (dotSymbol == '.')
                 {
-                    covenantIndex = i+1;
+                    covenantIndex = i + 1;
                     break;
                 }
             }

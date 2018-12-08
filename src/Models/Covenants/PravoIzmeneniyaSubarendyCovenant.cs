@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.PravoIzmeneniyaArendy;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор обязан не производить без письменного согласия Арендодателя",
                 "перепланировка",

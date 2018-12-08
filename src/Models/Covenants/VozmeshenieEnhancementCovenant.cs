@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.VozmeshenieEnhancement;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор не имеет права на возмещение стоимости неотделимых улучшений Помещений",
                 "неотделимые улучшения",
