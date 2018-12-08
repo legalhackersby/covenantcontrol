@@ -20,12 +20,13 @@ namespace src.Service
             var mongoDocument = new DocumentMetadata
             {
                 Id = ObjectId.GenerateNewId(),
-                FileContent = file.Content,
+                FileContentPath = file.Content.ToString(),
                 FileContentType = file.ContentType,
                 FileLength = file.Length,
                 FileName = file.Name,
             };
 
+            // autocollects collection
             var collection = _mongoDatabase.GetCollection<DocumentMetadata>("documents");
 
             await collection.InsertOneAsync(mongoDocument);
