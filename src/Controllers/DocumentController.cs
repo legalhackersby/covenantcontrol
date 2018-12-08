@@ -16,9 +16,9 @@ namespace src.Controllers
     public class DocumentController : Controller
     {
         [HttpGet("{documentId}/covenants")]
-        public async Task<string> GetCovenants(string documentId, [FromServices]IDocumentService reader)
+        public async Task<List<CovenantSearchResult> > GetCovenants(string documentId, [FromServices]IDocumentService reader)
         {
-                return await Task.FromResult("null");
+            return await reader.GetCovenants(documentId);
         }
 
         [HttpGet("{documentId}")]

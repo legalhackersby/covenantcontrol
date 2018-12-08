@@ -22,6 +22,16 @@ namespace src.Service
             this.storage = storage;
         }
 
+        public async Task<List<CovenantSearchResult>> GetCovenants(string documentId)
+        {
+       var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var finder2 = 
+                    await covenantsCollection
+                        .FindAsync(
+                            Builders<CovenantSearchResult>.Filter.Where(x => x.DocumentId == new ObjectId(documentId))
+                            );
+                 return finder2.ToList();           
+        }
 
         public async Task<(string, List<CovenantSearchResult>)> ReadDocument(string documentId)
         {

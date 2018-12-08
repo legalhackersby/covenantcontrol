@@ -2,16 +2,25 @@
 using System.Diagnostics;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace src.Models
 {
+    
     //NOTE: uses same object for db and calculation to speed up dev
+    [JsonObject]
     public class CovenantSearchResult : IEquatable<CovenantSearchResult>
     {
+        [JsonIgnore]
         [BsonId]
         public ObjectId Id {get;set;}
 
+        [JsonProperty]
+        [BsonIgnore]
+        public string CovenantId => Id.ToString();
+
         [BsonElement("DocumentId")]
+        [JsonIgnore]
         public ObjectId DocumentId {get;set;}       
         
         /// <summary>
@@ -20,7 +29,7 @@ namespace src.Models
         /// <value>
         /// The start covenant index.
         /// </value>
-        
+        [JsonProperty]
         [BsonElement("StartIndex")]
         public int StartIndex { get; set; }
 
@@ -30,6 +39,7 @@ namespace src.Models
         /// <value>
         /// The end covenant index.
         /// </value>
+        [JsonProperty]
         [BsonElement("EndIndex")]
         public int EndIndex { get; set; }
 
@@ -40,6 +50,7 @@ namespace src.Models
         /// The covenant value.
         /// </value>
         [BsonElement("CovenantValue")]
+        [JsonProperty]
         public string CovenantValue { get; set; }
 
         /// <summary>
@@ -49,6 +60,7 @@ namespace src.Models
         /// The type of the covenant.
         /// </value>
         [BsonElement("CovenantType")]
+        [JsonProperty]
         public string CovenantType { get; set; }
 
         /// <summary>
@@ -57,6 +69,7 @@ namespace src.Models
         /// <value>
         /// The covenant mathes key word.
         /// </value>
+        [JsonIgnore]
         [BsonIgnore]
         public string CovenantMathesKeyWord { get; set; }
 
