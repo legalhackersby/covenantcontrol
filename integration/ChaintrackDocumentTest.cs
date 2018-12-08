@@ -14,6 +14,8 @@ namespace integration
             var result = await httpClient.GetStringAsync(Settings.Host + api);
             Assert.Contains(@"<mark className={'highlight'}>", result);
             Assert.Contains(@"</mark>", result);
+            Assert.Contains(@"<br>", result);
+            
         }
     }
 }

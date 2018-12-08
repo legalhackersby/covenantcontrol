@@ -13,13 +13,10 @@ namespace tests
         }
 
         [Fact]
-        public void FindTextByInput()
+        public void GetCovenantResults()
         {
-            var covenant = "Срок действия договора";
-            var result = textParserService.GetCovenantResult(text, covenant);
-            Assert.True(result.CovenantValue == "31.08.2019");
-            Assert.True(result.StartIndex == 2813);
-            Assert.True(result.EndIndex == 2865);
+            var result = textParserService.GetCovenantResults(text);
+            Assert.True(result.Count == 15);
         }
 
         private string text = @"ДОГОВОР АРЕНДЫ 

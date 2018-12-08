@@ -1,9 +1,10 @@
-﻿using src.Models;
+﻿using System.Collections.Generic;
+using src.Models;
 
 namespace src.Service.Document
 {
     public interface ITextParserService
     {
-        CovenantSearchResult GetCovenantResult(string text, string covenant);
+        List<CovenantSearchResult> GetCovenantResults(string text);
     }
 }
