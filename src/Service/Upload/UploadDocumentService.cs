@@ -35,7 +35,7 @@ namespace src.Service
             mongoDocument.FileNameTxt = await converter.ConvertAsync(path);
 
             // autocreates collection locally
-            var collection = mongoDatabase.GetCollection<DocumentMetadata>("documents");
+            var collection = mongoDatabase.GetCollection<DocumentMetadata>(nameof(DocumentMetadata));
 
             await collection.InsertOneAsync(mongoDocument);
 
