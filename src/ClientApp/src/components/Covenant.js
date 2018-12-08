@@ -10,15 +10,20 @@ export class Covenant extends Component {
           <Panel>
               <Panel.Body>
                   <Row>
+                      <Col sm={12} className={'task-description'}>
+                          {this.props.description}
+                      </Col>
+                  </Row>
+                  <Row className={'cov-date'}>
+                      <label>{this.props.date}</label>
+                  </Row>
+                  <Row>
                       <Col sm={6}>
-                          Дата окончания договора
+                          <Button className={'btn-secondary'}>Удалить</Button>
                       </Col>
                       <Col sm={6}>
                           <Button className={'btn-primary'}>Добавить</Button>
                       </Col>
-                  </Row>
-                  <Row className={'cov-date'}>
-                      <label>31.08.2018</label>
                   </Row>
               </Panel.Body>
           </Panel>

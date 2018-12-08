@@ -12,8 +12,7 @@ export class CovenantList extends Component {
                     Covenants
                 </Panel.Heading>
                 <Panel.Body>
-                    <Covenant/>
-                    <Covenant/>
+                    {this.props.covenants.map(x => <Covenant description={x.description} date={x.date}></Covenant>)}
                 </Panel.Body>
             </Panel>
         )
