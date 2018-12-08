@@ -15,7 +15,7 @@ namespace src.Controllers
         [HttpGet("{documentId}")]
         public async Task<string> Get(Guid documentId)
         {
-            return documentBody;
+            return documentBody.Replace(Environment.NewLine, "<br>" ).Replace("\n", "<br>");
         }
 
         private string documentBody = @"
