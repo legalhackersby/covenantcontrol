@@ -3,9 +3,19 @@
 
 # Build
 
-- Works in `Visual Studio Code 1.29.1` with Firefox, Omnisharp, Editorconfi plugins.
-- `Visual Studio 2017.8.9`?
-- Jetbrains Raider/WebStorm?
+## Works in `Visual Studio Code 1.29.1` with plugins:
+- `Debugger for Firefox` or `Debugger for Chrome` 
+- `Omnisharp`
+- `EditorConfig for VS Code`
+- `.NET Core Test Explorer`
+- `npm`
+- `GitLens — Git supercharged`
+
+
+ plugins.
+## `Visual Studio 2017.8.9`?
+
+## Jetbrains Raider/WebStorm?
 
 # SDK and runtime
 
