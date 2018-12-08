@@ -23,11 +23,14 @@ namespace src.Service
 
         public async Task<string> ReadDocument(string documentId)
         {
-            var collection = this.mongoDatabase.GetCollection<DocumentMetadata>(nameof(DocumentMetadata));
+            var collection = this.mongoDatabase.GetCollection<DocumentMetadata>("documents");
             var id = ObjectId.Parse(documentId);
             var finder = await collection.FindAsync(BuildSingleDocumentFilter(documentId));
             var singleOrDefault = await finder.SingleOrDefaultAsync();
-            if (singleOrDefault == null) return null;
+            if (singleOrDefault == null)
+            {
+                return null;
+            } 
             return await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
         }
 

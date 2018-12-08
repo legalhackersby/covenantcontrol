@@ -11,5 +11,6 @@
         public const string TekushiyRemont = "Обязанность осуществления текущего ремонта";
         public const string KapitalniyRemont = "Обязанность осуществления капитального ремонта";
         public const string VozmeshenieEnhancement = "Возмещение неотделимых улучшений";
+        public const string General = "Общий ковенант";
     }
 }
