@@ -1,10 +1,10 @@
-
+﻿
 using System.Threading.Tasks;
 
-namespace src.Service
+namespace src.Service.Upload
 {
     public interface IConvertToTxt
     {
-         Task<string> Convert(string path);
+        Task<string> Convert(string inputFilePath, string outputDirectoryPath);
     }
 }

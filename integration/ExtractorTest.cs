@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using src.Service.Upload;
@@ -11,14 +11,14 @@ namespace integration
         [Fact]
         public async Task Word()
         {
-            // TODO: add git lfs to test data
-            // TODO: run relative of with portable office?
-            var converter = new ConvertToTxt();
-            // TODO: fix path
-            var example = @"F:\shared-src\chaintrack\data\2_аренда_хакатон.doc";
-            var converted = await converter.Convert(example);
+            var converter = new ConvertToTxt(@"D:/shared-src/chaintrack/src/Converter/", "", "");
+            var inputFilePath = @"D:/shared-src/chaintrack/data/2_аренда_хакатон.doc";
+            var outputResultDirectory = @"D:/shared-src/chaintrack/data/output";
+
+            var converted = await converter.Convert(inputFilePath, outputResultDirectory);
+
             Assert.NotNull(converted);
-        }     
+        }
     }
 }
 
