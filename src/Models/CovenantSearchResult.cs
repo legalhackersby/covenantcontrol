@@ -1,15 +1,27 @@
 ﻿using System;
+using System.Diagnostics;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace src.Models
 {
+    //NOTE: uses same object for db and calculation to speed up dev
     public class CovenantSearchResult : IEquatable<CovenantSearchResult>
     {
+        [BsonId]
+        public ObjectId Id {get;set;}
+
+        [BsonElement("DocumentId")]
+        public ObjectId DocumentId {get;set;}       
+        
         /// <summary>
         /// Gets or sets the start covenant index.
         /// </summary>
         /// <value>
         /// The start covenant index.
         /// </value>
+        
+        [BsonElement("StartIndex")]
         public int StartIndex { get; set; }
 
         /// <summary>
@@ -18,6 +30,7 @@ namespace src.Models
         /// <value>
         /// The end covenant index.
         /// </value>
+        [BsonElement("EndIndex")]
         public int EndIndex { get; set; }
 
         /// <summary>
@@ -26,6 +39,7 @@ namespace src.Models
         /// <value>
         /// The covenant value.
         /// </value>
+        [BsonElement("CovenantValue")]
         public string CovenantValue { get; set; }
 
         /// <summary>
@@ -34,6 +48,7 @@ namespace src.Models
         /// <value>
         /// The type of the covenant.
         /// </value>
+        [BsonElement("CovenantType")]
         public string CovenantType { get; set; }
 
         /// <summary>
@@ -42,7 +57,38 @@ namespace src.Models
         /// <value>
         /// The covenant mathes key word.
         /// </value>
+        [BsonIgnore]
         public string CovenantMathesKeyWord { get; set; }
+
+        
+        public bool IntersectNotFully(CovenantSearchResult other)
+        {
+            return 
+                // TODO: optimize with algebra + - because to much simmetry
+                // other starts before this and  other ends before this 
+                (other.StartIndex  < this.StartIndex && other.EndIndex < this.EndIndex && other.EndIndex > this.StartIndex )
+                ||
+                // this starts before other and  this ends before other 
+                (this.StartIndex  < other.StartIndex && this.EndIndex < other.EndIndex && this.EndIndex > other.StartIndex)
+                ||
+                // other inside this
+                (this.StartIndex < other.StartIndex && other.EndIndex < this.EndIndex)
+                ||
+                // this inside other
+                (other.StartIndex < this.StartIndex && this.EndIndex < other.EndIndex)
+                ;
+        }
+
+        [BsonIgnore]
+        public int Length
+        {
+            get 
+            {
+                Debug.Assert(CovenantValue.Length == EndIndex - StartIndex);
+                return CovenantValue.Length;
+            }
+        }
+
 
         public override int GetHashCode()
         {

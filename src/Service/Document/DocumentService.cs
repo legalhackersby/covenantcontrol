@@ -14,14 +14,12 @@ namespace src.Service
     {
         public IMongoDatabase mongoDatabase;
         private IStorage storage;
-        private ITextParserService covenantsSearch;
 
-        public DocumentService(IMongoDatabase mongoDatabase, IStorage storage, ITextParserService covenanstSearch)
+
+        public DocumentService(IMongoDatabase mongoDatabase, IStorage storage)
         {
             this.mongoDatabase = mongoDatabase;
             this.storage = storage;
-            this.covenantsSearch = covenanstSearch;
-
         }
 
 
@@ -29,23 +27,27 @@ namespace src.Service
         {
             var collection = this.mongoDatabase.GetCollection<DocumentMetadata>("documents");
             var id = ObjectId.Parse(documentId);
-            var finder = await collection.FindAsync(BuildSingleDocumentFilter(documentId));
+            var finder = 
+                    await collection
+                        .FindAsync(
+                            Builders<DocumentMetadata>.Filter.Where(x => x.Id == new ObjectId(documentId))
+                            );
             var singleOrDefault = await finder.SingleOrDefaultAsync();
             if (singleOrDefault == null)
             {
                 return (null, null);
             } 
-
-
+            var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var finder2 = 
+                    await covenantsCollection
+                        .FindAsync(
+                            Builders<CovenantSearchResult>.Filter.Where(x => x.DocumentId == new ObjectId(documentId))
+                            );
             var text = await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
-            var covenants = covenantsSearch.GetCovenantResults(text);
-            return (text, covenants);
+
+            return (text, finder2.ToList());
         }
 
 
-        public FilterDefinition<DocumentMetadata> BuildSingleDocumentFilter(string documentId)
-        {
-            return Builders<DocumentMetadata>.Filter.Where(x => x.Id == new ObjectId(documentId));
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace src.Controllers
             {
                 var stringBuilder = new StringBuilder(text.Length);
                 var head = 0;
-                List<CovenantSearchResult> ncovs = GetValidCovenants(covs);
+                List<CovenantSearchResult> ncovs = covs;
 
                 foreach (var cov in ncovs)
                 {
@@ -49,22 +49,6 @@ namespace src.Controllers
                 text = dummyCovenant;
             }
             return text.Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
-        }
-
-        private static List<CovenantSearchResult> GetValidCovenants(List<CovenantSearchResult> covs)
-        {
-            var ncovs = covs
-                .Where(x => x.StartIndex < x.EndIndex)//BUG: will be ensured by tests
-                .OrderBy(x => x.StartIndex)
-                .ToList();
-            var dict = new Dictionary<int, CovenantSearchResult>();
-            foreach (var cov in ncovs)
-            {
-                dict[cov.StartIndex] = cov;// BUG: we just use one covenant, but should all
-            }
-
-            ncovs = dict.Values.ToList();
-            return ncovs;
         }
 
         private string dummyCovenant = @"

@@ -1,6 +1,10 @@
 
 
 
+# DISCLAIMER
+
+Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done. Does reflect our ability for work fast, not our ability to code well.
+
 # Build
 
 dotnet run --launch-profile=src
