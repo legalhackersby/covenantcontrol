@@ -12,7 +12,7 @@ namespace src.Service.Upload
 
         // TODO: uses env variables for program, check of uno path, 
         private const string DefaultPathToLiberOffice = @"C:/Program Files/LibreOffice/program/python.exe";
-        private const string DefaultPathToUnoconv = "Converter/unoconv/unoconv";
+        private const string DefaultPathToUnoconv = "unoconv/unoconv";
 
         /// <summary>
         /// Gets or sets the custom unoconv path.
@@ -49,12 +49,11 @@ namespace src.Service.Upload
                 throw new FileNotFoundException(inputFilePath);
             }
 
-            string arguments = string.Format("{0} {1} {2} {3} {4}{5}",
+            string arguments = string.Format(@"{0} {1} {2} {3} ""{4}""",
                 CustomUnoconvPath ?? DefaultPathToUnoconv,
                 ConverterArgs.VerboseParamArg,
                 ConverterArgs.DotTypeDocumentParamArg,
                 ConverterArgs.FormatTextParamArg,
-                ConverterArgs.OutputParamArg,
                 inputFilePath);
 
             var startInfo = new ProcessStartInfo
@@ -71,9 +70,9 @@ namespace src.Service.Upload
             {
                 converter.StartInfo = startInfo;
 
-                var result = await this.RunProcessAsync(converter).ConfigureAwait(false);
+                await this.RunProcessAsync(converter);
 
-                return result;
+                return string.Format("{0}.{1}", Path.GetFileNameWithoutExtension(inputFilePath), "txt");
             }
         }
 
@@ -83,28 +82,28 @@ namespace src.Service.Upload
         /// <param name="process">The process.</param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException">Could not start process: " + process</exception>
-        private Task<string> RunProcessAsync(Process process)
+        private Task RunProcessAsync(Process process)
         {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-
-            DataReceivedEventHandler errorRecievedEventHandler = (sender, args) => Debug.WriteLine(args.Data);
-            DataReceivedEventHandler outputStringBuilderHandler = (sender, args) => Debug.WriteLine(args.Data);
-
-            process.Exited += (s, ea) => taskCompletionSource.SetResult($"Exit code: {process.ExitCode}");
-
-            bool started = process.Start();
-
-            if (!started)
+            return Task.Run(() =>
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not start process: {0}", process));
-            }
+                DataReceivedEventHandler errorRecievedEventHandler = (sender, args) => Debug.WriteLine(args.Data);
+                DataReceivedEventHandler outputStringBuilderHandler = (sender, args) => Debug.WriteLine(args.Data);
 
-            process.BeginErrorReadLine();
-            process.WaitForExit();
-            process.ErrorDataReceived -= errorRecievedEventHandler;
-            process.OutputDataReceived -= outputStringBuilderHandler;
+                process.Exited += (s, ea) => Debug.WriteLine(process);
 
-            return taskCompletionSource.Task;
+                if (process.Start())
+                {
+                    process.BeginErrorReadLine();
+                    process.WaitForExit();
+                    process.ErrorDataReceived -= errorRecievedEventHandler;
+                    process.OutputDataReceived -= outputStringBuilderHandler;
+
+                }
+                else
+                {
+                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Could not start process: {0}", process));
+                }
+            });
         }
     }
 }
