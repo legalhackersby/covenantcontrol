@@ -11,7 +11,6 @@ namespace src.Models.Covenants
             KeyWords = new List<string>
             {
                 "Возмещение стоимости  коммунальных услуг ",
-                "счет",
                 "счет-фактура"
             };
         }

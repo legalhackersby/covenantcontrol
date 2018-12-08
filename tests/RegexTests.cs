@@ -16,7 +16,7 @@ namespace tests
         public void GetCovenantResults()
         {
             var result = textParserService.GetCovenantResults(text);
-            Assert.True(result.Count == 15);
+            Assert.True(result.Count == 11);
         }
 
         private string text = @"ДОГОВОР АРЕНДЫ 

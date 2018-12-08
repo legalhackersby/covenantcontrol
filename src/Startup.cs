@@ -42,6 +42,10 @@ namespace src
             });
             services.AddTransient<IUploadDocumentService, UploadDocumentService>();
             services.AddTransient<IStorage, Storage>();
+            services.AddTransient<IStorage, Storage>();
+            services.AddSingleton<IConvertToTxt>(new ConvertToTxt());
+            services.AddTransient<IDocumentService, DocumentService>();
+            
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
