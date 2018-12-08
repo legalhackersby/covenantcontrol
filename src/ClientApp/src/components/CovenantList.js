@@ -15,7 +15,7 @@ export class CovenantList extends Component {
                     {
                         this.props
                             .covenants
-                            .map(x => <Covenant description={x.description} date={x.date} id={x.id}></Covenant>)
+                            .map(x => <Covenant description={x.description} date={x.date} key={x.id} skip={this.props.skip} add={this.props.add}></Covenant>)
                     }
                 </Panel.Body>
             </Panel>
