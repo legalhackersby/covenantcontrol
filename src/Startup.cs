@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using src.Data;
 using src.Service;
+using System.Security.Authentication;
 
 namespace src
 {
@@ -27,7 +27,12 @@ namespace src
             var mongoUrl = Configuration.GetValue<string>("MongoUrl");
             var mongoDatabase = Configuration.GetValue<string>("MongoDatabase");
 
-            services.AddSingleton(_ => new MongoClient(new MongoUrl(mongoUrl)));
+            services.AddSingleton(_ =>
+            {
+                MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(mongoUrl));
+                settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+                return new MongoClient(settings);
+            });
             services.AddScoped(x =>
             {
                 var client = x.GetRequiredService<MongoClient>();
@@ -73,7 +78,7 @@ namespace src
             {
                 spa.Options.SourcePath = "ClientApp";
 
-                //if (env.IsDevelopment())
+                if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
