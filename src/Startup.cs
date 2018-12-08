@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using src.Service;
+using src.Service.Upload;
 using System.Security.Authentication;
 
 namespace src
@@ -40,7 +41,7 @@ namespace src
                 return database;
             });
             services.AddTransient<IUploadDocumentService, UploadDocumentService>();
-
+            services.AddTransient<IStorage, Storage>();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -63,10 +64,11 @@ namespace src
                 //app.UseHsts();
             }
 
+
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseCors("*");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

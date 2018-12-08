@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using src.Data;
+using src.Service.Upload;
 using System;
 using System.Threading.Tasks;
 
@@ -8,25 +9,29 @@ namespace src.Service
 {
     public class UploadDocumentService : IUploadDocumentService
     {
-        public IMongoDatabase _mongoDatabase;
+        public IMongoDatabase mongoDatabase;
+        private IStorage storage;
 
-        public UploadDocumentService(IMongoDatabase mongoDatabase)
+        public UploadDocumentService(IMongoDatabase mongoDatabase, IStorage storage)
         {
-            _mongoDatabase = mongoDatabase;
+            this.mongoDatabase = mongoDatabase;
+            this.storage = storage;
         }
 
         public async Task<string> CreateDocument(UploadFileRequest file)
         {
+            var id = ObjectId.GenerateNewId();
+            await storage.SaveAsync(id.ToString(), file.Content, file.Name);
             var mongoDocument = new DocumentMetadata
             {
                 Id = ObjectId.GenerateNewId(),
-                FileContent = file.Content,
                 FileContentType = file.ContentType,
                 FileLength = file.Length,
                 FileName = file.Name,
             };
 
-            var collection = _mongoDatabase.GetCollection<DocumentMetadata>("documents");
+            // autocreates collection locally
+            var collection = mongoDatabase.GetCollection<DocumentMetadata>("documents");
 
             await collection.InsertOneAsync(mongoDocument);
 
