@@ -6,6 +6,10 @@ import { TaskList } from './TaskList';
 export class Home extends Component {
   displayName = Home.name
 
+  handleSelect(event) {
+    console.log(event);
+  }
+
   render() {
     return (
         <Grid fluid className={'content-container'}>
@@ -13,7 +17,18 @@ export class Home extends Component {
                 <Col sm={8}>
                     <Panel>
                         <Panel.Heading>
-                            Document
+                            <Row>
+                                <Col sm={6}>
+                                    Document
+                                </Col>
+                                <Col sm={6}>
+                                    <div className="file-upload-container">
+                                        <label className="file-upload btn btn-primary">
+                                            Upload <input type="file" onChange={this.handleSelect}/>
+                                        </label>
+                                    </div>
+                                </Col>
+                            </Row>
                         </Panel.Heading>
                         <Panel.Body>
                             1.1. <mark className={'highlight'}>Подрядчик обязуется в сроки</mark> с "__" _________ 20__ г. по "__" _________ 20__ г. выполнять своими силами и средствами работы (оказывать услуги) по техническому обслуживанию и ремонту оборудования, в соответствии с утвержденным сторонами перечнем работ, указаниями Заказчика и с обычно предъявляемыми техническими требованиями и указаниями производителя оборудования.

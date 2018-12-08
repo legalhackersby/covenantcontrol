@@ -5,3 +5,25 @@
 .highlight {
     background-color: yellow;
 }
+
+.file-upload-container {
+    text-align: right;
+}
+
+label.file-upload input[type="file"] {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: 0;
+    background: #fff;
+    cursor: inherit;
+    display: block;
+
+}
