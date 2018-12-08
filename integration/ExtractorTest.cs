@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using src.Service.Upload;
 using Xunit;
 
 namespace integration
@@ -12,8 +13,11 @@ namespace integration
         {
             // TODO: add git lfs to test data
             // TODO: run relative of with portable office?
-            // C:\Program Files\LibreOffice\program>python.exe F:\shared-src\chaintrack\src\Converter\unoconv\unoconv -f txt F:\shared-src\chaintrack\data\ping.docx
-
+            var converter = new ConvertToTxt();
+            // TODO: fix path
+            var example = @"F:\shared-src\chaintrack\data\2_аренда_хакатон.doc";
+            var converted = await converter.Convert(example);
+            Assert.NotNull(converted);
         }     
     }
 }

@@ -17,14 +17,16 @@ namespace src.Service.Upload
             if (File.Exists(unoconv))
             {
                 var p = new ProcessStartInfo(DefaultPathToLiberOffice);
-                p.Arguments = "-f txt " + path;
+                var output = "--output=" + "src/.storage/" + Path.GetFileNameWithoutExtension(path) + ".txt";
+                p.Arguments = "--doctype=document --format=text " + output + " " + path;
                 var converter = Process.Start(p);
-                await Task.Run(()=> converter.WaitForExit());
+                await Task.Run(() => converter.WaitForExit());
                 return path;
             }
             else
             {
-                     return Process.GetCurrentProcess().StartInfo.WorkingDirectory;
+                var converted = Process.GetCurrentProcess().StartInfo.WorkingDirectory;
+                return converted;
             }
         }
     }

@@ -1,1 +1,1 @@
-"C:/Program Files/LibreOffice/program/python.exe" src/Converter/unoconv/unoconv --verbose --import=utf8 --doctype=document --format=text  --output="data/.data/2_arenda_hackaton.txt"  data/2_arenda_hackaton.doc
+﻿"C:/Program Files/LibreOffice/program/python.exe" src/Converter/unoconv/unoconv --verbose --doctype=document --format=text  --output="data/.data/2_аренда_хакатон.doc.txt"  "data/2_аренда_хакатон.doc"
