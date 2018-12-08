@@ -3,6 +3,15 @@
 
 # Build
 
+## Development Mode
+Swapping to Development environment will display more detailed information about the error that occurred.
+
+Development environment should not be enabled in deployed applications, as it can result in sensitive information from exceptions being displayed to end users. For local debugging, development environment can be enabled by setting the ASPNETCORE_ENVIRONMENT environment variable to Development, and restarting the application.
+
+Visual Studio manages it automatically. If you use another IDE run the following command:
+
+`setx ASPNETCORE_ENVIRONMENT "Development"`
+
 ## Works in `Visual Studio Code 1.29.1` with plugins:
 - `Debugger for Firefox` or `Debugger for Chrome` 
 - `Omnisharp`
@@ -13,6 +22,7 @@
 
 
  plugins.
+
 ## `Visual Studio 2017.8.9`?
 
 ## Jetbrains Raider/WebStorm?

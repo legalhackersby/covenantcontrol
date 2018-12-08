@@ -4,7 +4,7 @@ using Xunit;
 
 namespace integration
 {
-    public class ChaintrackTest
+    public class ChaintrackHealthTest
     {
         [Fact]
         public async Task Ping()
