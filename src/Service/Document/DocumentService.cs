@@ -1,8 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using src.Data;
+using src.Models;
+using src.Service.Document;
 using src.Service.Upload;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace src.Service
@@ -11,17 +14,18 @@ namespace src.Service
     {
         public IMongoDatabase mongoDatabase;
         private IStorage storage;
+        private ITextParserService covenantsSearch;
 
-
-        public DocumentService(IMongoDatabase mongoDatabase, IStorage storage)
+        public DocumentService(IMongoDatabase mongoDatabase, IStorage storage, ITextParserService covenanstSearch)
         {
             this.mongoDatabase = mongoDatabase;
             this.storage = storage;
+            this.covenantsSearch = covenanstSearch;
 
         }
 
 
-        public async Task<string> ReadDocument(string documentId)
+        public async Task<(string, List<CovenantSearchResult>)> ReadDocument(string documentId)
         {
             var collection = this.mongoDatabase.GetCollection<DocumentMetadata>("documents");
             var id = ObjectId.Parse(documentId);
@@ -29,9 +33,13 @@ namespace src.Service
             var singleOrDefault = await finder.SingleOrDefaultAsync();
             if (singleOrDefault == null)
             {
-                return null;
+                return (null, null);
             } 
-            return await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
+
+
+            var text = await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
+            var covenants = covenantsSearch.GetCovenantResults(text);
+            return (text, covenants);
         }
 
 
