@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Col, Grid, Panel, Row } from 'react-bootstrap';
+import { Col, Grid, Panel, Row, Form } from 'react-bootstrap';
 import './Home.css'
 import { CovenantList } from './CovenantList';
 
@@ -13,7 +13,7 @@ export class Home extends Component {
 
         debugger;
 
-        const data = new FormData()
+        const data = new FormData();
         data.append('file', this.state.selectedFile, this.state.selectedFile.name)
 
         axios.post("http://localhost:56248/api/upload", data, {
@@ -26,6 +26,11 @@ export class Home extends Component {
             .then(res => {
                 console.log(res.statusText)
             })
+    }
+
+    componentWillMount() {
+        axios.get('http://localhost:5000/api/document/1')
+             .then(res => console.log(res));
     }
 
     render() {
