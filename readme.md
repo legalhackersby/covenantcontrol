@@ -49,11 +49,7 @@ TODO: we will be given with real covenantas
 ## Example
 
 ```yaml
-PaymantCovenant:
-  DueDate: 31 декабря 2021 года
-  Action: Внести плату
-  Amount: 100 р. (сто рублей)
-  TargetAccount: № 100300500
+
 ```
 
 
