@@ -15,5 +15,8 @@ namespace src.Data
 
         [BsonElement("FileName")]
         public string FileName { get; set; }
+
+        [BsonElement("FileNameTxt")]
+        public string FileNameTxt { get;  set; }
     }
 }

@@ -10,6 +10,11 @@
     text-align: right;
 }
 
+mark, .mark {
+    padding: .2em;
+    background-color: yellow;
+}
+
 label.file-upload input[type="file"] {
 
     position: absolute;
