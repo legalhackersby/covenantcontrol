@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.General;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "ежемесячно",
                 "согласие"

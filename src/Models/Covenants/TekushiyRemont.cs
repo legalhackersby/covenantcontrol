@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.TekushiyRemont;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор обязан не менее одного раза",
                 "в течение 30",

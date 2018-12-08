@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.SrokOplaty;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендная плата перечисляется Арендатором ежемесячно",
                 "Арендная плата перечисляется на расчетный счет Арендодателя",

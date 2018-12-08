@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.KapitalniyRemont;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендодатель обязан обеспечивать надлежащее функционирование систем жизнеобеспечения и инженерных систем Помещения",
                 "обеспечивать надлежащее функционирование систем жизнеобеспечения и инженерных систем Помещения",

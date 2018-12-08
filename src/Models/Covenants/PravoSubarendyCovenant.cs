@@ -8,7 +8,7 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.PravoSubarendy;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Арендатор не вправе без согласия Арендодателя сдавать арендованное помещение в субаренду",
                 "Арендатор не вправе сдавать имущество в субаренду без письменного согласия Арендодателя",
