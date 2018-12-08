@@ -63,10 +63,11 @@ namespace src
                 //app.UseHsts();
             }
 
+
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseCors("*");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
