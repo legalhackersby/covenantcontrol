@@ -3,39 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using src.Models;
+using src.Models.Covenants;
 
 namespace src.Service.Document
 {
+    /// <summary>
+    /// The text parser service.
+    /// </summary>
+    /// <seealso cref="src.Service.Document.ITextParserService" />
     public class TextParserService : ITextParserService
     {
-        private List<string> DateTimeRegexFormats = new List<string>
-        {
-            @"(?<day>\d{2})\.(?<month>\d{2})\.(?<year>\d{4})"
-        };
+        public List<BaseCovenant> Covenants { get; set; }
+        private readonly ICovenantSearchStrategy covenantSearchStrategy;
 
-        private List<string> StringRegexFormats = new List<string>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextParserService"/> class.
+        /// </summary>
+        public TextParserService(ICovenantSearchStrategy covenantSearchStrategy)
         {
-            @"^.*?(?=\n)"
-        };
+            this.covenantSearchStrategy = covenantSearchStrategy;
+            this.Covenants = new List<BaseCovenant>();
+        }
 
-        public List<CovenantSearchResult> GetCovenantResults(string input)
+        public List<CovenantSearchResult> GetCovenantResults(string text)
         {
             // TODO: input should be gotten from file such as StreamReader. For prototype and unit testing it is easy to use a direct plain text.
-            var covenantSearchResults= new List<CovenantSearchResult>();
+            var covenantSearchResults = new List<CovenantSearchResult>();
+
+            this.Covenants.AddRange(CovenantHelper.GetCovenants());
 
             try
             {
-                if (!string.IsNullOrWhiteSpace(input))
+                if (!string.IsNullOrWhiteSpace(text))
                 {
-                    var covenants = CovenantHelper.GetCovenants();
-                    foreach (var covenant in covenants)
+                    foreach (var covenant in this.Covenants)
                     {
-                        foreach (var covenantKeyWord in covenant.KeyWords.OrderByDescending(_ => _.Length))
+                        foreach (var covenantKeyWord in covenant.Keywords.OrderByDescending(_ => _.Length))
                         {
-                            var covenantStartIndex = input.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
+                            var covenantStartIndex = text.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
+
                             if (covenantStartIndex > -1)
                             {
-                                var covenantSearchResult = GetCovenantResult(input, covenantStartIndex, covenant.CovenantName, covenantKeyWord);
+                                var covenantSearchResult = covenantSearchStrategy.Search(text, covenantKeyWord, covenant.CovenantName);
+
                                 if (covenantSearchResult != null && !covenantSearchResults.Contains(covenantSearchResult))
                                 {
                                     covenantSearchResults.Add(covenantSearchResult);
@@ -43,7 +53,6 @@ namespace src.Service.Document
                             }
                         }
                     }
-                    
                 }
             }
             catch (Exception e)
@@ -52,62 +61,6 @@ namespace src.Service.Document
             }
 
             return covenantSearchResults;
-        }
-
-        private CovenantSearchResult GetCovenantResult(string input, int covenantStartIndex, string covenantName, string covenantKeyWord)
-        {
-            CovenantSearchResult result = null;
-            if (covenantStartIndex > -1)
-            {
-                covenantStartIndex = GetAdjustedStartCovenantIndex(input, covenantStartIndex);
-                var newInput = input.Substring(covenantStartIndex, input.Length - covenantStartIndex);
-                var match = GetCovenantMatchResult(newInput);
-                if (match != null)
-                {
-                    var covenantEndIndex = covenantStartIndex + match.Index + match.Length;
-
-                    result = new CovenantSearchResult
-                    {
-                        StartIndex = covenantStartIndex,
-                        EndIndex = covenantEndIndex,
-                        CovenantValue = match.Value,
-                        CovenantType = covenantName,
-                        CovenantMathesKeyWord = covenantKeyWord
-                    };
-                }
-            }
-
-            return result;
-        }
-
-        private int GetAdjustedStartCovenantIndex(string input, int covenantIndex)
-        {
-            for (int i = covenantIndex; i > 0; i--)
-            {
-                var dotSymbol = input[i];
-                if (dotSymbol == '.')
-                {
-                    covenantIndex = i+1;
-                    break;
-                }
-            }
-
-            return covenantIndex;
-        }
-
-        private Match GetCovenantMatchResult(string input)
-        {
-            foreach (var regexFormat in StringRegexFormats)
-            {
-                Regex rx = new Regex(regexFormat);
-                Match m = rx.Match(input);
-                if (m.Success)
-                {
-                    return m;
-                }
-            }
-
-            return null;
         }
     }
 }

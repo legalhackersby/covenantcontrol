@@ -1,6 +1,10 @@
 
 
 
+# DISCLAIMER
+
+Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done. Does reflect our ability for work fast, not our ability to code well.
+
 # Build
 
 dotnet run --launch-profile=src
@@ -59,11 +63,10 @@ TODO: we will be given with real covenantas
 - Covenant is added to task board
 - Covenant may be acted upon (e.g. set notification)
 
-## Example
+## Similar solutions
 
-```yaml
-
-```
+- https://ebrevia.com/
+- https://kirasystems.com/
 
 
 # Proof of Concept

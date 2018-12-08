@@ -1,8 +1,11 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using src.Data;
+using src.Models;
+using src.Service.Document;
 using src.Service.Upload;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace src.Service
@@ -17,27 +20,44 @@ namespace src.Service
         {
             this.mongoDatabase = mongoDatabase;
             this.storage = storage;
-
         }
 
+        public async Task<List<CovenantSearchResult>> GetCovenants(string documentId)
+        {
+       var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var finder2 = 
+                    await covenantsCollection
+                        .FindAsync(
+                            Builders<CovenantSearchResult>.Filter.Where(x => x.DocumentId == new ObjectId(documentId))
+                            );
+                 return finder2.ToList();           
+        }
 
-        public async Task<string> ReadDocument(string documentId)
+        public async Task<(string, List<CovenantSearchResult>)> ReadDocument(string documentId)
         {
             var collection = this.mongoDatabase.GetCollection<DocumentMetadata>("documents");
             var id = ObjectId.Parse(documentId);
-            var finder = await collection.FindAsync(BuildSingleDocumentFilter(documentId));
+            var finder = 
+                    await collection
+                        .FindAsync(
+                            Builders<DocumentMetadata>.Filter.Where(x => x.Id == new ObjectId(documentId))
+                            );
             var singleOrDefault = await finder.SingleOrDefaultAsync();
             if (singleOrDefault == null)
             {
-                return null;
+                return (null, null);
             } 
-            return await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
+            var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var finder2 = 
+                    await covenantsCollection
+                        .FindAsync(
+                            Builders<CovenantSearchResult>.Filter.Where(x => x.DocumentId == new ObjectId(documentId))
+                            );
+            var text = await storage.ReadAsync(documentId, singleOrDefault.FileNameTxt);
+
+            return (text, finder2.ToList());
         }
 
 
-        public FilterDefinition<DocumentMetadata> BuildSingleDocumentFilter(string documentId)
-        {
-            return Builders<DocumentMetadata>.Filter.Where(x => x.Id == new ObjectId(documentId));
-        }
     }
 }

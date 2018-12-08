@@ -9,15 +9,15 @@ namespace src.Service.Document
         {
             var list = new List<BaseCovenant>
             {
-                new KapitalniyRemontCovenant(),
                 new PravoIzmeneniyaSubarendyCovenant(),
                 new PravoSubarendyCovenant(),
                 new SrokDogovoraCovenant(),
                 new SrokOplatyCovenant(),
                 new SrokPredostavleniyaSchetovCovenant(),
                 new SrokUvedomleniyaCovenant(),
-                new TekushiyRemont(),
-                new VozmeshenieEnhancementCovenant()
+                new Remont(),
+                new VozmeshenieEnhancementCovenant(),
+                new PoluchenieSoglasovaniyaCovenant()
             };
 
             return list;

@@ -8,12 +8,16 @@ namespace src.Models.Covenants
         {
             CovenantName = CovenantType.SrokDogovora;
 
-            KeyWords = new List<string>
+            Keywords = new List<string>
             {
                 "Договор действует до",
+                "договор действует по",
+                "договор действует в течение",
                 "Срок действия договора",
                 "срок действия",
-                "Договор действует в течение"
+                "договор действует",
+                "Договор действует в течение",
+                "срок аренды"
             };
         }
     }
