@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Col, Grid, Panel, Row, Form } from 'react-bootstrap';
+import { Col, Grid, Panel, Row, Form, Button } from 'react-bootstrap';
 import './Home.css'
 import $ from 'jquery';
 import _ from 'lodash';
 
 import { Config } from '../Config';
+import { Link } from 'react-router-dom';
 
 const covenantTemplate = _.template(`
                           <div uid="<%=id%>" class="covenant panel panel-default">
@@ -146,7 +147,13 @@ export class Home extends Component {
                         <Panel>
                             <Panel.Heading>
                                 <Row>
-                                    <Col sm={12}>
+                                    <Col sm={8}></Col>
+                                    <Col sm={2}>
+                                        <Link to="/covenants">
+                                            <Button className={'btn-primary'} onClick={this.routeToList}>Ковенанты</Button>
+                                        </Link>
+                                    </Col>
+                                    <Col sm={2}>
                                         <Form id="uploadForm" method="POST" action="http://localhost:56248/api/Upload">
                                             <div className="file-upload-container">
                                                 <label className="file-upload btn btn-primary">
