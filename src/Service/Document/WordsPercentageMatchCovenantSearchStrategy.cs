@@ -40,49 +40,46 @@ namespace src.Service.Document
         public List<CovenantSearchResult> Search(string text, string covenantKeyword, string covenantName)
         {
             var covenantList = new List<CovenantSearchResult>();
-            //var keyWordsInParagraph = covenantKeyword.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            //if (keyWordsInParagraph.Length > 0)
+
+            var allTextParagraphs = text.Split(this.SearchSettings.ParagraphsSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            if (allTextParagraphs.Any())
             {
-                var allTextParagraphs = text.Split(this.SearchSettings.ParagraphsSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
-
-                if (allTextParagraphs.Any())
+                foreach (var paragraph in allTextParagraphs)
                 {
-                    foreach (var paragraph in allTextParagraphs)
-                    {
-                        var keyWordsInParagraph = covenantKeyword.Split(this.SearchSettings.KeywordSeparators, StringSplitOptions.RemoveEmptyEntries);
+                    var keyWordsInParagraph = covenantKeyword.Split(this.SearchSettings.KeywordSeparators, StringSplitOptions.RemoveEmptyEntries);
 
+                    if (keyWordsInParagraph.Length > 0)
+                    {
                         if (this.SearchSettings.ExctractStemm)
                         {
                             keyWordsInParagraph = keyWordsInParagraph.Select(Stemmer.Stemm).ToArray();
                         }
 
-                        if (keyWordsInParagraph.Length > 0)
+                        var wordCountInParagraph = 0;
+
+                        foreach (var keyWord in keyWordsInParagraph)
                         {
-                            var wordCountInParagraph = 0;
-
-                            foreach (var keyWord in keyWordsInParagraph)
+                            if (paragraph.IndexOf(keyWord, StringComparison.OrdinalIgnoreCase) > -1)
                             {
-                                if (paragraph.IndexOf(keyWord, StringComparison.OrdinalIgnoreCase) > -1)
-                                {
-                                    wordCountInParagraph++;
-                                }
+                                wordCountInParagraph++;
                             }
+                        }
 
-                            if ((double)(wordCountInParagraph / keyWordsInParagraph.Length) * 100 >= this.SearchSettings.AcceptableSearchPercentage)
+                        if ((double)(wordCountInParagraph / keyWordsInParagraph.Length) * 100 >= this.SearchSettings.AcceptableSearchPercentage)
+                        {
+                            var index = text.IndexOf(paragraph, StringComparison.Ordinal);
+
+                            if (index > -1)
                             {
-                                var index = text.IndexOf(paragraph, StringComparison.Ordinal);
-
-                                if (index > -1)
+                                covenantList.Add(new CovenantSearchResult
                                 {
-                                    covenantList.Add(new CovenantSearchResult
-                                    {
-                                        CovenantValue = paragraph,
-                                        CovenantMathesKeyWord = covenantKeyword,
-                                        CovenantType = covenantName,
-                                        StartIndex = index,
-                                        EndIndex = index + paragraph.Length
-                                    });
-                                }
+                                    CovenantValue = paragraph,
+                                    CovenantMathesKeyWord = covenantKeyword,
+                                    CovenantType = covenantName,
+                                    StartIndex = index,
+                                    EndIndex = index + paragraph.Length
+                                });
                             }
                         }
                     }
@@ -90,6 +87,21 @@ namespace src.Service.Document
             }
 
             return covenantList;
+        }
+
+        /// <summary>
+        /// Splits the list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items">The items.</param>
+        /// <param name="nSize">Size of the n.</param>
+        /// <returns></returns>
+        public IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize = 1)
+        {
+            for (int i = 0; i < items.Count; i += nSize)
+            {
+                yield return items.GetRange(i, Math.Min(nSize, items.Count - i));
+            }
         }
     }
 }
