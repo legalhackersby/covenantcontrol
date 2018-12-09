@@ -113,8 +113,40 @@ namespace tests
             }
 
             var text1 = ContractTextHelper.Contract1;
- 
+
             var textParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy());
+            var result2 = textParserService2.GetCovenantResults(ContractTextHelper.Contract1);
+
+            foreach (var covenantSearchResult in result2)
+            {
+                text1 = text1.Replace(covenantSearchResult.CovenantValue, $"<mark>{covenantSearchResult.CovenantValue}</mark>");
+            }
+
+            using (var sw = new StreamWriter($@"d:\TestCovenant_PercentStrategy_{Guid.NewGuid():N}.html"))
+            {
+                var newText = $@"<html>
+<body>
+{text1}
+</body>
+</html>";
+                sw.WriteLine(newText);
+                sw.Flush();
+            }
+            //Assert.Equal(16, result.Count);
+            //Assert.True(result.All( => .CovenantValue.Length > 3));
+            //Assert.True(result.All( => .StartIndex < _.EndIndex));
+            //Assert.True(result.Distinct().Count() == result.Count);
+        }
+
+        /// <summary>
+        /// Contract1 get covenant results.
+        /// </summary>
+        [Fact]
+        public void Contract1_GetCovenantResults_Strategy2()
+        {
+            var text1 = @"Sentence 1 Test. Sentence 2. Sentence 3 Test. Sentence 4 Test. Sentence 5. \n";
+
+            var textParserService2 = new TextParserService(new PresizeWordsPercentageMathCovenantSearchStrategy());
             var result2 = textParserService2.GetCovenantResults(ContractTextHelper.Contract1);
 
             foreach (var covenantSearchResult in result2)

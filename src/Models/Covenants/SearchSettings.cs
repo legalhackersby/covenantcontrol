@@ -14,8 +14,18 @@
             this.ExctractStemm = false;
             this.KeywordSeparators = new[] { ' ' };
             this.ParagraphsSeparators = new[] { '\n' };
+            this.SentenceSeparators = new[] { '.' };
             this.AcceptableSearchPercentage = 99;
+            this.WordsInPhrases = 1;
         }
+
+        /// <summary>
+        /// Gets or sets the words in phrases.
+        /// </summary>
+        /// <value>
+        /// The words in phrases.
+        /// </value>
+        public int WordsInPhrases { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="SearchSettings"/> is reverse.
@@ -40,6 +50,14 @@
         /// The paragraphs separator.
         /// </value>
         public char[] ParagraphsSeparators { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sentence separators.
+        /// </summary>
+        /// <value>
+        /// The sentence separators.
+        /// </value>
+        public char[] SentenceSeparators { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [exctract stemm].

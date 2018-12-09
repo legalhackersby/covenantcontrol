@@ -10,8 +10,8 @@ namespace src.Models.Covenants
 
             Keywords = new List<string>
             {
-                "ежемесячно",
-                "согласие"
+                "Test",
+                ""
             };
         }
     }
