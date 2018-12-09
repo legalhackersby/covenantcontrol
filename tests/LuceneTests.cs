@@ -14,6 +14,7 @@ using Lucene.Net.Search.Similarities;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Util;
 using System;
+using Lucene.Net.QueryParsers.Classic;
 
 namespace tests
 {
@@ -34,12 +35,14 @@ namespace tests
             document.AddTextField("paragraph", documentText, Field.Store.YES); 
             index.AddDocument(document);
             index.Dispose();
-           // var queryParser = new FuzzyQuery()
             var reader = DirectoryReader.Open(directory);
             var searcher = new IndexSearcher(reader);
-            var regexResults = searcher.Search(new RegexpQuery(new Term("keyword", "Договр")), 1);
+            var queryParser = new QueryParser(LuceneVersion.LUCENE_CURRENT, "paragraph", analyzer);
+            //var query = new RegexpQuery(new Term("keyword", "Договр"));
+            var query = queryParser.Parse("Договор");
+            var regexResults = searcher.Search(query, 1);
             var scoredDocs = regexResults.ScoreDocs;
-            //Assert.True(scoredDocs.Length > 0);
+            Assert.True(scoredDocs.Length > 0);
             foreach(var doc in scoredDocs)
             {
                 var data = searcher.Doc(doc.Doc);
