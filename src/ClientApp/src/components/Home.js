@@ -94,10 +94,12 @@ export class Home extends Component {
 
         $(document).on('click', '.btn-ok', (event) => {
             this.add(event);
+            event.stopPropagation();
         });
 
         $(document).on('click', '.btn-remove', (event) => {
             this.skip(event);
+            event.stopPropagation();
         });
 
         for (let i in covenants) {
@@ -111,15 +113,13 @@ export class Home extends Component {
             panel.on('click', (event) => {
 
 
-                /*if ($(event.target).hasClass('btn-ok')) {
-                    this.add(event);
+                if ($(event.target).hasClass('btn-ok')) {
                     return
                 }
 
                 if ($(event.target).hasClass('btn-remove')) {
-                    this.skip(event);
                     return
-                }*/
+                }
 
                 let collapsePanel = panel.children('.panel-collapse');
 
