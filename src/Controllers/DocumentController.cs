@@ -1,14 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
-using Microsoft.AspNetCore.Http;
 using src.Service;
 using System.Text;
-using System.Linq;
 using System.Collections.Generic;
 using src.Models;
-using MongoDB.Bson;
+using System.Linq;
 
 namespace src.Controllers
 {
@@ -16,9 +13,16 @@ namespace src.Controllers
     public class DocumentController : Controller
     {
         [HttpGet("{documentId}/covenants")]
-        public async Task<List<CovenantSearchResult> > GetCovenants(string documentId, [FromServices]IDocumentService reader)
+        public async Task<object> GetCovenants(string documentId, [FromServices]IDocumentService reader)
         {
-            return await reader.GetCovenants(documentId);
+            var list = await reader.GetCovenants(documentId);
+
+            return list.Select(x => new {
+                id = x.CovenantId,
+                type = x.CovenantType,
+                description = x.CovenantValue,
+                state = x.State.ToString()
+            });
         }
 
         [HttpGet("{documentId}")]
@@ -36,7 +40,7 @@ namespace src.Controllers
                 {
                     var subs = text.Substring(head, cov.StartIndex - head);
                     stringBuilder.Append(subs);
-                    stringBuilder.Append("<mark covenantId=\"" + ObjectId.GenerateNewId().ToString() + "\">");
+                    stringBuilder.Append("<mark id=\"" + cov.CovenantId + "\">");
                     stringBuilder.Append(cov.CovenantValue);
                     stringBuilder.Append("</mark>");
                     head = cov.EndIndex;

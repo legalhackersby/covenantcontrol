@@ -21,8 +21,12 @@ namespace src.Models
 
         [BsonElement("DocumentId")]
         [JsonIgnore]
-        public ObjectId DocumentId {get;set;}       
-        
+        public ObjectId DocumentId {get;set;}
+
+        [JsonProperty]
+        [BsonElement("State")]
+        public CovenantState State { get; set; }
+
         /// <summary>
         /// Gets or sets the start covenant index.
         /// </summary>
