@@ -21,9 +21,8 @@ namespace src.Service.Document
             var keyWordsInParagraph = covenantKeyWord.Split(" ");
             if (keyWordsInParagraph.Length > 1)
             {
-                text = text.Replace('\r', ' ').Replace('\t', ' ');
-                var allTextParagraphs = text.Split('\n');
-                if (allTextParagraphs.Length > 0)
+                var allTextParagraphs = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                if (allTextParagraphs.Any())
                 {
                     foreach (var paragraph in allTextParagraphs)
                     {
@@ -36,9 +35,9 @@ namespace src.Service.Document
                             }
                         }
 
-                        if ((double) (wordCountInParagraph / keyWordsInParagraph.Length) * 100 >= acceptablePercent)
+                        if ((double)(wordCountInParagraph / keyWordsInParagraph.Length) * 100 >= acceptablePercent)
                         {
-                            var index = text.IndexOf(paragraph);
+                            var index = text.IndexOf(paragraph, StringComparison.Ordinal);
                             if (index > -1)
                             {
                                 return new CovenantSearchResult
