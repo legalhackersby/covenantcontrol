@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using LingvoNET;
 using src.Models;
 using src.Models.Covenants;
 
@@ -20,14 +21,13 @@ namespace src.Service.Document
 
         public SearchSettings SearchSettings { get; set; }
 
-        public List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName)
+        public List<CovenantSearchResult> Search(string text, string covenantKeyword, string covenantName)
         {
-            var covenantStartIndex = text.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
+            var covenantStartIndex = text.IndexOf(covenantKeyword, StringComparison.OrdinalIgnoreCase);
 
             if (covenantStartIndex > -1)
             {
-                return new List<CovenantSearchResult>
-                    {GetCovenantResult(text, covenantStartIndex, covenantName, covenantKeyWord)};
+                return new List<CovenantSearchResult> { GetCovenantResult(text, covenantStartIndex, covenantName, covenantKeyword) };
             }
 
             return null;
@@ -38,7 +38,7 @@ namespace src.Service.Document
             CovenantSearchResult result = null;
             if (covenantStartIndex > -1)
             {
-                covenantStartIndex = GetAdjustedStartCovenantIndex(input, covenantStartIndex);
+                covenantStartIndex = this.GetAdjustedStartCovenantIndex(input, covenantStartIndex);
                 var newInput = input.Substring(covenantStartIndex, input.Length - covenantStartIndex).TrimStart();
                 var match = GetCovenantMatchResult(newInput);
                 if (match != null)

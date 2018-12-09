@@ -20,9 +20,9 @@ namespace src.Service.Document
         /// Searches the specified text.
         /// </summary>
         /// <param name="text">The text.</param>
-        /// <param name="covenantKeyWord">The covenant key word.</param>
+        /// <param name="covenantKeyword">The covenant key word.</param>
         /// <param name="covenantName">Name of the covenant.</param>
         /// <returns></returns>
-        List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName);
+        List<CovenantSearchResult> Search(string text, string covenantKeyword, string covenantName);
     }
 }
