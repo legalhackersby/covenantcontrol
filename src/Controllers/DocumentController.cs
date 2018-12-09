@@ -36,7 +36,7 @@ namespace src.Controllers
                 {
                     var subs = text.Substring(head, cov.StartIndex - head);
                     stringBuilder.Append(subs);
-                    stringBuilder.Append("<mark covenantId=\"" + ObjectId.GenerateNewId().ToString() + "\">");
+                    stringBuilder.Append("<mark covenantId=\"" + cov.CovenantId + "\">");
                     stringBuilder.Append(cov.CovenantValue);
                     stringBuilder.Append("</mark>");
                     head = cov.EndIndex;
