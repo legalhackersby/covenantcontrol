@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
 import { Covenant } from './Covenant';
 import axios from 'axios'
-import { Config } from '../Config';
+import { Config } from '../Config'
+import 'CovenantList.css';
 
 export class CovenantList extends Component {
     displayName = CovenantList.name
@@ -15,16 +16,16 @@ export class CovenantList extends Component {
     }
 
     componentWillMount() {
-        axios.get(`${Config.apiHost}/api/document/${this.props.id}/covenants`)
+        axios.get(`${Config.apiHost}/api/document/${this.props.match.params.id}/covenants`)
             .then((response => {
                 console.log(this.state);
-                this.setState({...this.state, covenants: response.data});
+                this.setState({...this.state, covenants: response.data.filter(x => x.state === 'Accepted')});
             }))
     }
 
     render() {
         return (
-            <Panel>
+            <Panel className={'cov-list'}>
                 <Panel.Heading>
                     Covenants
                 </Panel.Heading>

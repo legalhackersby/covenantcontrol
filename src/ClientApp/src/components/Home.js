@@ -69,6 +69,7 @@ export class Home extends Component {
             .then((response => {
 
                 this.state.documentId = response.data;
+                this.docId = response.data;
 
                 var file = document.getElementById('file');
                 file.value = '';
@@ -169,7 +170,7 @@ export class Home extends Component {
                                 <Row>
                                     <Col sm={8}></Col>
                                     <Col sm={2}>
-                                        <Link to="/covenants" params={{ id: this.state.documentId }}>
+                                        <Link to={{ pathname: '/covenants/' + this.docId, id: this.docId}}>
                                             <button class="btn btn-primary">Ковенанты</button>
                                         </Link>
                                     </Col>

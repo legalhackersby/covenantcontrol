@@ -14,8 +14,7 @@ export default class App extends Component {
          <Layout>
             <Route exact path='/' component={Home} />
             <Route path='/covenants/:id' component={CovenantList} />
-                /*<Route path='/fetchdata' component={FetchData} />*/}
-          </Layout>
+         </Layout>
     );
   }
 }
