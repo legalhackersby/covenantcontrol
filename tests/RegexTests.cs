@@ -38,11 +38,13 @@ namespace tests
 
             // exact first covenant in documenst
             var covenantsInOrder = nextResult.OrderBy(x => x.StartIndex).ToArray();
+            // discuss why we include or exclude some issues
             var covenant1 = "1.5. Договор вступает в силу с даты подписания сторонами. Срок действия договора устанавливается до 31.08.2019 года.\r";
             var covenant2 = "2.2. Арендная плата по п. 2.1. настоящего договора производится Арендатором ежемесячно, начиная с даты подписания Акта приема-передачи, в срок до 15 (пятнадцатого) числа текущего месяца. Арендатор предоставляет Арендодателю в срок до 20 (двадцатого) числа отчетного месяца копию платежного поручения о перечислении суммы арендной платы по адресу: Республика Беларусь, город Минск, ул. Радужная, 25. Копия платежного поручения должна содержать отметку обслуживающего банка о проведении платежа.\r";
+            var covenant3 = "2.3. Размер арендной платы, указанный в п.2.1. настоящего договора, может изменяться в одностороннем порядке по инициативе Арендодателя, но не чаще одного раза в год. О предстоящем изменении размера арендной платы Арендатор извещается Арендодателем не позднее, чем за 30 календарных дней.\r";
             Assert.Equal(covenant1, covenantsInOrder[0].CovenantValue);
             Assert.Equal(covenant2, covenantsInOrder[1].CovenantValue);
-
+            Assert.Equal(covenant3, covenantsInOrder[2].CovenantValue);
             //Assert.Equal(16, result.Count);
             //Assert.True(result.All(_ => _.CovenantValue.Length > 3));
             //Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
