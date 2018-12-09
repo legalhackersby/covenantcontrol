@@ -13,7 +13,7 @@
             this.Reverse = false;
             this.ExctractStemm = false;
             this.KeywordSeparator = " ";
-            this.AcceptableSearchPercentage = 100;
+            this.AcceptableSearchPercentage = 99;
         }
 
         /// <summary>
