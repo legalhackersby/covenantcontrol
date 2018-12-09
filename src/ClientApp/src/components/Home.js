@@ -121,10 +121,13 @@ export class Home extends Component {
                 }*/
 
                 let collapsePanel = panel.children('.panel-collapse');
+
                 if (!collapsePanel.hasClass('in')) {
-                    collapsePanel.addClass('in');
+                    collapsePanel.addClass('in');     
+                    collapsePanel.css('z-index', 10000);             
                 } else {
                     collapsePanel.removeClass('in');
+                    collapsePanel.css('z-index', 1000);
                 }
 
             }, );
