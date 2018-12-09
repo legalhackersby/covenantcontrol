@@ -20,7 +20,8 @@ namespace src.Controllers
             return list.Select(x => new {
                 id = x.CovenantId,
                 type = x.CovenantType,
-                description = x.CovenantValue                
+                description = x.CovenantValue,
+                state = x.State.ToString()
             });
         }
 

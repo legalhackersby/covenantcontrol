@@ -4,7 +4,6 @@ using src.Data;
 using src.Models;
 using src.Service.Document;
 using src.Service.Upload;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,10 +42,11 @@ namespace src.Service
             var content = await storage.ReadAsync(id.ToString(), mongoDocument.FileNameTxt);
 
             var covenants = GetValidCovenants(convenantsSearch.GetCovenantResults(content));
-            foreach (var cov in covenants)
+            foreach (var covenant in covenants)
             {
-                cov.Id = ObjectId.GenerateNewId();
-                cov.DocumentId = id;
+                covenant.Id = ObjectId.GenerateNewId();
+                covenant.DocumentId = id;
+                covenant.State = CovenantState.New;
             }
 
             // autocreates collection locally
@@ -55,31 +55,33 @@ namespace src.Service
 
             await documents.InsertOneAsync(mongoDocument);
             await covenantsCollection.InsertManyAsync(covenants);
-            
+
             return mongoDocument.Id.ToString();
         }
 
-        private static List<CovenantSearchResult> GetValidCovenants(List<CovenantSearchResult> covs)
+        private static List<CovenantSearchResult> GetValidCovenants(List<CovenantSearchResult> covenants)
         {
             // ISSUE: not optimal at all, fix on search engine side
-            var ncovs = covs
+            var ncovs = covenants
                 .Where(x => x.StartIndex < x.EndIndex)//BUG: will be ensured by tests
                 .OrderBy(x => x.StartIndex)
                 .ToList();
+
             var dict = new Dictionary<int, CovenantSearchResult>();
-            foreach (var cov in ncovs)
+
+            foreach (var covenant in ncovs)
             {
-                dict[cov.StartIndex] = cov;// BUG: we just use one covenant, but should all
+                dict[covenant.StartIndex] = covenant;// BUG: we just use one covenant, but should all
             }
 
             var result = new List<CovenantSearchResult>();
-               ncovs = dict.Values.ToList();
+            ncovs = dict.Values.ToList();
+
             foreach (var n in ncovs)
             {
                 if (!result.Any(n.IntersectNotFully)) result.Add(n);
             }
 
-         
             return result;
         }
     }

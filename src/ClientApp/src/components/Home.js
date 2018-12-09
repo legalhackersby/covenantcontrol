@@ -16,12 +16,12 @@ const covenantTemplate = _.template(`
                                      </div>
                                      <div class="col-sm-1">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-ok head-remove-button-<%=id%>">
-                                            <i class="glyphicon glyphicon-ok"></i>
+                                            <i uid="<%=id%>" class="glyphicon glyphicon-ok"></i>
                                         </button>
                                      </div>
                                      <div class="col-sm-1">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-remove">
-                                            <i class="glyphicon glyphicon-remove"></i>
+                                            <i uid="<%=id%>" class="glyphicon glyphicon-remove"></i>
                                         </button>
                                      </div>                                     
                                  </div>
@@ -90,6 +90,14 @@ export class Home extends Component {
     updateDocument() {
         let covenants = this.state.covenants;
 
+        $(document).on('click', '.btn-ok', (event) => {
+            this.add(event);
+        });
+
+        $(document).on('click', '.btn-remove', (event) => {
+            this.skip(event);
+        });
+
         for (let i in covenants) {
 
             let cov = covenants[i];
@@ -100,7 +108,8 @@ export class Home extends Component {
 
             panel.on('click', (event) => {
 
-                if ($(event.target).hasClass('btn-ok')) {
+
+                /*if ($(event.target).hasClass('btn-ok')) {
                     this.add(event);
                     return
                 }
@@ -108,7 +117,7 @@ export class Home extends Component {
                 if ($(event.target).hasClass('btn-remove')) {
                     this.skip(event);
                     return
-                }
+                }*/
 
                 let collapsePanel = panel.children('.panel-collapse');
                 if (!collapsePanel.hasClass('in')) {
@@ -117,7 +126,7 @@ export class Home extends Component {
                     collapsePanel.removeClass('in');
                 }
 
-            });
+            }, );
         }
 
         $('.add').on('click', but => {
