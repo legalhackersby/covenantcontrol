@@ -113,13 +113,8 @@ namespace tests
             }
 
             var text1 = ContractTextHelper.Contract1;
-            var searchSetting = new SearchSettings
-            {
-                ExctractStemm = true,
-                AcceptableSearchPercentage = 100
-            };
-
-            var textParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy(searchSetting));
+ 
+            var textParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy());
             var result2 = textParserService2.GetCovenantResults(ContractTextHelper.Contract1);
 
             foreach (var covenantSearchResult in result2)

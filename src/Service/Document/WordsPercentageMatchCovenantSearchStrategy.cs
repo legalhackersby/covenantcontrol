@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using LingvoNET;
-using Microsoft.Win32;
 using src.Models;
 using src.Models.Covenants;
 
@@ -35,21 +34,22 @@ namespace src.Service.Document
         /// Searches the specified text.
         /// </summary>
         /// <param name="text">The text.</param>
-        /// <param name="covenantKeyWord">The covenant key word.</param>
+        /// <param name="covenantKeyword">The covenant key word.</param>
         /// <param name="covenantName">Name of the covenant.</param>
         /// <returns></returns>
-        public List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName)
+        public List<CovenantSearchResult> Search(string text, string covenantKeyword, string covenantName)
         {
             var covenantList = new List<CovenantSearchResult>();
-            //var keyWordsInParagraph = covenantKeyWord.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            //var keyWordsInParagraph = covenantKeyword.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             //if (keyWordsInParagraph.Length > 0)
             {
-                var allTextParagraphs = text.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
+                var allTextParagraphs = text.Split(this.SearchSettings.ParagraphsSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
+
                 if (allTextParagraphs.Any())
                 {
                     foreach (var paragraph in allTextParagraphs)
                     {
-                        var keyWordsInParagraph = covenantKeyWord.Split(this.SearchSettings.KeywordSeparator, StringSplitOptions.RemoveEmptyEntries);
+                        var keyWordsInParagraph = covenantKeyword.Split(this.SearchSettings.KeywordSeparators, StringSplitOptions.RemoveEmptyEntries);
 
                         if (this.SearchSettings.ExctractStemm)
                         {
@@ -77,7 +77,7 @@ namespace src.Service.Document
                                     covenantList.Add(new CovenantSearchResult
                                     {
                                         CovenantValue = paragraph,
-                                        CovenantMathesKeyWord = covenantKeyWord,
+                                        CovenantMathesKeyWord = covenantKeyword,
                                         CovenantType = covenantName,
                                         StartIndex = index,
                                         EndIndex = index + paragraph.Length

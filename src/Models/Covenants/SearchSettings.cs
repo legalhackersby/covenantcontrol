@@ -12,7 +12,8 @@
         {
             this.Reverse = false;
             this.ExctractStemm = false;
-            this.KeywordSeparator = " ";
+            this.KeywordSeparators = new[] { ' ' };
+            this.ParagraphsSeparators = new[] { '\n' };
             this.AcceptableSearchPercentage = 99;
         }
 
@@ -30,7 +31,15 @@
         /// <value>
         /// The separator.
         /// </value>
-        public string KeywordSeparator { get; set; }
+        public char[] KeywordSeparators { get; set; }
+
+        /// <summary>
+        /// Gets or sets the paragraphs separator.
+        /// </summary>
+        /// <value>
+        /// The paragraphs separator.
+        /// </value>
+        public char[] ParagraphsSeparators { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [exctract stemm].
