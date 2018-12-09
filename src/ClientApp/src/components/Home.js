@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Col, Grid, Panel, Row, Form } from 'react-bootstrap';
+import { Col, Grid, Panel, Row, Form, Button } from 'react-bootstrap';
 import './Home.css'
 import $ from 'jquery';
 import _ from 'lodash';
 
 import { Config } from '../Config';
+import { Link } from 'react-router-dom';
 
 const covenantTemplate = _.template(`
                           <div uid="<%=id%>" class="covenant panel panel-default">
@@ -16,12 +17,12 @@ const covenantTemplate = _.template(`
                                      </div>
                                      <div class="col-sm-1">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-ok head-remove-button-<%=id%>">
-                                            <i class="glyphicon glyphicon-ok"></i>
+                                            <i uid="<%=id%>" class="glyphicon glyphicon-ok"></i>
                                         </button>
                                      </div>
                                      <div class="col-sm-1">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-remove">
-                                            <i class="glyphicon glyphicon-remove"></i>
+                                            <i uid="<%=id%>" class="glyphicon glyphicon-remove"></i>
                                         </button>
                                      </div>                                     
                                  </div>
@@ -30,7 +31,7 @@ const covenantTemplate = _.template(`
                                      <div class="panel-body">
                                          <div class="row">
                                             <div class="task-description col-sm-12"><%=description%></div>
-                                         </div>
+                                         </div>                                    
                                      <div class="row action-buttons-<%=id%>">
                                          <div class="col-sm-6">
                                             <button uid="<%=id%>" type="button" class="skip btn-secondary btn btn-default">Пропустить</button>
@@ -48,19 +49,8 @@ export class Home extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            covenants: [{
-                id: 1,
-                description: 'Срок действия договора устанавливается до 31.08.2019 года',
-                date: '31.08.2019',
-                type: 'Сроки'
-            }, {
-                id: 2,
-                description: 'Арендатор предоставляет Арендодателю в срок до 20 (двадцатого) числа отчетного месяца копию платежного поручения о перечислении суммы арендной платы по адресу: Республика Беларусь, город Минск, ул. Радужная, 25. Копия платежного поручения должна содержать отметку обслуживающего банка о проведении платежа.',
-                date: '',
-                type: 'Общий'
-            }]
-        };
+
+        this.state = {};
     }
 
     handleSelect(event) {
@@ -76,23 +66,52 @@ export class Home extends Component {
                     console.log(ProgressEvent);
                 },
             })
-            .then(response => {
-                axios.get(`${Config.apiHost}/api/document/${response.data}`)
-                    .then((res => this.setState({ ...this.state, fileContent: res.data }, this.updateDocument)));
-            })
+            .then((response => {
+
+                this.state.documentId = response.data;
+                this.docId = response.data;
+
+                var file = document.getElementById('file');
+                file.value = '';
+
+                axios.get(`${Config.apiHost}/api/document/${this.state.documentId}`)
+                    .then(response => {
+                        let fileContent = response.data;
+
+                        axios.get(`${Config.apiHost}/api/document/${this.state.documentId}/covenants`)
+                            .then((response => {
+                                this.state.covenants = response.data;
+
+                                console.log(this.state);
+                                this.setState({ ...this.state, fileContent: fileContent }, this.updateDocument);
+                            }))
+                    })
+            }));
     }
 
     updateDocument() {
         let covenants = this.state.covenants;
-        for(let  i in covenants) {
+
+        $(document).on('click', '.btn-ok', (event) => {
+            this.add(event);
+        });
+
+        $(document).on('click', '.btn-remove', (event) => {
+            this.skip(event);
+        });
+
+        for (let i in covenants) {
+
             let cov = covenants[i];
             let htmlFragment = covenantTemplate(cov);
             let elem = $(`[id='${cov.id}']`);
             elem.addClass('highlight');
             let panel = $(htmlFragment).insertBefore(elem);
+
             panel.on('click', (event) => {
 
-                if ($(event.target).hasClass('btn-ok')) {
+
+                /*if ($(event.target).hasClass('btn-ok')) {
                     this.add(event);
                     return
                 }
@@ -100,16 +119,19 @@ export class Home extends Component {
                 if ($(event.target).hasClass('btn-remove')) {
                     this.skip(event);
                     return
-                }
+                }*/
 
                 let collapsePanel = panel.children('.panel-collapse');
-                if(!collapsePanel.hasClass('in')) {
-                    collapsePanel.addClass('in');
+
+                if (!collapsePanel.hasClass('in')) {
+                    collapsePanel.addClass('in');     
+                    collapsePanel.css('z-index', 10000);             
                 } else {
                     collapsePanel.removeClass('in');
+                    collapsePanel.css('z-index', 1000);
                 }
 
-            });
+            }, );
         }
 
         $('.add').on('click', but => {
@@ -122,23 +144,38 @@ export class Home extends Component {
     }
 
     add(but) {
+
         let id = but.target.attributes['uid'].value;
-        $(`.action-buttons-${id}`).replaceWith(`<div class="row"></div>`);
-        $(`.head-remove-button-${id}`).remove();
-        $(`[uid='${id}']`).addClass('panel-success');
-        console.log(id);
+
+        axios.post(`${Config.apiHost}/api/document/${this.state.documentId}/covenants/${id}/accept`)
+            .then(x => {
+
+                $(`.action-buttons-${id}`).replaceWith(`<div class="row"></div>`);
+                $(`.head-remove-button-${id}`).remove();
+                $(`[uid='${id}']`).addClass('panel-success');
+                console.log(id);
+
+            });
     }
 
     skip(but) {
+
         let id = but.target.attributes['uid'].value;
-        let elem = $(`[id='${id}']`);
-        elem.removeClass('highlight');
-        let coven = $(`[uid='${id}']`);
-        coven.remove();
-        console.log(id);
+
+        axios.post(`${Config.apiHost}/api/document/${this.state.documentId}/covenants/${id}/reject`)
+            .then(x => {
+
+                let elem = $(`[id='${id}']`);
+                elem.removeClass('highlight');
+                let coven = $(`[uid='${id}']`);
+                coven.remove();
+                console.log(id);
+                
+            });
+        
     }
 
-     render() {
+    render() {
         return (
             <Grid fluid className={'content-container'}>
                 <Row>
@@ -146,11 +183,17 @@ export class Home extends Component {
                         <Panel>
                             <Panel.Heading>
                                 <Row>
-                                    <Col sm={12}>
+                                    <Col sm={8}></Col>
+                                    <Col sm={2}>
+                                        <Link to={{ pathname: '/covenants/' + this.docId, id: this.docId}}>
+                                            <button class="btn btn-primary">Ковенанты</button>
+                                        </Link>
+                                    </Col>
+                                    <Col sm={2}>
                                         <Form id="uploadForm" method="POST" action="http://localhost:56248/api/Upload">
                                             <div className="file-upload-container">
                                                 <label className="file-upload btn btn-primary">
-                                                    Загрузить <input type="file" onChange={this.handleSelect.bind(this)} />
+                                                    Загрузить <input id="file" type="file" onChange={this.handleSelect.bind(this)} />
                                                 </label>
                                             </div>
                                         </Form>
@@ -158,15 +201,15 @@ export class Home extends Component {
                                 </Row>
                             </Panel.Heading>
                             <Panel.Body>
-                                <div dangerouslySetInnerHTML={{__html: this.state.fileContent}}></div>
+                                <div dangerouslySetInnerHTML={{ __html: this.state.fileContent }}></div>
                             </Panel.Body>
-                    </Panel>
-                </Col>
-                <Col sm={4}>
-                    {/*<CovenantList covenants={this.state.covenants} skip={this.skip} add={this.add}/>*/}
-                </Col>
-            </Row>
-        </Grid>
-    );
-  }
+                        </Panel>
+                    </Col>
+                    <Col sm={4}>
+                        {/*<CovenantList covenants={this.state.covenants} skip={this.skip} add={this.add}/>*/}
+                    </Col>
+                </Row>
+            </Grid>
+        );
+    }
 }

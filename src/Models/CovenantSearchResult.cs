@@ -21,8 +21,12 @@ namespace src.Models
 
         [BsonElement("DocumentId")]
         [JsonIgnore]
-        public ObjectId DocumentId {get;set;}       
-        
+        public ObjectId DocumentId {get;set;}
+
+        [JsonProperty]
+        [BsonElement("State")]
+        public CovenantState State { get; set; }
+
         /// <summary>
         /// Gets or sets the start covenant index.
         /// </summary>
@@ -73,23 +77,10 @@ namespace src.Models
         [BsonIgnore]
         public string CovenantMathesKeyWord { get; set; }
 
-        
+        //https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods?noredirect=1&lq=1
         public bool IntersectNotFully(CovenantSearchResult other)
         {
-            return 
-                // TODO: optimize with algebra + - because to much simmetry
-                // other starts before this and  other ends before this 
-                (other.StartIndex  < this.StartIndex && other.EndIndex < this.EndIndex && other.EndIndex > this.StartIndex )
-                ||
-                // this starts before other and  this ends before other 
-                (this.StartIndex  < other.StartIndex && this.EndIndex < other.EndIndex && this.EndIndex > other.StartIndex)
-                ||
-                // other inside this
-                (this.StartIndex < other.StartIndex && other.EndIndex < this.EndIndex)
-                ||
-                // this inside other
-                (other.StartIndex < this.StartIndex && this.EndIndex < other.EndIndex)
-                ;
+            return this.StartIndex < other.EndIndex && other.StartIndex < this.EndIndex;
         }
 
         [BsonIgnore]
