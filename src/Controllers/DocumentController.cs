@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
-using src.Service;
-using System.Text;
-using System.Collections.Generic;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using src.Models;
+using src.Service;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace src.Controllers
 {
@@ -17,12 +19,41 @@ namespace src.Controllers
         {
             var list = await reader.GetCovenants(documentId);
 
-            return list.Select(x => new {
+            return list.Select(x => new
+            {
                 id = x.CovenantId,
                 type = x.CovenantType,
                 description = x.CovenantValue,
                 state = x.State.ToString()
             });
+        }
+
+        [HttpPost("{documentId}/covenants/{covenantId}/reject")]
+        public async Task RejectCovenant(string documentId, string covenantId, [FromServices]IMongoDatabase mongoDatabase)
+        {
+            var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var filter = Builders<CovenantSearchResult>.Filter.Where(x => x.Id == new ObjectId(covenantId));
+            var result = await covenantsCollection                .FindAsync(filter);
+
+            var covenant = await result.SingleOrDefaultAsync();
+
+            covenant.State = CovenantState.Rejected;
+
+            await covenantsCollection.ReplaceOneAsync(filter, covenant);
+        }
+
+        [HttpPost("{documentId}/covenants/{covenantId}/accept")]
+        public async Task AcceptCovenant(string documentId, string covenantId, [FromServices]IMongoDatabase mongoDatabase)
+        {
+            var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
+            var filter = Builders<CovenantSearchResult>.Filter.Where(x => x.Id == new ObjectId(covenantId));
+            var result = await covenantsCollection.FindAsync(filter);
+
+            var covenant = await result.SingleOrDefaultAsync();
+
+            covenant.State = CovenantState.Accepted;
+
+            await covenantsCollection.ReplaceOneAsync(filter, covenant);
         }
 
         [HttpGet("{documentId}")]
@@ -55,7 +86,7 @@ namespace src.Controllers
             return text.Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
         }
 
-        private string dummyCovenant = @"
+        private readonly string dummyCovenant = @"
       
 Automating Covenants.
 
