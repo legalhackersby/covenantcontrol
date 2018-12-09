@@ -53,6 +53,11 @@ namespace tests
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
             Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
             Assert.True(result.Distinct().Count() == result.Count);
+            
+            // exact first covenant in document
+            var covenantsInOrder = result.OrderBy(x => x.StartIndex).ToArray();
+            var covenant1 = "Срок действия договора устанавливается до 31.08.2019 года.";
+            Assert.Equal(covenant1, covenantsInOrder[0].CovenantValue);
         }
 
         /// <summary>
