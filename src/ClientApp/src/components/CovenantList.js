@@ -3,7 +3,7 @@ import { Panel } from 'react-bootstrap';
 import { Covenant } from './Covenant';
 import axios from 'axios'
 import { Config } from '../Config'
-import 'CovenantList.css';
+import './CovenantList.css';
 
 export class CovenantList extends Component {
     displayName = CovenantList.name
