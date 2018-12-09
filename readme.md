@@ -77,3 +77,14 @@ See real covenants in `data/` folder.
 # Solution
 - Will store native document to allow download and reparse original. So not client side (fat client) parsing
 - Store document file system to allow command line tools to run upon
+
+
+# Teck
+
+- Решение построенно на технологиях c полностью открытым исходным кодом(React, .NET Core, LibreOffice, MongoDb)
+- Эвристическая модель распознания основана на:
+  1. Поиске ключевых слов и их вариаций
+  2. Взаимном расположении ключевых слов в структуре документа
+  3. Задание веса ключевого слова для типа ковенанты
+- Модель готова к более сложным вероятностым иерархическим эвристикам и к интеграции машинного обучения
+
