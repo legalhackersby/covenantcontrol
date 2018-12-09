@@ -32,9 +32,14 @@ namespace tests
             var result1 = textParserService1.GetCovenantResults(ContractTextHelper.Contract1);
 
             var extParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy(100));
-            var result2 = extParserService2.GetCovenantResults(ContractTextHelper.Contract1);
+            var nextResult = extParserService2.GetCovenantResults(ContractTextHelper.Contract1);
 
-            var result3 = result1.Select(_ => _.StartIndex).Except(result2.Select(_ => _.StartIndex)).ToList();
+            var result3 = result1.Select(_ => _.StartIndex).Except(nextResult.Select(_ => _.StartIndex)).ToList();
+
+            // exact first covenant in documenst
+            var covenantsInOrder = nextResult.OrderBy(x => x.StartIndex).ToArray();
+            var covenant1 = "Срок действия договора устанавливается до 31.08.2019 года.";
+            Assert.Equal(covenant1, covenantsInOrder[0].CovenantValue);
 
             //Assert.Equal(16, result.Count);
             //Assert.True(result.All(_ => _.CovenantValue.Length > 3));
