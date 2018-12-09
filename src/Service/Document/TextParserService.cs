@@ -44,9 +44,9 @@ namespace src.Service.Document
 
                             if (covenantStartIndex > -1)
                             {
-                                var covenantSearchResult = covenantSearchStrategy.Search(text, covenantKeyWord, covenant.CovenantName);
+                                var covenantSearchResult = this.covenantSearchStrategy.Search(text, covenantKeyWord, covenant.CovenantName);
 
-                                if (covenantSearchResult != null)// && !covenantSearchResults.Contains(covenantSearchResult))
+                                if (covenantSearchResult != null && covenantSearchResult.Any())// && !covenantSearchResults.Contains(covenantSearchResult))
                                 {
                                     covenantSearchResults.AddRange(covenantSearchResult);
                                 }

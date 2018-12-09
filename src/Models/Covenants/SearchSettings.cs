@@ -10,16 +10,11 @@
         /// </summary>
         public SearchSettings()
         {
-            this.Separator = " ";
+            this.Reverse = false;
+            this.ExctractStemm = false;
+            this.KeywordSeparator = " ";
+            this.AcceptableSearchPercentage = 100;
         }
-
-        /// <summary>
-        /// Gets or sets the keywords count per attempt.
-        /// </summary>
-        /// <value>
-        /// The keywords count per attempt.
-        /// </value>
-        public int KeywordsCountPerAttempt { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="SearchSettings"/> is reverse.
@@ -35,6 +30,22 @@
         /// <value>
         /// The separator.
         /// </value>
-        public string Separator { get; set; }
+        public string KeywordSeparator { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [exctract stemm].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [exctract stemm]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ExctractStemm { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [acceptable search percentage].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [acceptable search percentage]; otherwise, <c>false</c>.
+        /// </value>
+        public int AcceptableSearchPercentage { get; set; }
     }
 }

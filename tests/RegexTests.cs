@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
+using src.Models.Covenants;
 using src.Service.Document;
 using Xunit;
 
@@ -19,7 +22,7 @@ namespace tests
         /// </summary>
         public RegexTests()
         {
-            this.textParserService = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy(100));
+            this.textParserService = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy());
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace tests
             var textParserService1 = new TextParserService(new ExactMatchCovenantSearchStrategy());
             var result1 = textParserService1.GetCovenantResults(ContractTextHelper.Contract1);
 
-            var extParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy(100));
+            var extParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy());
             var nextResult = extParserService2.GetCovenantResults(ContractTextHelper.Contract1);
 
             var result3 = result1.Select(_ => _.StartIndex).Except(nextResult.Select(_ => _.StartIndex)).ToList();
@@ -63,7 +66,7 @@ namespace tests
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
             Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
             Assert.True(result.Distinct().Count() == result.Count);
-            
+
             // exact first covenant in document
             var covenantsInOrder = result.OrderBy(x => x.StartIndex).ToArray();
             var covenant1 = "Срок действия договора устанавливается до 31.08.2019 года.";
@@ -81,6 +84,63 @@ namespace tests
             Assert.True(result.All(_ => _.CovenantValue.Length > 3));
             Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
             Assert.True(result.Distinct().Count() == result.Count);
+        }
+
+        /// <summary>
+        /// Contract1 get covenant results.
+        /// </summary>
+        [Fact]
+        public void Contract1_GetCovenantResults_Strategy()
+        {
+            var text = ContractTextHelper.Contract1;
+            var textParserService1 = new TextParserService(new ExactMatchCovenantSearchStrategy());
+            var result = textParserService1.GetCovenantResults(ContractTextHelper.Contract1);
+
+            foreach (var covenantSearchResult in result)
+            {
+                text = text.Replace(covenantSearchResult.CovenantValue, $"<mark>{covenantSearchResult.CovenantValue}</mark>");
+            }
+
+            using (var sw = new StreamWriter($@"d:\TestCovenant_Exact_{Guid.NewGuid().ToString("N")}.html"))
+            {
+                var newText = $@"<html>
+<body>
+{text}
+</body>
+</html>";
+                sw.WriteLine(newText);
+                sw.Flush();
+            }
+
+            var text1 = ContractTextHelper.Contract1;
+            var searchSetting = new SearchSettings
+            {
+                ExctractStemm = true,
+                AcceptableSearchPercentage = 100
+            };
+
+            var textParserService2 = new TextParserService(new WordsPercentageMatchCovenantSearchStrategy(searchSetting));
+            var result2 = textParserService2.GetCovenantResults(ContractTextHelper.Contract1);
+
+            foreach (var covenantSearchResult in result2)
+            {
+                text1 = text1.Replace(covenantSearchResult.CovenantValue, $"<mark>{covenantSearchResult.CovenantValue}</mark>");
+            }
+
+            using (var sw = new StreamWriter($@"d:\TestCovenant_PercentStrategy_{Guid.NewGuid():N}.html"))
+            {
+                var newText = $@"<html>
+<body>
+{text1}
+</body>
+</html>";
+                sw.WriteLine(newText);
+                sw.Flush();
+            }
+            //Assert.Equal(16, result.Count);
+            //Assert.True(result.All( => .CovenantValue.Length > 3));
+            //Assert.True(result.All( => .StartIndex < _.EndIndex));
+            //Assert.True(result.Distinct().Count() == result.Count);
         }
     }
 }

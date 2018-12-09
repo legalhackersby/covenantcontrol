@@ -46,7 +46,7 @@ namespace src
             services.AddTransient<IStorage, Storage>();
             services.AddSingleton<IConvertToTxt>(new ConvertToTxt());
             services.AddTransient<IDocumentService, DocumentService>();
-            services.AddTransient<ICovenantSearchStrategy, ExactMatchCovenantSearchStrategy>();
+            services.AddTransient<ICovenantSearchStrategy, WordsPercentageMatchCovenantSearchStrategy>();
             services.AddTransient<ITextParserService, TextParserService>();
             
             
