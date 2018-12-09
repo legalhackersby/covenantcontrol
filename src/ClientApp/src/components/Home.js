@@ -142,20 +142,35 @@ export class Home extends Component {
     }
 
     add(but) {
+
         let id = but.target.attributes['uid'].value;
-        $(`.action-buttons-${id}`).replaceWith(`<div class="row"></div>`);
-        $(`.head-remove-button-${id}`).remove();
-        $(`[uid='${id}']`).addClass('panel-success');
-        console.log(id);
+
+        axios.post(`${Config.apiHost}/api/document/${this.state.documentId}/covenants/${id}/accept`)
+            .then(x => {
+
+                $(`.action-buttons-${id}`).replaceWith(`<div class="row"></div>`);
+                $(`.head-remove-button-${id}`).remove();
+                $(`[uid='${id}']`).addClass('panel-success');
+                console.log(id);
+
+            });
     }
 
     skip(but) {
+
         let id = but.target.attributes['uid'].value;
-        let elem = $(`[id='${id}']`);
-        elem.removeClass('highlight');
-        let coven = $(`[uid='${id}']`);
-        coven.remove();
-        console.log(id);
+
+        axios.post(`${Config.apiHost}/api/document/${this.state.documentId}/covenants/${id}/reject`)
+            .then(x => {
+
+                let elem = $(`[id='${id}']`);
+                elem.removeClass('highlight');
+                let coven = $(`[uid='${id}']`);
+                coven.remove();
+                console.log(id);
+                
+            });
+        
     }
 
     render() {
