@@ -3,11 +3,13 @@
 
 # DISCLAIMER
 
-Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done. Does reflect our ability for work fast, not our ability to code well.
+Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done, long running stuff not in background. Does reflect our ability for work fast, not our ability to code well.
+
+# Run
+
+`dotnet run --launch-profile=src`
 
 # Build
-
-dotnet run --launch-profile=src
 
 ## Works in `Visual Studio Code 1.29.1` with plugins:
 - `Debugger for Firefox` or `Debugger for Chrome` 
@@ -16,17 +18,9 @@ dotnet run --launch-profile=src
 - `.NET Core Test Explorer`
 - `npm`
 - `GitLens — Git supercharged`
-
-
- plugins.
-
-## `Visual Studio 2017.8.9`?
-
-## Jetbrains Raider/WebStorm?
+- 
 
 # SDK and runtime
-
-
 
 ## Front
 - [React Dev tools](https://fb.me/react-devtools)
@@ -51,7 +45,7 @@ https://web.telegram.org/#/im?p=g283474501
 
 See [example document](src/ClientApp/public/document/55db3a1231a04e39983063027839bf36.txt)
 
-TODO: we will be given with real covenantas
+See real covenants in `data/` folder.
 
 # Main scenario
 
@@ -68,22 +62,18 @@ TODO: we will be given with real covenantas
 - https://ebrevia.com/
 - https://kirasystems.com/
 
+# Features 
+- Suppored uploads: txt, rtf, doc, docx, odt
+- Text only view
 
 # Proof of Concept
-
-- upload text only; next upload text only docx or rtf, next pdf
-- find covenants by regex; next by nlp ml
-- position is `{start char index, end char index, type of data index}`
-- only found can be added; next allow manual highlight
+- upload pdf
+- by nlp ml
+- allow manual highlight for data collection and tuning
 - show in dashboard; next:allow attach action to dashboard item
-- text only view; next: near native view;
+- near native view;
 
 
-# Solutions
-- Will store native document to allow download and reparce original. So not client side (fat client) parsing
-- Store document text in database or as file?
-
-# Todo
-- sketch dummy data and API and interfaces on MVC side to allow parallel start
-- sketch dummy react view (read data stored in json file) to show document random highligh and to press on yellow to get dashboard item (all in raw text-json blobs, no real sructure)
-- Update React to latest?
+# Solution
+- Will store native document to allow download and reparse original. So not client side (fat client) parsing
+- Store document file system to allow command line tools to run upon
