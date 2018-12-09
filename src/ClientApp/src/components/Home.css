@@ -108,3 +108,7 @@ label.file-upload input[type="file"] {
     z-index: 10;
     background-color: white;
 }
+
+.full-text {
+    min-height: 700px;
+}

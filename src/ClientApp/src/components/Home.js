@@ -200,7 +200,7 @@ export class Home extends Component {
                                     </Col>
                                 </Row>
                             </Panel.Heading>
-                            <Panel.Body>
+                            <Panel.Body className={'full-text'}>
                                 <div dangerouslySetInnerHTML={{ __html: this.state.fileContent }}></div>
                             </Panel.Body>
                         </Panel>

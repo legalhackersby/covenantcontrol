@@ -1,5 +1,10 @@
-﻿.navbar li .glyphicon {
+﻿.navbar {
+    display: none;
+}
+
+.navbar li .glyphicon {
     margin-right: 10px;
+
 }
 
 /* Highlighting rules for nav menu items */
