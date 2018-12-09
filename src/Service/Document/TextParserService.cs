@@ -29,8 +29,7 @@ namespace src.Service.Document
         {
             // TODO: input should be gotten from file such as StreamReader. For prototype and unit testing it is easy to use a direct plain text.
             var covenantSearchResults = new List<CovenantSearchResult>();
-
-            this.Covenants.AddRange(CovenantHelper.GetCovenants());
+            this.Covenants = CovenantHelper.GetCovenants();
 
             try
             {
