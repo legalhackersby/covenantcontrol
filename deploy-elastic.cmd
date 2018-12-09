@@ -2,8 +2,6 @@
 :: https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html 
 :: https://www.elastic.co/guide/en/kibana/current/install.html
 ::
-:: ElasticSearch http://localhost:9200/
-:: Kibana http://localhost:5601/
 
 set ORIG = %CD%
 mkdir .runtime
