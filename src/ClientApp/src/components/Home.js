@@ -15,12 +15,12 @@ const covenantTemplate = _.template(`
                                      <div class="col-sm-9" style="magrin-top:-10px;">
                                         <span><%=type%></span>
                                      </div>
-                                     <div class="col-sm-1">
+                                     <div class="col-sm-1" style="z-index=10000">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-ok head-remove-button-<%=id%>">
                                             <i uid="<%=id%>" class="glyphicon glyphicon-ok"></i>
                                         </button>
                                      </div>
-                                     <div class="col-sm-1">
+                                     <div class="col-sm-1" style="z-index=10000">
                                         <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-remove">
                                             <i uid="<%=id%>" class="glyphicon glyphicon-remove"></i>
                                         </button>
@@ -94,10 +94,16 @@ export class Home extends Component {
 
         $(document).on('click', '.btn-ok', (event) => {
             this.add(event);
+            event.stopPropagation();
+            event.preventDefault();
+            return false;
         });
 
         $(document).on('click', '.btn-remove', (event) => {
             this.skip(event);
+            event.stopPropagation();
+            event.preventDefault();
+            return false;
         });
 
         for (let i in covenants) {
@@ -110,25 +116,27 @@ export class Home extends Component {
 
             panel.on('click', (event) => {
 
+if (event.target.tagName != 'DIV')
+{
+return;
+}
 
-                /*if ($(event.target).hasClass('btn-ok')) {
-                    this.add(event);
+                if ($(event.target).hasClass('btn-ok')) {
                     return
                 }
 
                 if ($(event.target).hasClass('btn-remove')) {
-                    this.skip(event);
                     return
-                }*/
+                }
 
                 let collapsePanel = panel.children('.panel-collapse');
 
                 if (!collapsePanel.hasClass('in')) {
                     collapsePanel.addClass('in');     
-                    collapsePanel.css('z-index', 10000);             
+                    collapsePanel.parent().css('z-index', 1000000);             
                 } else {
                     collapsePanel.removeClass('in');
-                    collapsePanel.css('z-index', 1000);
+                    collapsePanel.parent().css('z-index', 1000);
                 }
 
             }, );
