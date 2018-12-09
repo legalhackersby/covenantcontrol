@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using src.Models;
 using src.Models.Covenants;
@@ -22,6 +23,6 @@ namespace src.Service.Document
         /// <param name="covenantKeyWord">The covenant key word.</param>
         /// <param name="covenantName">Name of the covenant.</param>
         /// <returns></returns>
-        CovenantSearchResult Search(string text, string covenantKeyWord, string covenantName);
+        List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName);
     }
 }

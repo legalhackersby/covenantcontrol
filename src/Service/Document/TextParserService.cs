@@ -46,9 +46,9 @@ namespace src.Service.Document
                             {
                                 var covenantSearchResult = covenantSearchStrategy.Search(text, covenantKeyWord, covenant.CovenantName);
 
-                                if (covenantSearchResult != null && !covenantSearchResults.Contains(covenantSearchResult))
+                                if (covenantSearchResult != null)// && !covenantSearchResults.Contains(covenantSearchResult))
                                 {
-                                    covenantSearchResults.Add(covenantSearchResult);
+                                    covenantSearchResults.AddRange(covenantSearchResult);
                                 }
                             }
                         }
@@ -60,7 +60,7 @@ namespace src.Service.Document
                 Console.WriteLine(e);
             }
 
-            return covenantSearchResults;
+            return covenantSearchResults.Distinct().ToList();
         }
     }
 }
