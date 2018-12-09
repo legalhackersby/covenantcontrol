@@ -33,7 +33,7 @@ export class CovenantList extends Component {
                     {
                         this.state
                             .covenants
-                            .map(x => <Covenant description={x.description} key={x.id}></Covenant>)
+                            .map(x => <Covenant description={x.description} key={x.id} type={x.type}></Covenant>)
                     }
                 </Panel.Body>
             </Panel>

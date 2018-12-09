@@ -8,6 +8,9 @@ export class Covenant extends Component {
     render() {
         return (
           <Panel>
+              <Panel.Heading>
+                  {this.props.type}
+              </Panel.Heading>
               <Panel.Body>
                   <Row>
                       <Col sm={12} className={'task-description'}>

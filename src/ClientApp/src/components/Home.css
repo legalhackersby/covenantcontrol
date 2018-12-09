@@ -109,6 +109,10 @@ label.file-upload input[type="file"] {
     background-color: white;
 }
 
+.full-text {
+    min-height: 700px;
+}
+
 .cov-head
 {
     padding-top: 0px;

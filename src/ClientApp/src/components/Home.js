@@ -133,7 +133,7 @@ return;
 
                 if (!collapsePanel.hasClass('in')) {
                     collapsePanel.addClass('in');     
-                    collapsePanel.parent().css('z-index', 1000000);             
+                    collapsePanel.parent().css('z-index', 1000000);
                 } else {
                     collapsePanel.removeClass('in');
                     collapsePanel.parent().css('z-index', 1000);
@@ -208,7 +208,7 @@ return;
                                     </Col>
                                 </Row>
                             </Panel.Heading>
-                            <Panel.Body>
+                            <Panel.Body className={'full-text'}>
                                 <div dangerouslySetInnerHTML={{ __html: this.state.fileContent }}></div>
                             </Panel.Body>
                         </Panel>
