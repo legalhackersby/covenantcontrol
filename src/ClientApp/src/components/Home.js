@@ -12,7 +12,7 @@ const covenantTemplate = _.template(`
                           <div uid="<%=id%>" class="covenant panel panel-default">
                                  <div class="panel-heading cov-head">
                                     <div class="row">
-                                     <div class="col-sm-8">
+                                     <div class="col-sm-9" style="magrin-top:-10px;">
                                         <span><%=type%></span>
                                      </div>
                                      <div class="col-sm-1">

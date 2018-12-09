@@ -108,3 +108,14 @@ label.file-upload input[type="file"] {
     z-index: 10;
     background-color: white;
 }
+
+.panel-heading
+{
+    padding-top: 0px;
+}
+
+.panel-heading .col-sm-1
+{
+    margin-top: 10px;
+}
+
