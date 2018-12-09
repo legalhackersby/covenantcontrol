@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
 import { Covenant } from './Covenant';
+import axios from 'axios'
+import { Config } from '../Config';
 
 export class CovenantList extends Component {
     displayName = CovenantList.name
@@ -13,7 +15,11 @@ export class CovenantList extends Component {
     }
 
     componentWillMount() {
-
+        axios.get(`${Config.apiHost}/api/document/${this.props.id}/covenants`)
+            .then((response => {
+                console.log(this.state);
+                this.setState({...this.state, covenants: response.data});
+            }))
     }
 
     render() {
@@ -26,7 +32,7 @@ export class CovenantList extends Component {
                     {
                         this.state
                             .covenants
-                            .map(x => <Covenant description={x.description} key={x.id} skip={this.props.skip} add={this.props.add}></Covenant>)
+                            .map(x => <Covenant description={x.description} key={x.id}></Covenant>)
                     }
                 </Panel.Body>
             </Panel>

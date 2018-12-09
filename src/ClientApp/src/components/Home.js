@@ -166,8 +166,8 @@ export class Home extends Component {
                                 <Row>
                                     <Col sm={8}></Col>
                                     <Col sm={2}>
-                                        <Link to="/covenants">
-                                            <Button className={'btn-primary'} onClick={this.routeToList}>Ковенанты</Button>
+                                        <Link to="/covenants" params={{ id: this.state.documentId }}>
+                                            <button class="btn btn-primary">Ковенанты</button>
                                         </Link>
                                     </Col>
                                     <Col sm={2}>
