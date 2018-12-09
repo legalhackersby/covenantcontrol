@@ -15,8 +15,14 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.1.1" />
+    
     <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
     <PackageReference Include="MongoDB.Driver.GridFS" Version="2.7.2" />
+
+    <PackageReference Include="Lucene.Net"  Version="4.8.0-beta00005" />
+    <PackageReference Include="Lucene.Net.Analysis.Common"  Version="4.8.0-beta00005" />
+    <PackageReference Include="Lucene.Net.QueryParser"  Version="4.8.0-beta00005" />
+    <PackageReference Include="LingvoNET" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -20,13 +20,14 @@ namespace src.Service.Document
 
         public SearchSettings SearchSettings { get; set; }
 
-        public CovenantSearchResult Search(string text, string covenantKeyWord, string covenantName)
+        public List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName)
         {
             var covenantStartIndex = text.IndexOf(covenantKeyWord, StringComparison.OrdinalIgnoreCase);
 
             if (covenantStartIndex > -1)
             {
-                return GetCovenantResult(text, covenantStartIndex, covenantName, covenantKeyWord);
+                return new List<CovenantSearchResult>
+                    {GetCovenantResult(text, covenantStartIndex, covenantName, covenantKeyWord)};
             }
 
             return null;

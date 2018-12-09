@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Win32;
 using src.Models;
 using src.Models.Covenants;
 
@@ -16,45 +18,55 @@ namespace src.Service.Document
             this.acceptablePercent = acceptablePercent;
         }
 
-        public CovenantSearchResult Search(string text, string covenantKeyWord, string covenantName)
+        public List<CovenantSearchResult> Search(string text, string covenantKeyWord, string covenantName)
         {
-            var keyWordsInParagraph = covenantKeyWord.Split(" ");
-            if (keyWordsInParagraph.Length > 1)
+            var covenantList = new List<CovenantSearchResult>();
+            //var keyWordsInParagraph = covenantKeyWord.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            //if (keyWordsInParagraph.Length > 0)
             {
-                var allTextParagraphs = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                var allTextParagraphs = text.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
                 if (allTextParagraphs.Any())
                 {
-                    foreach (var paragraph in allTextParagraphs)
-                    {
-                        var wordCountInParagraph = 0;
-                        foreach (var keyWord in keyWordsInParagraph)
-                        {
-                            if (paragraph.IndexOf(keyWord, StringComparison.OrdinalIgnoreCase) > -1)
-                            {
-                                wordCountInParagraph++;
-                            }
-                        }
 
-                        if ((double)(wordCountInParagraph / keyWordsInParagraph.Length) * 100 >= acceptablePercent)
+                    {
+
+                        foreach (var paragraph in allTextParagraphs)
                         {
-                            var index = text.IndexOf(paragraph, StringComparison.Ordinal);
-                            if (index > -1)
+                            var keyWordsInParagraph = covenantKeyWord.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                            if (keyWordsInParagraph.Length > 0)
                             {
-                                return new CovenantSearchResult
+                                var wordCountInParagraph = 0;
+                                foreach (var keyWord in keyWordsInParagraph)
                                 {
-                                    CovenantValue = paragraph,
-                                    CovenantMathesKeyWord = covenantKeyWord,
-                                    CovenantType = covenantName,
-                                    StartIndex = index,
-                                    EndIndex = index + paragraph.Length
-                                };
+                                    if (paragraph.IndexOf(keyWord, StringComparison.OrdinalIgnoreCase) > -1)
+                                    {
+                                        wordCountInParagraph++;
+                                    }
+                                }
+
+                                if ((double) (wordCountInParagraph / keyWordsInParagraph.Length) * 100 >=
+                                    acceptablePercent)
+                                {
+                                    var index = text.IndexOf(paragraph, StringComparison.Ordinal);
+                                    if (index > -1)
+                                    {
+                                        covenantList.Add(new CovenantSearchResult
+                                        {
+                                            CovenantValue = paragraph,
+                                            CovenantMathesKeyWord = covenantKeyWord,
+                                            CovenantType = covenantName,
+                                            StartIndex = index,
+                                            EndIndex = index + paragraph.Length
+                                        });
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
 
-            return null;
+            return covenantList;
         }
     }
 }

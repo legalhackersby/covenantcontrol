@@ -15,12 +15,12 @@ const covenantTemplate = _.template(`
                                         <span><%=type%></span>
                                      </div>
                                      <div class="col-sm-1">
-                                        <button type="button" class="btn btn-info btn-circle btn-ok">
+                                        <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-ok head-remove-button-<%=id%>">
                                             <i class="glyphicon glyphicon-ok"></i>
                                         </button>
                                      </div>
                                      <div class="col-sm-1">
-                                        <button type="button" class="btn btn-info btn-circle btn-remove">
+                                        <button uid="<%=id%>" type="button" class="btn btn-info btn-circle btn-remove">
                                             <i class="glyphicon glyphicon-remove"></i>
                                         </button>
                                      </div>                                     
@@ -101,12 +101,12 @@ export class Home extends Component {
             panel.on('click', (event) => {
 
                 if ($(event.target).hasClass('btn-ok')) {
-                    console.log('ok');
+                    this.add(event);
                     return
                 }
 
                 if ($(event.target).hasClass('btn-remove')) {
-                    console.log('cancel');
+                    this.skip(event);
                     return
                 }
 
@@ -121,23 +121,29 @@ export class Home extends Component {
         }
 
         $('.add').on('click', but => {
-            let id = but.target.attributes['uid'].value;
-            $(`.action-buttons-${id}`).replaceWith(`<div class="row">
-                                     <div class="col-sm-12">
-                                        <span>Добавлено</span>
-                                     </div>
-                                 </div>`);
-            console.log(id);
+            this.add(but)
         });
 
         $('.skip').on('click', but => {
-            let id = but.target.attributes['uid'].value;
-            let elem = $(`[id='${id}']`);
-            elem.removeClass('highlight');
-            let coven = $(`[uid='${id}']`);
-            coven.remove();
-            console.log(id);
+            this.skip(but);
         });
+    }
+
+    add(but) {
+        let id = but.target.attributes['uid'].value;
+        $(`.action-buttons-${id}`).replaceWith(`<div class="row"></div>`);
+        $(`.head-remove-button-${id}`).remove();
+        $(`[uid='${id}']`).addClass('panel-success');
+        console.log(id);
+    }
+
+    skip(but) {
+        let id = but.target.attributes['uid'].value;
+        let elem = $(`[id='${id}']`);
+        elem.removeClass('highlight');
+        let coven = $(`[uid='${id}']`);
+        coven.remove();
+        console.log(id);
     }
 
     render() {
