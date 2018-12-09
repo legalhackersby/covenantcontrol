@@ -112,3 +112,14 @@ label.file-upload input[type="file"] {
 .full-text {
     min-height: 700px;
 }
+
+.cov-head
+{
+    padding-top: 0px;
+}
+
+.cov-head .col-sm-1
+{
+    margin-top: 10px;
+}
+
