@@ -5,7 +5,7 @@
 
 Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done, long running stuff not in background. Does reflect our ability for work fast, not our ability to code well.
 
-See [presentation in Russion here](https://youtu.be/I50DY7bAkvE?t=193)
+See [presentation in Russian here](https://youtu.be/I50DY7bAkvE?t=193)
 
 # Run
 
@@ -70,7 +70,7 @@ See real covenants in `data/` folder.
 
 # Proof of Concept
 - upload pdf
-- by nlp ml
+- by nlp ml;
 - allow manual highlight for data collection and tuning
 - show in dashboard; next:allow attach action to dashboard item
 - near native view;
