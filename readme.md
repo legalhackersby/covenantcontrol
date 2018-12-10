@@ -5,6 +5,8 @@
 
 Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done, long running stuff not in background. Does reflect our ability for work fast, not our ability to code well.
 
+See [presentation in Russion here](https://youtu.be/I50DY7bAkvE?t=193)
+
 # Run
 
 `dotnet run --launch-profile=src`
@@ -79,7 +81,7 @@ See real covenants in `data/` folder.
 - Store document file system to allow command line tools to run upon
 
 
-# Teck
+# Tech
 
 - Решение построенно на технологиях c полностью открытым исходным кодом(React, .NET Core, LibreOffice, MongoDb)
 - Эвристическая модель распознания основана на:
