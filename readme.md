@@ -5,6 +5,8 @@
 
 Alpha version. Code was typed fast, streams and async-awaits not used, layers not layered and no optimizations done, long running stuff not in background. Does reflect our ability for work fast, not our ability to code well.
 
+ML/NLP code is not part of this repository.
+
 See [presentation in Russian here](https://youtu.be/I50DY7bAkvE?t=193)
 
 # Run
@@ -63,6 +65,7 @@ See real covenants in `data/` folder.
 
 - https://ebrevia.com/
 - https://kirasystems.com/
+- http://jetlex.ai/
 
 # Features 
 - Suppored uploads: txt, rtf, doc, docx, odt
@@ -70,11 +73,9 @@ See real covenants in `data/` folder.
 
 # Proof of Concept
 - upload pdf
-- by nlp ml;
 - allow manual highlight for data collection and tuning
 - show in dashboard; next:allow attach action to dashboard item
 - near native view;
-
 
 # Solution
 - Will store native document to allow download and reparse original. So not client side (fat client) parsing
@@ -83,7 +84,6 @@ See real covenants in `data/` folder.
 
 # Tech
 
-- Решение построенно на технологиях c полностью открытым исходным кодом(React, .NET Core, LibreOffice, MongoDb)
 - Эвристическая модель распознания основана на:
   1. Поиске ключевых слов и их вариаций
   2. Взаимном расположении ключевых слов в структуре документа
