@@ -124,6 +124,9 @@ See real covenants in `data/` folder.
 
 - Input documents and data are closed-proprietary
 - Generated models are closed-proprietary
-- Code is open, but AGPL
+- Code is open, but AGPL (or similar, with approciate clause for investor)
 - Code after X(1 year or next release or fail of startup) is under Apache(other?)
+
+# Initial Delivery model
+- Online Office (Google, Microsoft) plugin to help detect coventants.
 
