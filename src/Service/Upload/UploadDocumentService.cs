@@ -54,7 +54,10 @@ namespace src.Service
             var covenantsCollection = mongoDatabase.GetCollection<CovenantSearchResult>("covenants");
 
             await documents.InsertOneAsync(mongoDocument);
-            await covenantsCollection.InsertManyAsync(covenants);
+            if (covenants.Count > 0)
+            {
+                await covenantsCollection.InsertManyAsync(covenants);
+            }
 
             return mongoDocument.Id.ToString();
         }
@@ -67,15 +70,15 @@ namespace src.Service
                 .OrderBy(x => x.StartIndex)
                 .ToList();
 
-            var dict = new Dictionary<int, CovenantSearchResult>();
+            var dict = new List<CovenantSearchResult>();
 
             foreach (var covenant in ncovs)
             {
-                dict[covenant.StartIndex] = covenant;// BUG: we just use one covenant, but should all
+                dict.Add(covenant);// BUG: we just use one covenant, but should all
             }
 
             var result = new List<CovenantSearchResult>();
-            ncovs = dict.Values.ToList();
+            ncovs = dict;
 
             foreach (var n in ncovs)
             {

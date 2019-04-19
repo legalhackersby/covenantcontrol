@@ -1,0 +1,78 @@
+"Receiving permission/Notification"
+ {
+                "written permission",
+                "excess written permission",
+                "requesting permission",
+                "without the written permission",
+                "receive permission",
+		"24 hour notice",
+		"by an agreement in writing", 
+		"Landlord's prior written consent",
+		"notices provided"
+            };
+			
+			
+"Alterations & improvements terms"
+{
+                "alterations",
+                "additions",
+                "improvements",
+                "decorations"
+            };
+			
+"Sub renting"
+ {
+                "allow any other person to live",
+                "Resident agrees not to assign this agreement",
+                "appropriate surcharge",
+		"sublease",
+		"notices provided",
+                "By no means may Tenant allow any additional persons to occupy premise"
+            };
+
+"Repair policy"
+ {
+                "all minor repairs are expected to be performed by or at the direction of the Tenant",
+                "Any repair that is estimated to cost",
+                "Inventory and Inspection Record",
+				"necessary repairs",
+				"repairs" ,
+				"at the direction of the Tenant",
+                "Owner take any action to complete the necessary repairs",
+                "are scheduled for repair/replacement at regular intervals",
+				"TENANT must pay for all repairs"
+            };
+			
+"Duration of agreement"
+ {
+                "Commencing on the",
+		"starting on",
+		"ending on"				
+            };
+			
+"Payment terms"
+ {
+                "Tenant agrees to pay",
+                "due and payable monthly in advance on the",
+                "Rent must be received by",
+				"has not been received by",
+				"may be paid by check",
+				"single payment will be accepted",
+				"Tenant will add",
+				"Tenant will pay",
+				"Tenant must pay",
+				"Tenant must also pay",
+				"will be paid for directly by Tenant",
+				"rent is not received prior",
+				"will be responsible for payment"
+            };
+			
+"Termination"
+ {
+                "Termination",
+                "terminate the Lease",
+                "Termination Date shall be no earlier",
+				"Tenant shall vacate",
+				"If Tenant fails to vacate",
+				"in advance of the date"
+            };

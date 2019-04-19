@@ -34,10 +34,10 @@ const covenantTemplate = _.template(`
                                          </div>                                    
                                      <div class="row action-buttons-<%=id%>">
                                          <div class="col-sm-6">
-                                            <button uid="<%=id%>" type="button" class="skip btn-secondary btn btn-default">Пропустить</button>
+                                            <button uid="<%=id%>" type="button" class="skip btn-secondary btn btn-default">Discard</button>
                                          </div>
                                          <div class="col-sm-6">
-                                            <button uid="<%=id%>" type="button" class="add btn-primary btn btn-default">Добавить</button>
+                                            <button uid="<%=id%>" type="button" class="add btn-primary btn btn-default">Submit</button>
                                          </div>
                                      </div>
                                   </div>
@@ -194,14 +194,14 @@ return;
                                     <Col sm={8}></Col>
                                     <Col sm={2}>
                                         <Link to={{ pathname: '/covenants/' + this.docId, id: this.docId}}>
-                                            <button class="btn btn-primary">Ковенанты</button>
+                                            <button class="btn btn-primary">Covenants</button>
                                         </Link>
                                     </Col>
                                     <Col sm={2}>
                                         <Form id="uploadForm" method="POST" action="http://localhost:56248/api/Upload">
                                             <div className="file-upload-container">
                                                 <label className="file-upload btn btn-primary">
-                                                    Загрузить <input id="file" type="file" onChange={this.handleSelect.bind(this)} />
+                                                    Upload <input id="file" type="file" onChange={this.handleSelect.bind(this)} />
                                                 </label>
                                             </div>
                                         </Form>

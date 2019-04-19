@@ -17,7 +17,14 @@ namespace src.Service.Document
                 new SrokUvedomleniyaCovenant(),
                 new Remont(),
                 new VozmeshenieEnhancementCovenant(),
-                new PoluchenieSoglasovaniyaCovenant()
+                new PoluchenieSoglasovaniyaCovenant(),
+                new ReceivingPermissionCovenant(),
+                new AlterationsCovenant(),
+                new SubRentingCovenant(),
+                new RepairPolicyCovenant(),
+                new DurationOfAgreementCovenant(),
+                new PaymentCovenant(),
+                new TerminationCovenant()
             };
 
             return list;
