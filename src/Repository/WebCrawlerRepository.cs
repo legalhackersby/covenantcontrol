@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+
+namespace src.Repository
+{
+    public class WebCrawlerRepository
+    {
+        private readonly HttpClient client = new HttpClient();
+
+        private const string URL = "https://iswarm.azure-api.net/api/v1/report/socialmessage?html=false&offset=0&limit=400&sources=OSFI_CA_Chapter&lang=en&features=true";
+
+        public WebCrawlerRepository()
+        {
+            this.client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "fe8ba2b9adb342dcb8e6bcdccb7e3a54");
+            
+        }
+
+        public string GetData()
+        {
+            var request = WebRequest.Create(URL);
+            request.Headers.Add("Ocp-Apim-Subscription-Key", "fe8ba2b9adb342dcb8e6bcdccb7e3a54");
+            request.Credentials = new NetworkCredential("osfi_ca_demo1", "ErFULDtuSq2ZzcLA");
+            string result;
+
+            using (var stream = request.GetResponse().GetResponseStream())
+            {
+                using (var sr = new StreamReader(stream))
+                {
+                    result = sr.ReadLine();
+                }
+            }
+
+            return result;
+
+
+
+            /*var response = await this.client.GetAsync(URL);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return content;*/
+        }
+    }
+}
