@@ -1,0 +1,16 @@
+﻿using System.Collections.Generic;
+using src.Models;
+
+namespace src.Service.iSwarm
+{
+    public interface IWebCrawlerService
+    {
+        void HandleData();
+
+        List<string> GetPageTitles();
+
+        List<string> GetChapterTitles(string pageTitle);
+
+        ChapterEntity GetChapter(string chapterTitle);
+    }
+}

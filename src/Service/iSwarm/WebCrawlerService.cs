@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Bson;
+using Newtonsoft.Json.Linq;
 using src.Models;
 using src.Repository;
 
 namespace src.Service.iSwarm
 {
-    public class WebCrawlerService
+    public class WebCrawlerService : IWebCrawlerService
     {
         private readonly WebCrawlerRepository repository = new WebCrawlerRepository();
 
@@ -23,12 +25,24 @@ namespace src.Service.iSwarm
         {
             var content = repository.GetData();
 
-            List<string> result = new List<string>();
-
-            result.Add(content);
+            var json = JArray.Parse(content);
 
             List<ChapterEntity> returnedList = new List<ChapterEntity>();
-            List<ChapterEntity> existingList = new List<ChapterEntity>();
+
+            foreach (var item in json)
+            {
+                var entity = new ChapterEntity();
+                entity.Body = (string)item["body"];
+                entity.PageTitle = (string)item["title"];
+                var user = item["user"];
+                var fullName = user["fullname"];
+                entity.ChapterTitle = (string)fullName.FirstOrDefault();
+                entity.Source = (string)item["url"];
+                entity.CreatedTime = DateTime.Now;
+                returnedList.Add(entity);
+            }
+            
+            List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().ToList();
 
             List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
 
@@ -36,7 +50,7 @@ namespace src.Service.iSwarm
             {
                 var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle);
 
-                if (existingItem != null && existingItem.ChapterTitle != item.ChapterTitle)
+                if (existingItem != null && existingItem.Body != item.Body)
                 {
                     entitiesToInsert.Add(new ChapterEntity()
                     {

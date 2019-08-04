@@ -12,7 +12,7 @@ namespace src.Repository
     {
         private readonly HttpClient client = new HttpClient();
 
-        private const string URL = "https://iswarm.azure-api.net/api/v1/report/socialmessage?html=false&offset=0&limit=400&sources=OSFI_CA_Chapter&lang=en&features=true";
+        private const string URL = "https://iswarm.azure-api.net/ api/v1/report/socialmessage?html=false&offset=0&limit=50&sources=OSFI_CA_Chapter&lang=en&features=true";
 
         public WebCrawlerRepository()
         {

@@ -8,7 +8,7 @@ using src.Models;
 
 namespace src.Repository
 {
-    public abstract class BaseMongoRepository <TModel>
+    public abstract class BaseMongoRepository <TModel> : IBaseMongoRepository<TModel>
     where TModel: BaseEntity
     {
         private readonly IMongoDatabase mongoDatabase;

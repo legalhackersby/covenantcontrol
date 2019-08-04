@@ -9,6 +9,8 @@ using src.Service;
 using src.Service.Document;
 using src.Service.Upload;
 using System.Security.Authentication;
+using src.Repository;
+using src.Service.iSwarm;
 
 namespace src
 {
@@ -48,8 +50,9 @@ namespace src
             services.AddTransient<IDocumentService, DocumentService>();
             services.AddTransient<ICovenantSearchStrategy, WordsPercentageMatchCovenantSearchStrategy>();
             services.AddTransient<ITextParserService, TextParserService>();
-            
-            
+            services.AddTransient<IWebCrawlerService, WebCrawlerService>();
+            services.AddTransient<IChapterMongoRepository, ChapterMongoRepository>();
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
