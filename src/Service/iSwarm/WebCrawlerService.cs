@@ -23,51 +23,55 @@ namespace src.Service.iSwarm
 
         public void HandleData()
         {
-            var content = repository.GetData();
+            var contentList = repository.GetData();
 
-            var json = JArray.Parse(content);
-
-            List<ChapterEntity> returnedList = new List<ChapterEntity>();
-
-            foreach (var item in json)
+            foreach (var jsonString in contentList)
             {
-                var entity = new ChapterEntity();
-                entity.Body = (string)item["body"];
-                entity.PageTitle = (string)item["title"];
-                var user = item["user"];
-                var fullName = user["fullname"];
-                entity.ChapterTitle = (string)fullName.FirstOrDefault();
-                entity.Source = (string)item["url"];
-                entity.CreatedTime = DateTime.Now;
-                returnedList.Add(entity);
-            }
-            
-            List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().ToList();
+                var json = JArray.Parse(jsonString);
 
-            List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
+                List<ChapterEntity> returnedList = new List<ChapterEntity>();
 
-            foreach (var item in returnedList)
-            {
-                var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle);
-
-                if (existingItem != null && existingItem.Body != item.Body)
+                foreach (var item in json)
                 {
-                    entitiesToInsert.Add(new ChapterEntity()
+                    var entity = new ChapterEntity();
+                    entity.Body = (string)item["body"];
+                    entity.PageTitle = (string)item["title"];
+                    var user = item["user"];
+                    var fullName = user["fullname"];
+                    entity.ChapterTitle = (string)fullName.FirstOrDefault();
+                    entity.Source = (string)item["url"];
+                    entity.CreatedTime = DateTime.Now;
+                    returnedList.Add(entity);
+                }
+
+                List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().ToList();
+
+                List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
+
+                foreach (var item in returnedList)
+                {
+                    var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle);
+
+                    if (existingItem != null && existingItem.Body != item.Body)
                     {
-                        Body = item.Body,
-                        ChapterTitle = item.ChapterTitle,
-                        CreatedTime = DateTime.Now,
-                        Id = ObjectId.GenerateNewId(),
-                        PageTitle = item.PageTitle,
-                        Source = item.Source
-                    });
+                        entitiesToInsert.Add(new ChapterEntity()
+                        {
+                            Body = item.Body,
+                            ChapterTitle = item.ChapterTitle,
+                            CreatedTime = DateTime.Now,
+                            Id = ObjectId.GenerateNewId(),
+                            PageTitle = item.PageTitle,
+                            Source = item.Source
+                        });
+                    }
+                }
+
+                if (entitiesToInsert.Count > 0)
+                {
+                    this.chapterMongoRepository.InsertMany(entitiesToInsert);
                 }
             }
-
-            if (entitiesToInsert.Count > 0)
-            {
-                this.chapterMongoRepository.InsertMany(entitiesToInsert);
-            }
+           
         }
 
         public List<string> GetPageTitles()
