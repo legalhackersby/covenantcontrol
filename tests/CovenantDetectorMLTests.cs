@@ -22,7 +22,7 @@ namespace tests
         }
 
         [Fact]
-        public void Test1_Test()
+        public void Train_Predict_Validate()
         {
             // ASSSET.
 

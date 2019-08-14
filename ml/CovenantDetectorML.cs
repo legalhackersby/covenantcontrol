@@ -11,6 +11,7 @@ namespace ml
     public class CovenantDetectorML
     {
         public const string PredictedLabelName = "PredictedLabel";
+
         private string AppPath => Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName);
         private string DefaultCovenantDataPath => Path.Combine(AppPath, "data", "ml", "trainingSets", "covenants", "CovenantsCollection");
         private string DefaultNonCovenantDataPath => Path.Combine(AppPath, "data", "ml", "trainingSets", "covenants", "NonCovenantsCollection");
@@ -19,8 +20,23 @@ namespace ml
 
         public CovenantDetectorML(Context context)
         {
+            if (string.IsNullOrWhiteSpace(context.CovenantDataPath))
+            {
+                context.CovenantDataPath = DefaultCovenantDataPath;
+            }
+
+            if (string.IsNullOrWhiteSpace(context.NonCovenantDataPath))
+            {
+                context.NonCovenantDataPath = DefaultNonCovenantDataPath;
+            }
+
+            if (string.IsNullOrWhiteSpace(context.TrainDataPath))
+            {
+                context.TrainDataPath = DefaultTrainDataPath;
+            }
+
             // Create the dataset if it doesn't exists.
-            if (!File.Exists(DefaultTrainDataPath))
+            if (!File.Exists(context.TrainDataPath))
             {
                 this.CreateTrainDataStructure(context);
             }
@@ -33,7 +49,7 @@ namespace ml
             var mlContext = new MLContext();
 
             var data = mlContext.Data.LoadFromTextFile<CovenantInput>(
-                path: context.TrainDataPath ?? DefaultTrainDataPath,
+                path: context.TrainDataPath,
                 hasHeader: true,
                 separatorChar: '\t');
 
@@ -88,21 +104,20 @@ namespace ml
         public bool IsCovenant(string input)
         {
             var prediction = this.Predictor.Predict(new CovenantInput { Text = input });
-
             return prediction.IsCovenant == "covenant";
         }
 
         private void CreateTrainDataStructure(Context context)
         {
-            string[] nonCovenants = File.ReadAllLines(context.NonCovenantDataPath ?? DefaultNonCovenantDataPath);
-            string[] covenants = File.ReadAllLines(context.CovenantDataPath ?? DefaultCovenantDataPath);
+            string[] nonCovenants = File.ReadAllLines(context.NonCovenantDataPath);
+            string[] covenants = File.ReadAllLines(context.CovenantDataPath);
 
-            if (!Directory.Exists(Path.GetDirectoryName(context.TrainDataPath ?? DefaultTrainDataPath)))
+            if (!Directory.Exists(Path.GetDirectoryName(context.TrainDataPath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(context.TrainDataPath ?? DefaultTrainDataPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(context.TrainDataPath));
             }
 
-            using (var fs = File.Create(context.TrainDataPath ?? DefaultTrainDataPath))
+            using (var fs = File.Create(context.TrainDataPath))
             using (StreamWriter writer = new StreamWriter(fs))
             {
                 int lineNum = 0;
