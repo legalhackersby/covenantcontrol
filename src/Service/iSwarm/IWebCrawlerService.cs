@@ -12,5 +12,7 @@ namespace src.Service.iSwarm
         List<string> GetChapterTitles(string pageTitle);
 
         ChapterEntity GetChapter(string chapterTitle);
+
+        string GetLiquidityAdequacyRequirementsPage();
     }
 }

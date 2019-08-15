@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
@@ -16,9 +17,14 @@ namespace src.Service.iSwarm
 
         private readonly ChapterMongoRepository chapterMongoRepository;
 
-        public WebCrawlerService(ChapterMongoRepository chapterMongoRepository)
+        private readonly IChangesSearchResultMongoRepository changesSearchResultMongoRepository;
+
+        private readonly char[] paragraphSeparators = new[] { '\n' };
+
+        public WebCrawlerService(ChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository)
         {
             this.chapterMongoRepository = chapterMongoRepository;
+            this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
         }
 
         public void HandleData()
@@ -54,7 +60,7 @@ namespace src.Service.iSwarm
 
                     if (existingItem != null && existingItem.Body != item.Body)
                     {
-                        entitiesToInsert.Add(new ChapterEntity()
+                        var newEntity = new ChapterEntity()
                         {
                             Body = item.Body,
                             ChapterTitle = item.ChapterTitle,
@@ -62,7 +68,10 @@ namespace src.Service.iSwarm
                             Id = ObjectId.GenerateNewId(),
                             PageTitle = item.PageTitle,
                             Source = item.Source
-                        });
+                        };
+
+                        this.FindChanges(newEntity, existingItem);
+                        entitiesToInsert.Add(newEntity);
                     }
                 }
 
@@ -71,7 +80,72 @@ namespace src.Service.iSwarm
                     this.chapterMongoRepository.InsertMany(entitiesToInsert);
                 }
             }
-           
+        }
+
+        public string GetLiquidityAdequacyRequirementsPage()
+        {
+            var result = new StringBuilder();
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+                x.PageTitle ==
+                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle);
+
+            foreach (var chapter in chapters)
+            {
+                string text = chapter.Body;
+                var chapterChanges =
+                    this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle);
+
+                var stringBuilder = new StringBuilder(text.Length);
+                var head = 0;
+                foreach (var change in chapterChanges)
+                {
+                    var subs = text.Substring(head, change.StartIndex - head);
+                    stringBuilder.Append(subs);
+                    stringBuilder.Append("<mark id=\"" + change.Id + "\">");
+                    stringBuilder.Append(change.ChangeValue);
+                    stringBuilder.Append("</mark>");
+                    head = change.EndIndex;
+
+                    stringBuilder.Append(text.Substring(head, text.Length - head));
+                    text = stringBuilder.ToString();
+                }
+
+                result.AppendLine(text);
+
+            }
+            return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
+        }
+
+        private void FindChanges(ChapterEntity newVersion, ChapterEntity oldVersion)
+        {
+            var allTextParagraphs = newVersion.Body.Split(this.paragraphSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var changesList = new List<ChangesSearchEntity>();
+            if (allTextParagraphs.Any())
+            {
+                foreach (var paragraph in allTextParagraphs)
+                {
+                    if (!oldVersion.Body.Contains(paragraph))
+                    {
+                        var index = newVersion.Body.IndexOf(paragraph, StringComparison.Ordinal);
+
+                        if (index > -1)
+                        {
+                            changesList.Add(new ChangesSearchEntity
+                            {
+                                ChangeValue = paragraph,
+                                ChapterTitle = newVersion.ChapterTitle,
+                                StartIndex = index,
+                                EndIndex = index + paragraph.Length
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (changesList.Count > 0)
+            {
+                this.changesSearchResultMongoRepository.InsertMany(changesList);
+            }
         }
 
         public List<string> GetPageTitles()

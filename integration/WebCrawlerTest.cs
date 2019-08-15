@@ -12,7 +12,8 @@ namespace integration
         public WebCrawlerTest()
         {
             var client = new MongoClient();
-            this.webCrawlerService = new WebCrawlerService(new ChapterMongoRepository(client.GetDatabase("testCovenantControl")));
+            var database = client.GetDatabase("testCovenantControl");
+            this.webCrawlerService = new WebCrawlerService(new ChapterMongoRepository(database), new ChangesSearchResultMongoRepository(database));
         }
 
         [Fact]
