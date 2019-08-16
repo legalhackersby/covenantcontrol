@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using src.Service.Upload;
 using Xunit;
 
@@ -9,13 +10,15 @@ namespace integration
     /// </summary>
     public class ExtractorTest
     {
+        private string AppPath => Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName);
+
         [Fact]
         public async Task ConvertAsync_RightParametersIn_FileSuccesfullyConverted()
         {
-            string rootFolder = @"D:/shared-src/chaintrack/src/";
-            string inputFilePath = @"D:/shared-src/chaintrack/data/2_аренда_хакатон.doc";
+            string rootFolder = Path.Combine(AppPath, "src");
+            string inputFilePath = Path.Combine(AppPath, "data", "2_аренда_хакатон.doc");
 
-            var converted = await new ConvertToTxt(rootFolder).ConvertAsync(inputFilePath);
+            var converted = await new ConvertToTxt(rootFolder).ExtractTextAsync(inputFilePath);
 
             Assert.NotNull(converted);
         }

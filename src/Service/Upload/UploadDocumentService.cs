@@ -37,7 +37,7 @@ namespace src.Service
                 FileName = file.Name,
             };
 
-            mongoDocument.FileNameTxt = await converter.ConvertAsync(path);
+            mongoDocument.FileNameTxt = await converter.ExtractTextAsync(path);
 
             var content = await storage.ReadAsync(id.ToString(), mongoDocument.FileNameTxt);
 

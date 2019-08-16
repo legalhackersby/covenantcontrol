@@ -5,6 +5,6 @@ namespace src.Service.Upload
 {
     public interface IConvertToTxt
     {
-        Task<string> ConvertAsync(string inputFilePath);
+        Task<string> ExtractTextAsync(string inputFilePath);
     }
 }
