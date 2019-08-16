@@ -54,9 +54,6 @@ namespace tests
             Assert.Equal(covenant1, covenantsInOrder[0].CovenantValue);
             Assert.Equal(covenant2, covenantsInOrder[1].CovenantValue);
             Assert.Equal(covenant3, covenantsInOrder[2].CovenantValue);
-            //Assert.True(result.All(_ => _.CovenantValue.Length > 3));
-            //Assert.True(result.All(_ => _.StartIndex < _.EndIndex));
-            //Assert.True(result.Distinct().Count() == result.Count);
         }
 
         /// <summary>
