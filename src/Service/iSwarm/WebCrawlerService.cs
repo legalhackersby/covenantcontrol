@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
 using src.Models;
@@ -15,13 +18,13 @@ namespace src.Service.iSwarm
     {
         private readonly WebCrawlerRepository repository = new WebCrawlerRepository();
 
-        private readonly ChapterMongoRepository chapterMongoRepository;
+        private readonly IChapterMongoRepository chapterMongoRepository;
 
         private readonly IChangesSearchResultMongoRepository changesSearchResultMongoRepository;
 
         private readonly char[] paragraphSeparators = new[] { '\n' };
 
-        public WebCrawlerService(ChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository)
+        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository)
         {
             this.chapterMongoRepository = chapterMongoRepository;
             this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
@@ -29,6 +32,7 @@ namespace src.Service.iSwarm
 
         public void HandleData()
         {
+            Debugger.Launch();
             var contentList = repository.GetData();
 
             foreach (var jsonString in contentList)
@@ -50,7 +54,7 @@ namespace src.Service.iSwarm
                     returnedList.Add(entity);
                 }
 
-                List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().ToList();
+                List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().OrderByDescending(x => x.CreatedTime).Distinct(((first, second) => first.ChapterTitle == second.ChapterTitle )).ToList();
 
                 List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
 
@@ -85,32 +89,34 @@ namespace src.Service.iSwarm
         public string GetLiquidityAdequacyRequirementsPage()
         {
             var result = new StringBuilder();
-            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+            var chapters = this.chapterMongoRepository.GetAll()/*.Where(x =>
                 x.PageTitle ==
-                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle);
+                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools")*/.OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                (first, second) => { return first.ChapterTitle == second.ChapterTitle; }) .ToList();
 
             foreach (var chapter in chapters)
             {
+                string modifiedText = string.Empty;
                 string text = chapter.Body;
                 var chapterChanges =
                     this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle);
 
-                var stringBuilder = new StringBuilder(text.Length);
+                
                 var head = 0;
                 foreach (var change in chapterChanges)
                 {
-                    var subs = text.Substring(head, change.StartIndex - head);
-                    stringBuilder.Append(subs);
-                    stringBuilder.Append("<mark id=\"" + change.Id + "\">");
+                    var stringBuilder = new StringBuilder(modifiedText);
+
+                    stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
+                    stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
                     stringBuilder.Append(change.ChangeValue);
                     stringBuilder.Append("</mark>");
                     head = change.EndIndex;
-
-                    stringBuilder.Append(text.Substring(head, text.Length - head));
-                    text = stringBuilder.ToString();
+                    modifiedText = stringBuilder.ToString();
+                    text = chapter.Body.Substring(head, chapter.Body.Length - head);
                 }
 
-                result.AppendLine(text);
+                result.AppendLine(modifiedText + text + "<br>");
 
             }
             return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");

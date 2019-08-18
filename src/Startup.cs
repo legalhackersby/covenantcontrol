@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -9,6 +10,9 @@ using src.Service;
 using src.Service.Document;
 using src.Service.Upload;
 using System.Security.Authentication;
+using Quartz;
+using Quartz.Impl;
+using src.Jobs;
 using src.Repository;
 using src.Service.iSwarm;
 
@@ -37,7 +41,14 @@ namespace src
                 settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
                 return new MongoClient(settings);
             });
-            services.AddScoped(x =>
+            services.AddScoped<IMongoDatabase>(x =>
+            {
+                var client = x.GetRequiredService<MongoClient>();
+                IMongoDatabase database = client.GetDatabase(mongoDatabase);
+                return database;
+            });
+            
+            services.AddTransient<IMongoDatabase>(x =>
             {
                 var client = x.GetRequiredService<MongoClient>();
                 IMongoDatabase database = client.GetDatabase(mongoDatabase);
@@ -52,6 +63,7 @@ namespace src
             services.AddTransient<ITextParserService, TextParserService>();
             services.AddTransient<IWebCrawlerService, WebCrawlerService>();
             services.AddTransient<IChapterMongoRepository, ChapterMongoRepository>();
+            services.AddTransient<IChangesSearchResultMongoRepository, ChangesSearchResultMongoRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -96,6 +108,9 @@ namespace src
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            Debugger.Launch();
+            Scheduler.Start(app.ApplicationServices.GetService<IWebCrawlerService>());
         }
     }
 }

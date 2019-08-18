@@ -42,7 +42,7 @@ namespace src.Repository
                     }
                 }
 
-                if (content == "[]")
+                if (content == "[]" || content == "{\"status\":\"invalid_parameter\",\"action\":\"offset\",\"object\":\"No iterator exists for this offset\",\"id\":0}" || i > 0)
                 {
                     break;
                 }

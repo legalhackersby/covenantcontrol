@@ -191,7 +191,12 @@ return;
                         <Panel>
                             <Panel.Heading>
                                 <Row>
-                                    <Col sm={8}></Col>
+                                    <Col sm={6}></Col>
+                                    <Col sm={2}>
+                                        <Link to={{ pathname: '/webDocument/'}}>
+                                            <button class="btn btn-primary">Web Document</button>
+                                        </Link>
+                                    </Col>
                                     <Col sm={2}>
                                         <Link to={{ pathname: '/covenants/' + this.docId, id: this.docId}}>
                                             <button class="btn btn-primary">Covenants</button>
