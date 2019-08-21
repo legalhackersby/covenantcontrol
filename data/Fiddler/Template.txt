@@ -1,0 +1,1 @@
+method:GET api/v1/report/socialmessage?html=false&offset=0&limit=50&sources=OSFI_CA_Chapter&lang=en&features=true
