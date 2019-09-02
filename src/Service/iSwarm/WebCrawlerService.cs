@@ -22,7 +22,7 @@ namespace src.Service.iSwarm
 
         private readonly IChangesSearchResultMongoRepository changesSearchResultMongoRepository;
 
-        private readonly char[] paragraphSeparators = new[] { '\n' };
+        private readonly char[] paragraphSeparators = new[] { '\n', '.' };
 
         public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository)
         {
@@ -119,7 +119,7 @@ namespace src.Service.iSwarm
                 result.AppendLine(modifiedText + text + "<br>");
 
             }
-            return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
+            return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>").Replace(".", ".<br>");
         }
 
         private void FindChanges(ChapterEntity newVersion, ChapterEntity oldVersion)

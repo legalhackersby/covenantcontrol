@@ -24,5 +24,7 @@ namespace src.Service.Document
         /// <param name="covenantName">Name of the covenant.</param>
         /// <returns></returns>
         List<CovenantSearchResult> Search(string text, string covenantKeyword, string covenantName);
+
+        List<CovenantWebSearchResult> SearchWeb(string text, string covenantKeyword, string covenantName);
     }
 }
