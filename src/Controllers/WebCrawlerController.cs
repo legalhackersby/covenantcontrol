@@ -31,5 +31,19 @@ namespace src.Controllers
             var result = this.service.GetLiquidityAdequacyRequirementsPageWithCovenants();
             return result;
         }
+
+        [HttpGet("getCovenants")]
+
+        public object GetWebCovenants()
+        {
+            var list = this.service.GetCovenants();
+            return list.Select(x => new
+            {
+                id = x.CovenantId,
+                type = x.CovenantType,
+                description = x.CovenantValue,
+                state = x.State.ToString()
+            });
+        }
     }
 }

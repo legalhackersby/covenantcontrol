@@ -15,7 +15,7 @@ namespace src.Models
         [BsonIgnore]
         public string CovenantId => Id.ToString();
 
-        [BsonElement("DocumentId")]
+        [BsonElement("ChapterId")]
         [JsonIgnore]
         public ObjectId ChapterId {get;set;}
 

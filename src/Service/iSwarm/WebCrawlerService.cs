@@ -29,11 +29,12 @@ namespace src.Service.iSwarm
 
         private readonly char[] paragraphSeparators = new[] { '\n', '.' };
 
-        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService)
+        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository)
         {
             this.chapterMongoRepository = chapterMongoRepository;
             this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
             this.textParserService = textParserService;
+            this.covenantsWebRepository = covenantsWebRepository;
         }
 
         public void HandleData()
@@ -131,7 +132,9 @@ namespace src.Service.iSwarm
         public string GetLiquidityAdequacyRequirementsPageWithCovenants()
         {
             var result = new StringBuilder();
-            var chapters = this.chapterMongoRepository.GetAll()/*.Where(x =>
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+                x.Id ==
+                ObjectId.Parse("5d700f0275eed25db8d34895"))/*.Where(x =>
                 x.PageTitle ==
                     "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools")*/.OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
@@ -163,6 +166,11 @@ namespace src.Service.iSwarm
 
             }
             return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>").Replace(".", ".<br>");
+        }
+
+        public List<CovenantWebSearchResult> GetCovenants()
+        {
+            return this.covenantsWebRepository.Find(x => x.ChapterId == ObjectId.Parse("5d700f0275eed25db8d34895")).ToList();
         }
 
         private void FindChanges(ChapterEntity newVersion, ChapterEntity oldVersion)
