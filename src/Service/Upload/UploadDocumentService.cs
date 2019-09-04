@@ -87,5 +87,31 @@ namespace src.Service
 
             return result;
         }
+
+        private static List<CovenantWebSearchResult> GetValidCovenantsWeb(List<CovenantWebSearchResult> covenants)
+        {
+            // ISSUE: not optimal at all, fix on search engine side
+            var ncovs = covenants
+                .Where(x => x.StartIndex < x.EndIndex)//BUG: will be ensured by tests
+                .OrderBy(x => x.StartIndex)
+                .ToList();
+
+            var dict = new List<CovenantWebSearchResult>();
+
+            foreach (var covenant in ncovs)
+            {
+                dict.Add(covenant);// BUG: we just use one covenant, but should all
+            }
+
+            var result = new List<CovenantWebSearchResult>();
+            ncovs = dict;
+
+            foreach (var n in ncovs)
+            {
+                if (!result.Any(n.IntersectNotFully)) result.Add(n);
+            }
+
+            return result;
+        }
     }
 }

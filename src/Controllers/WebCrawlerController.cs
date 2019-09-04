@@ -23,5 +23,13 @@ namespace src.Controllers
             var result = this.service.GetLiquidityAdequacyRequirementsPage();
             return result;
         }
+
+        [HttpGet("getWeb")]
+        
+        public string GetWeb()
+        {
+            var result = this.service.GetLiquidityAdequacyRequirementsPageWithCovenants();
+            return result;
+        }
     }
 }

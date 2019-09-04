@@ -74,7 +74,7 @@ namespace src.Models
         public string CovenantMathesKeyWord { get; set; }
 
         //https://stackoverflow.com/questions/13513932/algorithm-to-detect-overlapping-periods?noredirect=1&lq=1
-        public bool IntersectNotFully(CovenantSearchResult other)
+        public bool IntersectNotFully(CovenantWebSearchResult other)
         {
             return this.StartIndex < other.EndIndex && other.StartIndex < this.EndIndex;
         }

@@ -157,6 +157,11 @@ namespace src.Service.Document
             return covenantList;
         }
 
+        public List<CovenantWebSearchResult> SearchWeb(string text, string covenantKeyword, string covenantName)
+        {
+            throw new NotImplementedException();
+        }
+
         private void Do(Dictionary<Guid, List<string>> items, Guid guid, KeyValuePair<int, string> sentenceKeyValuePair)
         {
             if (items.ContainsKey(guid))

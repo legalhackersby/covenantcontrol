@@ -64,6 +64,7 @@ namespace src
             services.AddTransient<IWebCrawlerService, WebCrawlerService>();
             services.AddTransient<IChapterMongoRepository, ChapterMongoRepository>();
             services.AddTransient<IChangesSearchResultMongoRepository, ChangesSearchResultMongoRepository>();
+            services.AddTransient<ICovenantsWebRepository, CovenantsWebRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

@@ -33,6 +33,11 @@ namespace src.Service.Document
             return null;
         }
 
+        public List<CovenantWebSearchResult> SearchWeb(string text, string covenantKeyword, string covenantName)
+        {
+            throw new NotImplementedException();
+        }
+
         private CovenantSearchResult GetCovenantResult(string input, int covenantStartIndex, string covenantName, string covenantKeyWord)
         {
             CovenantSearchResult result = null;

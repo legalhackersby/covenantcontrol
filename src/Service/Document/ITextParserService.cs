@@ -6,5 +6,7 @@ namespace src.Service.Document
     public interface ITextParserService
     {
         List<CovenantSearchResult> GetCovenantResults(string text);
+
+        List<CovenantWebSearchResult> GetCovenantWebResults(string text);
     }
 }

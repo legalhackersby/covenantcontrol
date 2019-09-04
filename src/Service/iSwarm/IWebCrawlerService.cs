@@ -14,5 +14,7 @@ namespace src.Service.iSwarm
         ChapterEntity GetChapter(string chapterTitle);
 
         string GetLiquidityAdequacyRequirementsPage();
+
+        string GetLiquidityAdequacyRequirementsPageWithCovenants();
     }
 }
