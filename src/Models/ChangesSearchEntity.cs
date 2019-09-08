@@ -9,5 +9,7 @@
         public int EndIndex { get; set; }
 
         public string ChapterTitle { get; set; }
+
+        public string PageTitle { get; set; }
     }
 }

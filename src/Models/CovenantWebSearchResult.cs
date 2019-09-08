@@ -54,6 +54,16 @@ namespace src.Models
         public string CovenantValue { get; set; }
 
         /// <summary>
+        /// Gets or sets the covenant value.
+        /// </summary>
+        /// <value>
+        /// The covenant value.
+        /// </value>
+        [BsonElement("PageTitle")]
+        [JsonProperty]
+        public string PageTitle { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the covenant.
         /// </summary>
         /// <value>

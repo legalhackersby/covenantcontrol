@@ -21,7 +21,7 @@ namespace src
                 .WithIdentity("trigger1", "group1")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(5)
+                    .WithIntervalInHours(24)
                     .RepeatForever())
                 .Build();
 

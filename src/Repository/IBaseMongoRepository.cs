@@ -18,5 +18,7 @@ namespace src.Repository
         IEnumerable<TModel> Find(Expression<Func<TModel, bool>> filter);
 
         IEnumerable<TModel> GetAll();
+
+        void DeleteMany(Expression<Func<TModel, bool>> filter);
     }
 }

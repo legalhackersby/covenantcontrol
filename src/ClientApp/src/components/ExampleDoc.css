@@ -1,0 +1,125 @@
+.content-container {
+    margin-top: 20px;
+}
+
+.cov-head {
+    max-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.covenant {
+    position: absolute;
+    left: 100%;
+    width: 300px;
+}
+
+.highlight {
+    padding: 10px 10px 10px 10px;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+    background-color: #ACDCF3;
+}
+
+.file-upload-container {
+    text-align: right;
+}
+
+mark, .mark {
+    padding: .2em;
+    background-color: white;
+}
+
+label.file-upload input[type="file"] {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: 0;
+    background: #fff;
+    cursor: inherit;
+    display: block;
+}
+
+.paragraphListItem-wrapper-w2PKy0 {
+    padding: 10px 10px 10px 0;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .05);
+    background-color: hsla(0, 0%, 95%, .1);
+}
+
+.paragraphListItem-wrapper-w2PKy0:not(last-of-type) {
+    margin-bottom: 25px;
+}
+.main_class {
+    padding: 10px;
+    display: -ms-flexbox;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+    background-color: #ACDCF3;
+}
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+
+.btn-circle {
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    font-size: 24px;
+    line-height: 1.33;
+    border-radius: 35px;
+}
+
+.glyphicon {
+    top: -1px;
+}
+
+.task-description {
+    z-index: 10;
+    background-color: white;
+}
+
+.full-text {
+    min-height: 700px;
+}
+
+.cov-head
+{
+    padding-top: 0px;
+}
+
+.cov-head .col-sm-1
+{
+    margin-top: 10px;
+}
+

@@ -98,10 +98,19 @@ namespace src.Service.Document
         /// <returns></returns>
         public List<CovenantWebSearchResult> SearchWeb(string text, string covenantKeyword, string covenantName)
         {
-            this.SearchSettings.ParagraphsSeparators = new[] {'\n', '.'};
+            string[] parSeps;
+            if (text.Contains("\\n"))
+            {
+                parSeps = new[] { "\\n" };
+            }
+            else
+            {
+                parSeps = new[] {"\\n", "."};
+            }
+
             var covenantList = new List<CovenantWebSearchResult>();
 
-            var allTextParagraphs = text.Split(this.SearchSettings.ParagraphsSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var allTextParagraphs = text.Split(parSeps, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             if (allTextParagraphs.Any())
             {

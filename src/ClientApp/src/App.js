@@ -5,6 +5,8 @@ import { Home } from './components/Home';
 import { CovenantList } from './components/CovenantList';
 import { WebDocument } from './components/WebDocument';
 import { WebDocumentCov } from './components/WebDocumentCov';
+import { ExampleDoc } from './components/ExampleDoc';
+import { ExampleDocCov } from './components/ExampleDocCov';
 // import { FetchData } from './components/FetchData';
 // import Counter from './components/Counter';
 
@@ -18,6 +20,8 @@ export default class App extends Component {
             <Route path='/covenants/:id' component={CovenantList} />
             <Route path='/webDocument' component={WebDocument} />
             <Route path='/webDocumentCov' component={WebDocumentCov} />
+            <Route path='/exampleDocument' component={ExampleDoc} />
+            <Route path='/getExampleCovenants/' component={ExampleDocCov} />
          </Layout>
     );
   }

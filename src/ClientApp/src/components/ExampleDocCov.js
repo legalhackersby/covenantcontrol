@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import { Col, Grid, Panel, Row, Form, Button } from 'react-bootstrap';
-import './Home.css'
+import './ExampleDocCov.css'
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -44,52 +44,35 @@ const covenantTemplate = _.template(`
                                 </div>                                 
                           </div>`);
 
-export class Home extends Component {
-    displayName = Home.name
+export class ExampleDocCov extends Component {
+    displayName = ExampleDocCov.name
 
     constructor(props) {
         super(props);
 
         this.state = {};
+        this.handleSelect();
     }
 
-    handleSelect(event) {
-
-        let file = event.target.files[0];
-
-        const data = new FormData()
-        data.append('file', file)
-
-        axios
-            .post(Config.apiHost + "/api/upload", data, {
-                onUploadProgress: ProgressEvent => {
-                    console.log(ProgressEvent);
-                },
-            })
-            .then((response => {
-
-                this.state.documentId = response.data;
-                this.docId = response.data;
-
-                var file = document.getElementById('file');
-                file.value = '';
-
-                axios.get(`${Config.apiHost}/api/document/${this.state.documentId}`)
+    handleSelect() {
+      
+                axios.get(`${Config.apiHost}/api/WebCrawler/GetExampleCovenants`)
                     .then(response => {
                         let fileContent = response.data;
 
-                        axios.get(`${Config.apiHost}/api/document/${this.state.documentId}/covenants`)
+                        axios.get(`${Config.apiHost}/api/WebCrawler/getCovenants`)
                             .then((response => {
                                 this.state.covenants = response.data;
 
                                 console.log(this.state);
                                 this.setState({ ...this.state, fileContent: fileContent }, this.updateDocument);
                             }))
-                    })
-            }));
+                    });
+            
     }
 
     updateDocument() {
+       
         let covenants = this.state.covenants;
 
         $(document).on('click', '.btn-ok', (event) => {
@@ -122,11 +105,11 @@ return;
 }
 
                 if ($(event.target).hasClass('btn-ok')) {
-                    return
+                    return;
                 }
 
                 if ($(event.target).hasClass('btn-remove')) {
-                    return
+                    return;
                 }
 
                 let collapsePanel = panel.children('.panel-collapse');
@@ -143,7 +126,7 @@ return;
         }
 
         $('.add').on('click', but => {
-            this.add(but)
+            this.add(but);
         });
 
         $('.skip').on('click', but => {
@@ -183,52 +166,17 @@ return;
         
     }
 
+
     render() {
         return (
-            <Grid fluid className={'content-container'}>
-                <Row>
-                    <Col sm={8}>
-                        <Panel>
-                            <Panel.Heading>
-                                <Row>
-                                    <Col sm={2}></Col>
-                                    <Col sm={2}>
-                                        <Link to={{ pathname: '/exampleDocument/'}}>
-                                            <button class="btn btn-primary">Example Document</button>
-                                        </Link>
-                                    </Col>
-                                    <Col sm={2}></Col>
-                                    <Col sm={2}>
-                                        <Link to={{ pathname: '/webDocument/'}}>
-                                            <button class="btn btn-primary">Web Document</button>
-                                        </Link>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <Link to={{ pathname: '/covenants/' + this.docId, id: this.docId}}>
-                                            <button class="btn btn-primary">Covenants</button>
-                                        </Link>
-                                    </Col>
-                                    <Col sm={2}>
-                                        <Form id="uploadForm" method="POST" action="http://localhost:56248/api/Upload">
-                                            <div className="file-upload-container">
-                                                <label className="file-upload btn btn-primary">
-                                                    Upload <input id="file" type="file" onChange={this.handleSelect.bind(this)} />
-                                                </label>
-                                            </div>
-                                        </Form>
-                                    </Col>
-                                </Row>
-                            </Panel.Heading>
-                            <Panel.Body className={'full-text'}>
+            <Panel className={'cov-list'}>
+                <Panel.Heading>
+                    Web Document
+                </Panel.Heading>
+                <Panel.Body className={'full-text'}>
                                 <div dangerouslySetInnerHTML={{ __html: this.state.fileContent }}></div>
                             </Panel.Body>
-                        </Panel>
-                    </Col>
-                    <Col sm={4}>
-                        {/*<CovenantList covenants={this.state.covenants} skip={this.skip} add={this.add}/>*/}
-                    </Col>
-                </Row>
-            </Grid>
+            </Panel>
         );
     }
 }

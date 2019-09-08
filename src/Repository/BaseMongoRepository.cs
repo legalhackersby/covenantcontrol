@@ -53,5 +53,11 @@ namespace src.Repository
 
             return result;
         }
+
+        public void DeleteMany(Expression<Func<TModel, bool>> filter)
+        {
+            var documents = mongoDatabase.GetCollection<TModel>(typeof(TModel).ToString());
+            documents.DeleteMany(filter);
+        }
     }
 }

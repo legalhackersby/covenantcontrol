@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -60,13 +61,27 @@ namespace src.Service.iSwarm
                     returnedList.Add(entity);
                 }
 
+                 /*var toSampleData = json.Where(x =>
+                     (string) x["title"] == "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
+
+                 using (var fs = File.OpenWrite(@"D:\sampleData.txt"))
+                 {
+                     using (var sw = new StreamWriter(fs))
+                     {
+                         foreach (var item in toSampleData)
+                         {
+                             sw.WriteLine(item.ToString()+ ",");
+                         }
+                     }
+                 }*/
+
                 List<ChapterEntity> existingList = this.chapterMongoRepository.GetAll().OrderByDescending(x => x.CreatedTime).Distinct(((first, second) => first.ChapterTitle == second.ChapterTitle)).ToList();
 
                 List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
 
                 foreach (var item in returnedList)
                 {
-                    var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle);
+                    var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle && model.PageTitle == item.PageTitle);
 
                     if (existingItem != null && existingItem.Body != item.Body)
                     {
@@ -96,9 +111,9 @@ namespace src.Service.iSwarm
         public string GetLiquidityAdequacyRequirementsPage()
         {
             var result = new StringBuilder();
-            var chapters = this.chapterMongoRepository.GetAll()/*.Where(x =>
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
                 x.PageTitle ==
-                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools")*/.OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
 
             foreach (var chapter in chapters)
@@ -133,10 +148,8 @@ namespace src.Service.iSwarm
         {
             var result = new StringBuilder();
             var chapters = this.chapterMongoRepository.GetAll().Where(x =>
-                x.Id ==
-                ObjectId.Parse("5d700f0275eed25db8d34895"))/*.Where(x =>
                 x.PageTitle ==
-                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools")*/.OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
 
             foreach (var chapter in chapters)
@@ -145,8 +158,6 @@ namespace src.Service.iSwarm
                 string text = chapter.Body;
                 var chapterCovenants =
                     this.covenantsWebRepository.Find(x => x.ChapterId == chapter.Id);
-
-
 
                 var head = 0;
                 foreach (var change in chapterCovenants)
@@ -192,7 +203,8 @@ namespace src.Service.iSwarm
                                 ChangeValue = paragraph,
                                 ChapterTitle = newVersion.ChapterTitle,
                                 StartIndex = index,
-                                EndIndex = index + paragraph.Length
+                                EndIndex = index + paragraph.Length,
+                                PageTitle = newVersion.PageTitle
                             });
                         }
                     }
@@ -201,6 +213,7 @@ namespace src.Service.iSwarm
 
             if (changesList.Count > 0)
             {
+                this.changesSearchResultMongoRepository.DeleteMany(x => x.ChapterTitle == newVersion.ChapterTitle && x.PageTitle == newVersion.PageTitle);
                 this.changesSearchResultMongoRepository.InsertMany(changesList);
             }
         }
@@ -224,6 +237,86 @@ namespace src.Service.iSwarm
             return result;
         }
 
+        public string GetPage(string pageTitle)
+        {
+            var result = new StringBuilder();
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+                x.PageTitle == pageTitle).OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
+
+            foreach (var chapter in chapters)
+            {
+                string modifiedText = string.Empty;
+                string text = chapter.Body;
+                var chapterChanges =
+                    this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle);
+
+
+                var head = 0;
+                foreach (var change in chapterChanges)
+                {
+                    var stringBuilder = new StringBuilder(modifiedText);
+
+                    stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
+                    stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
+                    stringBuilder.Append(change.ChangeValue);
+                    stringBuilder.Append("</mark>");
+                    head = change.EndIndex;
+                    modifiedText = stringBuilder.ToString();
+                    text = chapter.Body.Substring(head, chapter.Body.Length - head);
+                }
+
+                result.AppendLine(modifiedText + text + "<br>");
+
+            }
+
+            if (pageTitle != "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)")
+            {
+                result.Replace(".", ".<br>");
+            }
+
+            return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
+        }
+
+        public string GetPageWithCovenants(string pageTitle)
+        {
+            var result = new StringBuilder();
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+                x.PageTitle == pageTitle).OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
+
+            foreach (var chapter in chapters)
+            {
+                string modifiedText = string.Empty;
+                string text = chapter.Body;
+                var chapterCovenants =
+                    this.covenantsWebRepository.Find(x => x.ChapterId == chapter.Id);
+
+                var head = 0;
+                foreach (var change in chapterCovenants)
+                {
+                    var stringBuilder = new StringBuilder(modifiedText);
+
+                    stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
+                    stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
+                    stringBuilder.Append(change.CovenantValue);
+                    stringBuilder.Append("</mark>");
+                    head = change.EndIndex;
+                    modifiedText = stringBuilder.ToString();
+                    text = chapter.Body.Substring(head, chapter.Body.Length - head);
+                }
+
+                result.AppendLine(modifiedText + text + "<br>");
+
+            }
+
+            if (pageTitle != "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)")
+            {
+                result.Replace(".", ".<br>");
+            }
+            return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
+        }
+
         private void FindCovenants(List<ChapterEntity> chapters)
         {
             foreach (var chapterEntity in chapters)
@@ -236,6 +329,7 @@ namespace src.Service.iSwarm
                     covenant.Id = ObjectId.GenerateNewId();
                     covenant.ChapterId = chapterEntity.Id;
                     covenant.State = CovenantState.New;
+                    covenant.PageTitle = chapterEntity.PageTitle;
                 }
                 
                 if (covenants.Count > 0)

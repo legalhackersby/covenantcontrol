@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import { Col, Grid, Panel, Row, Form, Button } from 'react-bootstrap';
-import './WebDocument.css'
+import './ExampleDoc.css'
 import $ from 'jquery';
 import _ from 'lodash';
 
@@ -44,8 +44,8 @@ const covenantTemplate = _.template(`
                                 </div>                                 
                           </div>`);
 
-export class WebDocument extends Component {
-    displayName = WebDocument.name
+export class ExampleDoc extends Component {
+    displayName = ExampleDoc.name
 
     constructor(props) {
         super(props);
@@ -56,7 +56,7 @@ export class WebDocument extends Component {
 
     handleSelect() {
       
-                axios.get(`${Config.apiHost}/api/WebCrawler/`)
+                axios.get(`${Config.apiHost}/api/WebCrawler/GetExamplePage`)
                     .then(response => {
                         let fileContent = response.data;
 
@@ -78,7 +78,7 @@ export class WebDocument extends Component {
                             <Col sm={2}>Web Document</Col>
                             <Col sm={6}> </Col>
                             <Col sm={2}>
-                                <Link to={{ pathname: '/webDocumentCov/'}}>
+                                <Link to={{ pathname: '/getExampleCovenants/'}}>
                                     <button class="btn btn-primary">Web Document Cov</button>
                                 </Link>
                             </Col>

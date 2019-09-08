@@ -20,7 +20,7 @@ namespace src.Controllers
         [HttpGet]
         public string Get()
         {
-            var result = this.service.GetLiquidityAdequacyRequirementsPage();
+            var result = this.service.GetPage("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
             return result;
         }
 
@@ -28,7 +28,7 @@ namespace src.Controllers
         
         public string GetWeb()
         {
-            var result = this.service.GetLiquidityAdequacyRequirementsPageWithCovenants();
+            var result = this.service.GetPageWithCovenants("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
             return result;
         }
 
@@ -44,6 +44,26 @@ namespace src.Controllers
                 description = x.CovenantValue,
                 state = x.State.ToString()
             });
+        }
+
+        [HttpGet("RefreshData")]
+        public void RefreshData()
+        {
+            this.service.HandleData();
+        }
+
+        [HttpGet("GetExamplePage")]
+        public string GetExamplePage()
+        {
+            var result = this.service.GetPage("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)");
+            return result;
+        }
+
+        [HttpGet("GetExampleCovenants")]
+        public string GetExampleCovenants()
+        {
+            var result = this.service.GetPageWithCovenants("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)");
+            return result;
         }
     }
 }
