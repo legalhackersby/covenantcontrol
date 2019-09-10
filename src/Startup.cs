@@ -12,6 +12,7 @@ using src.Service.Upload;
 using System.Security.Authentication;
 using Quartz;
 using Quartz.Impl;
+using src.Hubs;
 using src.Jobs;
 using src.Repository;
 using src.Service.iSwarm;
@@ -31,6 +32,7 @@ namespace src
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSignalR();
 
             var mongoUrl = Configuration.GetValue<string>("MongoUrl");
             var mongoDatabase = Configuration.GetValue<string>("MongoDatabase");
@@ -90,6 +92,7 @@ namespace src
 
 
             //app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCors("*");
@@ -108,6 +111,10 @@ namespace src
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
+            });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotifyHub>("/notify");
             });
 
             Debugger.Launch();

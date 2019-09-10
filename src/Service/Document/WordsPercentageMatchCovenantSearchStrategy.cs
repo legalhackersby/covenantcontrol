@@ -99,13 +99,13 @@ namespace src.Service.Document
         public List<CovenantWebSearchResult> SearchWeb(string text, string covenantKeyword, string covenantName)
         {
             string[] parSeps;
-            if (text.Contains("\\n"))
+            if (text.Contains("\n"))
             {
-                parSeps = new[] { "\\n" };
+                parSeps = new[] { "\n" };
             }
             else
             {
-                parSeps = new[] {"\\n", "."};
+                parSeps = new[] {"\n", "."};
             }
 
             var covenantList = new List<CovenantWebSearchResult>();

@@ -60,7 +60,7 @@ export class ExampleDocCov extends Component {
                     .then(response => {
                         let fileContent = response.data;
 
-                        axios.get(`${Config.apiHost}/api/WebCrawler/getCovenants`)
+                        axios.get(`${Config.apiHost}/api/WebCrawler/getExCovenants`)
                             .then((response => {
                                 this.state.covenants = response.data;
 

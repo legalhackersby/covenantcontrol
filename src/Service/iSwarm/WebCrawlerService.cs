@@ -28,7 +28,7 @@ namespace src.Service.iSwarm
 
         private readonly ICovenantsWebRepository covenantsWebRepository;
 
-        private readonly char[] paragraphSeparators = new[] { '\n', '.' };
+        private string[] paragraphSeparators = new[] { "\n", "." };
 
         public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository)
         {
@@ -187,13 +187,21 @@ namespace src.Service.iSwarm
             return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>").Replace(".", ".<br>");
         }
 
-        public List<CovenantWebSearchResult> GetCovenants()
+        public List<CovenantWebSearchResult> GetCovenants(string title)
         {
-            return this.covenantsWebRepository.Find(x => x.PageTitle == "Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview").ToList();
+            return this.covenantsWebRepository.Find(x => x.PageTitle == title).ToList();
         }
 
         private void FindChanges(ChapterEntity newVersion, ChapterEntity oldVersion)
         {
+            if (newVersion.Body.Contains("\n"))
+            {
+                this.paragraphSeparators = new[] { "\n" };
+            }
+            else
+            {
+                this.paragraphSeparators = new[] { "\n", "." };
+            }
             var allTextParagraphs = newVersion.Body.Split(this.paragraphSeparators, StringSplitOptions.RemoveEmptyEntries).ToList();
             var changesList = new List<ChangesSearchEntity>();
             if (allTextParagraphs.Any())
@@ -254,7 +262,7 @@ namespace src.Service.iSwarm
 
             foreach (var chapter in chapters)
             {
-                string modifiedText = string.Empty;
+                string modifiedText = "<h2>" + chapter.ChapterTitle.Replace("(changed)", String.Empty) + "</h2><br><br>";
                 string text = chapter.Body;
                 var chapterChanges =
                     this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle).OrderBy(x => x.StartIndex);
@@ -263,15 +271,19 @@ namespace src.Service.iSwarm
                 var head = 0;
                 foreach (var change in chapterChanges)
                 {
-                    var stringBuilder = new StringBuilder(modifiedText);
+                    if (change.StartIndex - head >= 0)
+                    {
+                        var stringBuilder = new StringBuilder(modifiedText);
 
-                    stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
-                    stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
-                    stringBuilder.Append(change.ChangeValue);
-                    stringBuilder.Append("</mark>");
-                    head = change.EndIndex;
-                    modifiedText = stringBuilder.ToString();
-                    text = chapter.Body.Substring(head, chapter.Body.Length - head);
+
+                        stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
+                        stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
+                        stringBuilder.Append(change.ChangeValue);
+                        stringBuilder.Append("</mark>");
+                        head = change.EndIndex;
+                        modifiedText = stringBuilder.ToString();
+                        text = chapter.Body.Substring(head, chapter.Body.Length - head);
+                    }
                 }
 
                 result.AppendLine(modifiedText + text + "<br>");
@@ -295,7 +307,7 @@ namespace src.Service.iSwarm
 
             foreach (var chapter in chapters)
             {
-                string modifiedText = string.Empty;
+                string modifiedText = "<h2>" + chapter.ChapterTitle.Replace("(changed)", String.Empty) + "</h2><br><br>";
                 string text = chapter.Body;
                 var chapterCovenants =
                     this.covenantsWebRepository.Find(x => x.ChapterId == chapter.Id);
@@ -303,15 +315,18 @@ namespace src.Service.iSwarm
                 var head = 0;
                 foreach (var change in chapterCovenants)
                 {
-                    var stringBuilder = new StringBuilder(modifiedText);
+                    if (change.StartIndex - head >= 0)
+                    {
+                        var stringBuilder = new StringBuilder(modifiedText);
 
-                    stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
-                    stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
-                    stringBuilder.Append(change.CovenantValue);
-                    stringBuilder.Append("</mark>");
-                    head = change.EndIndex;
-                    modifiedText = stringBuilder.ToString();
-                    text = chapter.Body.Substring(head, chapter.Body.Length - head);
+                        stringBuilder.Append(chapter.Body.Substring(head, change.StartIndex - head));
+                        stringBuilder.Append("<mark id=\"" + change.Id + "\" class=\"highlight\">");
+                        stringBuilder.Append(change.CovenantValue);
+                        stringBuilder.Append("</mark>");
+                        head = change.EndIndex;
+                        modifiedText = stringBuilder.ToString();
+                        text = chapter.Body.Substring(head, chapter.Body.Length - head);
+                    }
                 }
 
                 result.AppendLine(modifiedText + text + "<br>");

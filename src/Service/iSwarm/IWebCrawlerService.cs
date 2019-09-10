@@ -17,7 +17,7 @@ namespace src.Service.iSwarm
 
         string GetLiquidityAdequacyRequirementsPageWithCovenants();
 
-        List<CovenantWebSearchResult> GetCovenants();
+        List<CovenantWebSearchResult> GetCovenants(string title);
 
         string GetPage(string pageTitle);
 
