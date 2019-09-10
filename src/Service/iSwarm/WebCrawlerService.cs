@@ -42,8 +42,10 @@ namespace src.Service.iSwarm
         {
             var contentList = repository.GetData();
 
+            var addedContent = new List<Tuple<string, string>>();
             foreach (var jsonString in contentList)
             {
+                
                 var json = JArray.Parse(jsonString);
 
                 List<ChapterEntity> returnedList = new List<ChapterEntity>();
@@ -79,11 +81,16 @@ namespace src.Service.iSwarm
 
                 List<ChapterEntity> entitiesToInsert = returnedList.Where(model => existingList.All(x => x.ChapterTitle != model.ChapterTitle)).ToList();
 
+                addedContent.AddRange(entitiesToInsert.Select(x => new Tuple<string, string>(x.PageTitle, x.ChapterTitle)));
+
                 foreach (var item in returnedList)
                 {
                     var existingItem = existingList.FirstOrDefault(model => model.ChapterTitle == item.ChapterTitle && model.PageTitle == item.PageTitle);
 
-                    if (existingItem != null && existingItem.Body != item.Body)
+                    var addedInCurrentSession =
+                        addedContent.Any(x => x.Item1 == item.PageTitle && x.Item2 == item.ChapterTitle);
+
+                    if (existingItem != null && existingItem.Body != item.Body && !addedInCurrentSession)
                     {
                         var newEntity = new ChapterEntity()
                         {
@@ -97,6 +104,7 @@ namespace src.Service.iSwarm
 
                         this.FindChanges(newEntity, existingItem);
                         entitiesToInsert.Add(newEntity);
+                        addedContent.Add(new Tuple<string, string>(newEntity.PageTitle, newEntity.ChapterTitle));
                     }
                 }
 
@@ -113,7 +121,7 @@ namespace src.Service.iSwarm
             var result = new StringBuilder();
             var chapters = this.chapterMongoRepository.GetAll().Where(x =>
                 x.PageTitle ==
-                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                    "Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
 
             foreach (var chapter in chapters)
@@ -149,7 +157,7 @@ namespace src.Service.iSwarm
             var result = new StringBuilder();
             var chapters = this.chapterMongoRepository.GetAll().Where(x =>
                 x.PageTitle ==
-                    "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                    "Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview").OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
 
             foreach (var chapter in chapters)
@@ -181,7 +189,7 @@ namespace src.Service.iSwarm
 
         public List<CovenantWebSearchResult> GetCovenants()
         {
-            return this.covenantsWebRepository.Find(x => x.ChapterId == ObjectId.Parse("5d700f0275eed25db8d34895")).ToList();
+            return this.covenantsWebRepository.Find(x => x.PageTitle == "Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview").ToList();
         }
 
         private void FindChanges(ChapterEntity newVersion, ChapterEntity oldVersion)
@@ -249,7 +257,7 @@ namespace src.Service.iSwarm
                 string modifiedText = string.Empty;
                 string text = chapter.Body;
                 var chapterChanges =
-                    this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle);
+                    this.changesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle).OrderBy(x => x.StartIndex);
 
 
                 var head = 0;

@@ -20,7 +20,7 @@ namespace src.Controllers
         [HttpGet]
         public string Get()
         {
-            var result = this.service.GetPage("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
+            var result = this.service.GetPage("Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview");
             return result;
         }
 
@@ -28,7 +28,7 @@ namespace src.Controllers
         
         public string GetWeb()
         {
-            var result = this.service.GetPageWithCovenants("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
+            var result = this.service.GetPageWithCovenants("Liquidity Adequacy Requirements (LAR): Chapter 1 – Overview");
             return result;
         }
 
