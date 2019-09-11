@@ -7,9 +7,11 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore.Internal;
 using MongoDB.Bson;
 using Newtonsoft.Json.Linq;
+using src.Hubs;
 using src.Models;
 using src.Repository;
 using src.Service.Document;
@@ -30,16 +32,20 @@ namespace src.Service.iSwarm
 
         private string[] paragraphSeparators = new[] { "\n", "." };
 
-        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository)
+        private readonly IHubContext<NotifyHub> hubContext;
+
+        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository, IHubContext<NotifyHub> hubContext)
         {
             this.chapterMongoRepository = chapterMongoRepository;
             this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
             this.textParserService = textParserService;
             this.covenantsWebRepository = covenantsWebRepository;
+            this.hubContext = hubContext;
         }
 
         public void HandleData()
         {
+            this.hubContext.Clients.All.SendAsync("sendToAll", "some text").Wait();
             var contentList = repository.GetData();
 
             var addedContent = new List<Tuple<string, string>>();

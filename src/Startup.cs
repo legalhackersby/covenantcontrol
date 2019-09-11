@@ -10,6 +10,7 @@ using src.Service;
 using src.Service.Document;
 using src.Service.Upload;
 using System.Security.Authentication;
+using Microsoft.AspNetCore.SignalR;
 using Quartz;
 using Quartz.Impl;
 using src.Hubs;
@@ -32,6 +33,13 @@ namespace src
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod().AllowAnyHeader()
+                        .AllowAnyOrigin()
+                        .AllowCredentials();
+                }));
             services.AddSignalR();
 
             var mongoUrl = Configuration.GetValue<string>("MongoUrl");
@@ -67,6 +75,7 @@ namespace src
             services.AddTransient<IChapterMongoRepository, ChapterMongoRepository>();
             services.AddTransient<IChangesSearchResultMongoRepository, ChangesSearchResultMongoRepository>();
             services.AddTransient<ICovenantsWebRepository, CovenantsWebRepository>();
+            
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -89,13 +98,18 @@ namespace src
                 app.UseExceptionHandler("/Error");
                 //app.UseHsts();
             }
-
+            /*app.Use(async (context, next) =>
+            {
+                context.RequestServices
+                    .GetRequiredService<IHubContext<NotifyHub>>();
+            });*/
 
             //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCors("*");
+            app.UseCors("CorsPolicy");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
