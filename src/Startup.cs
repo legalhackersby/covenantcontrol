@@ -10,6 +10,7 @@ using src.Service;
 using src.Service.Document;
 using src.Service.Upload;
 using System.Security.Authentication;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.SignalR;
 using Quartz;
 using Quartz.Impl;
@@ -98,18 +99,17 @@ namespace src
                 app.UseExceptionHandler("/Error");
                 //app.UseHsts();
             }
-            /*app.Use(async (context, next) =>
+          /* app.Use(async (context, next) =>
             {
                 context.RequestServices
                     .GetRequiredService<IHubContext<NotifyHub>>();
-            });*/
+            })*/;
 
             //app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseCors("*");
-            app.UseCors("CorsPolicy");
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -129,9 +129,9 @@ namespace src
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotifyHub>("/notify");
+                
             });
 
-            Debugger.Launch();
             Scheduler.Start(app.ApplicationServices.GetService<IWebCrawlerService>());
         }
     }

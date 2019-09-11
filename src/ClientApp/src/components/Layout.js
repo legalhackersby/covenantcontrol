@@ -21,7 +21,7 @@ export class Layout extends Component {
     };
 
     // create the connection instance
-    let hubConnection = new HubConnectionBuilder()
+   /* let hubConnection = new HubConnectionBuilder()
       .withUrl("http://localhost:56248/notify", options)
       .withHubProtocol(protocol)
       .build();
@@ -35,7 +35,7 @@ export class Layout extends Component {
     this.state.hubConnection.on('sendToAll', (receivedMessage) => {
       console.log(receivedMessage);
       });
-    });
+    });*/
   }
 
   render() {

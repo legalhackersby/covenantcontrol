@@ -8,9 +8,19 @@ namespace src.Hubs
 {
     public class NotifyHub : Hub
     {
-        public async Task Send(string message)
+        public async Task SendAsync(string message)
         {
             await this.Clients.All.SendAsync("sendToAll", message);
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }

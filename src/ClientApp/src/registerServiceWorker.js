@@ -66,10 +66,29 @@ function registerValidSW(swUrl) {
           }
         };
       };
+     
+        registration.pushManager.subscribe({
+          userVisibleOnly: true
+      }).then(function (pushSubscription) {
+          fetch('/notify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(pushSubscription)
+          }).then(function (response) {
+              if (response.ok) {
+                  console.log('Successfully subscribed for Push Notifications');
+              } else {
+                  console.log('Failed to store the Push Notifications subscription on server');
+              }
+          }).catch(function (error) {
+              console.log('Failed to store the Push Notifications subscription on server: ' + error);
+          });
+      
     })
     .catch(error => {
       console.error('Error during service worker registration:', error);
     });
+  });
 }
 
 function checkValidServiceWorker(swUrl) {
