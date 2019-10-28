@@ -183,6 +183,11 @@ return;
         
     }
 
+    refreshData() {
+        axios.get(`${Config.apiHost}/api/WebCrawler/RefreshData`);               
+                    
+    }
+
     render() {
         return (
             <Grid fluid className={'content-container'}>
@@ -191,7 +196,13 @@ return;
                         <Panel>
                             <Panel.Heading>
                                 <Row>
-                                    <Col sm={2}></Col>
+                                    <Col sm={2}>                                   
+                                            
+                                                <button onClick={this.refreshData.bind(this)} className="file-upload btn btn-primary">
+                                                    Refresh Data
+                                                </button>                                       
+                                        
+                                    </Col>
                                     <Col sm={2}>
                                         <Link to={{ pathname: '/exampleDocument/'}}>
                                             <button class="btn btn-primary">Example Document</button>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -17,7 +18,6 @@ namespace src.Repository
         public WebCrawlerRepository()
         {
             this.client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "fe8ba2b9adb342dcb8e6bcdccb7e3a54");
-
         }
 
         public List<string> GetData()
@@ -50,7 +50,7 @@ namespace src.Repository
                 {
                     resultList.Add(content); 
                 }
-
+                
                 i++;
             } 
 
