@@ -15,6 +15,7 @@ using src.Hubs;
 using src.Models;
 using src.Repository;
 using src.Service.Document;
+using WebPush;
 
 namespace src.Service.iSwarm
 {
@@ -34,18 +35,17 @@ namespace src.Service.iSwarm
 
         private readonly IHubContext<NotifyHub> hubContext;
 
-        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository, IHubContext<NotifyHub> hubContext)
+        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository)
         {
             this.chapterMongoRepository = chapterMongoRepository;
             this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
             this.textParserService = textParserService;
             this.covenantsWebRepository = covenantsWebRepository;
-            this.hubContext = hubContext;
         }
 
         public void HandleData()
         {
-            this.hubContext.Clients.All.SendAsync("sendToAll", "some text").Wait();
+            var sadadsd = new WebPushClient();
             var contentList = repository.GetData();
 
             var addedContent = new List<Tuple<string, string>>();
@@ -66,6 +66,7 @@ namespace src.Service.iSwarm
                     entity.ChapterTitle = (string)fullName.FirstOrDefault();
                     entity.Source = (string)item["url"];
                     entity.CreatedTime = DateTime.Now;
+                    entity.JsonContent = this.ParseJsonContent(item["content_json"]);
                     returnedList.Add(entity);
                 }
 
@@ -120,6 +121,25 @@ namespace src.Service.iSwarm
                     this.FindCovenants(entitiesToInsert);
                 }
             }
+        }
+
+        private Paragraph ParseJsonContent(JToken jsonParagraph)
+        {
+            var result = new Paragraph();
+            result.Text = (string)jsonParagraph["paragraphText"] ?? string.Empty;
+            result.HeaderLevel = (string)jsonParagraph["headerLevel"] ?? string.Empty;
+            result.Type = (string)jsonParagraph["type"] ?? string.Empty;
+            var list = new List<Paragraph>();
+            if (jsonParagraph["subParagraphs"] != null)
+            {
+                foreach (var jsonSubParagraph in jsonParagraph["subParagraphs"])
+                {
+                    list.Add(this.ParseJsonContent(jsonSubParagraph));
+                }
+            }
+
+            result.SubParagraphs = list;
+            return result;
         }
 
         public string GetLiquidityAdequacyRequirementsPage()

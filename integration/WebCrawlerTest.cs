@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using src.Hubs;
 using src.Repository;
 using src.Service.Document;
 using src.Service.iSwarm;
@@ -14,7 +15,7 @@ namespace integration
         {
             var client = new MongoClient();
             var database = client.GetDatabase("testCovenantControl");
-            this.webCrawlerService = new WebCrawlerService(new ChapterMongoRepository(database), new ChangesSearchResultMongoRepository(database),  new TextParserService(new WordsPercentageMatchCovenantSearchStrategy()),new CovenantsWebRepository(database) );
+            this.webCrawlerService = new WebCrawlerService(new ChapterMongoRepository(database), new ChangesSearchResultMongoRepository(database),  new TextParserService(new WordsPercentageMatchCovenantSearchStrategy()),new CovenantsWebRepository(database));
         }
 
         [Fact]

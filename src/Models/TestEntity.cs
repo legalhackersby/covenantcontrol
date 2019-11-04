@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Security.AccessControl;
+using System.Collections.Generic;
+using Lucene.Net.Support.C5;
 
 namespace src.Models
 {
-    public class ChapterEntity : BaseEntity
+    public class TestEntity : BaseEntity
     {
         public string Source { get; set; }
 
@@ -13,8 +14,6 @@ namespace src.Models
 
         public string Body { get; set; }
 
-        public DateTime CreatedTime { get; set; }
-
-        public Paragraph JsonContent { get; set; }
+        public List<TestEntity> SubEntities { get; set; }
     }
 }
