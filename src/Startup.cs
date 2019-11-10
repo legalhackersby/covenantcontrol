@@ -76,6 +76,9 @@ namespace src
             services.AddTransient<IChapterMongoRepository, ChapterMongoRepository>();
             services.AddTransient<IChangesSearchResultMongoRepository, ChangesSearchResultMongoRepository>();
             services.AddTransient<ICovenantsWebRepository, CovenantsWebRepository>();
+            services
+                .AddTransient<IJsonContentChangesSearchResultMongoRepository,
+                    JsonContentChangesSearchResultMongoRepository>();
             
 
             // In production, the React files will be served from this directory

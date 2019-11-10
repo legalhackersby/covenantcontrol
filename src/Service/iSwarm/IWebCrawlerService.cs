@@ -21,6 +21,8 @@ namespace src.Service.iSwarm
 
         string GetPage(string pageTitle);
 
+        string GetPageForJsonContent(string pageTitle);
+
         string GetPageWithCovenants(string pageTitle);
     }
 }

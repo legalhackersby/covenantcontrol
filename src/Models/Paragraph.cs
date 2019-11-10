@@ -2,7 +2,7 @@
 
 namespace src.Models
 {
-    public class Paragraph
+    public class Paragraph : BaseEntity
     {
         public string Type { get; set; }
 

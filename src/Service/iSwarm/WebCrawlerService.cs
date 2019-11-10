@@ -31,16 +31,19 @@ namespace src.Service.iSwarm
 
         private readonly ICovenantsWebRepository covenantsWebRepository;
 
+        private readonly IJsonContentChangesSearchResultMongoRepository jsonContentChangesSearchResultMongoRepository;
+
         private string[] paragraphSeparators = new[] { "\n", "." };
 
         private readonly IHubContext<NotifyHub> hubContext;
 
-        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository)
+        public WebCrawlerService(IChapterMongoRepository chapterMongoRepository, IChangesSearchResultMongoRepository changesSearchResultMongoRepository, ITextParserService textParserService, ICovenantsWebRepository covenantsWebRepository, IJsonContentChangesSearchResultMongoRepository jsonContentChangesSearchResultMongoRepository)
         {
             this.chapterMongoRepository = chapterMongoRepository;
             this.changesSearchResultMongoRepository = changesSearchResultMongoRepository;
             this.textParserService = textParserService;
             this.covenantsWebRepository = covenantsWebRepository;
+            this.jsonContentChangesSearchResultMongoRepository = jsonContentChangesSearchResultMongoRepository;
         }
 
         public void HandleData()
@@ -110,6 +113,7 @@ namespace src.Service.iSwarm
                         };
 
                         this.FindChanges(newEntity, existingItem);
+                        this.FindJsonContentChanges(newEntity, existingItem);
                         entitiesToInsert.Add(newEntity);
                         addedContent.Add(new Tuple<string, string>(newEntity.PageTitle, newEntity.ChapterTitle));
                     }
@@ -126,6 +130,7 @@ namespace src.Service.iSwarm
         private Paragraph ParseJsonContent(JToken jsonParagraph)
         {
             var result = new Paragraph();
+            result.Id = ObjectId.GenerateNewId();
             result.Text = (string)jsonParagraph["paragraphText"] ?? string.Empty;
             result.HeaderLevel = (string)jsonParagraph["headerLevel"] ?? string.Empty;
             result.Type = (string)jsonParagraph["type"] ?? string.Empty;
@@ -260,6 +265,42 @@ namespace src.Service.iSwarm
             }
         }
 
+        private void FindJsonContentChanges(ChapterEntity newVersion, ChapterEntity oldVersion)
+        {
+            var changesList = new List<JsonContentChangesSearchEntity>();
+            this.FindJsonContentChangesInternal(changesList, newVersion.JsonContent, oldVersion.JsonContent, newVersion.ChapterTitle, newVersion.PageTitle);
+
+            if (changesList.Count > 0)
+            {
+                this.jsonContentChangesSearchResultMongoRepository.DeleteMany(x => x.ChapterTitle == newVersion.ChapterTitle && x.PageTitle == newVersion.PageTitle);
+                this.jsonContentChangesSearchResultMongoRepository.InsertMany(changesList);
+            }
+        }
+
+        private void FindJsonContentChangesInternal(List<JsonContentChangesSearchEntity> resultList, Paragraph newParagraph, Paragraph oldParagraph, string chapterTitle, string pageTitle)
+        {
+            if (newParagraph.Text != null && oldParagraph.Text != null && newParagraph.Text != oldParagraph.Text)
+            {
+                var changes = new JsonContentChangesSearchEntity();
+                changes.NewParagraphId = newParagraph.Id;
+                changes.OldParagraphId = oldParagraph.Id;
+                changes.ChapterTitle = chapterTitle;
+                changes.PageTitle = pageTitle;
+                resultList.Add(changes);
+            }
+
+            var newSubParagraphs = newParagraph.SubParagraphs.ToList();
+            var oldSubParagraphs = oldParagraph.SubParagraphs.ToList();
+
+            if (newSubParagraphs.Count > 0 && oldSubParagraphs.Count > 0)
+            {
+                for (int i = 0; i < newSubParagraphs.Count; i++)
+                {
+                    this.FindJsonContentChangesInternal(resultList, newSubParagraphs[i], oldSubParagraphs[i], chapterTitle, pageTitle);
+                }
+            }
+        }
+
         public List<string> GetPageTitles()
         {
             var result = this.chapterMongoRepository.GetAll().Select(x => x.PageTitle);
@@ -322,6 +363,77 @@ namespace src.Service.iSwarm
             }
 
             return result.ToString().Replace(Environment.NewLine, "<br>").Replace("\n", "<br>").Replace("\r", "<br>");
+        }
+
+        public string GetPageForJsonContent(string pageTitle)
+        {
+            var result = new StringBuilder();
+            var chapters = this.chapterMongoRepository.GetAll().Where(x =>
+                x.PageTitle == pageTitle).OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
+                (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
+
+            foreach (var chapter in chapters)
+            {
+               
+                var chapterChanges =
+                    this.jsonContentChangesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle).ToList();
+                var stringBuilder = new StringBuilder();
+                this.ParseParagraphsToString(stringBuilder, chapter.JsonContent, chapterChanges);
+            }
+
+           /* if (pageTitle != "Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)")
+            {
+                result.Replace(".", ".<br>");
+            }*/
+
+            return result.ToString();
+        }
+
+        private void ParseParagraphsToString(StringBuilder result, Paragraph paragraph, List<JsonContentChangesSearchEntity> changes)
+        {
+            switch (paragraph.Type)
+            {
+                case "HEADER":
+                    var currentParagraphChanges = changes.FirstOrDefault(x => x.NewParagraphId == paragraph.Id);
+                    if (currentParagraphChanges != null)
+                    {
+                        result.AppendFormat("<h{0}><mark id=\"{2}\" class=\"highlight\">{1}</mark></h{0}>", paragraph.HeaderLevel, paragraph.Text, currentParagraphChanges.Id);
+                    }
+                    else
+                    {
+                        result.AppendFormat("<h{0}>{1}</h{0}>", paragraph.HeaderLevel, paragraph.Text);
+                    }
+
+                    foreach (var subParagraph in paragraph.SubParagraphs)
+                    {
+                        this.ParseParagraphsToString(result, subParagraph, changes);
+                    }
+                    break;
+                case "LIST":
+                    result.AppendFormat("<ol>");
+                    foreach (var subParagraph in paragraph.SubParagraphs)
+                    {
+                        this.ParseParagraphsToString(result, subParagraph, changes);
+                    }
+                    result.AppendFormat("</ol>");
+                    break;
+                case "LIST_ITEM":
+                    currentParagraphChanges = changes.FirstOrDefault(x => x.NewParagraphId == paragraph.Id);
+                    if (currentParagraphChanges != null)
+                    {
+                        result.AppendFormat("<li><mark id=\"{1}\" class=\"highlight\">{0}</mark></li>", paragraph.Text, currentParagraphChanges.Id);
+                    }
+                    else
+                    {
+                        result.AppendFormat("<li>{0}</li>", paragraph.Text);
+                    }
+
+                    foreach (var subParagraph in paragraph.SubParagraphs)
+                    {
+                        this.ParseParagraphsToString(result, subParagraph, changes);
+                    }
+                    break;
+            }
         }
 
         public string GetPageWithCovenants(string pageTitle)
