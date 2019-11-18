@@ -367,7 +367,7 @@ namespace src.Service.iSwarm
 
         public string GetPageForJsonContent(string pageTitle)
         {
-            var result = new StringBuilder();
+            var stringBuilder = new StringBuilder();
             var chapters = this.chapterMongoRepository.GetAll().Where(x =>
                 x.PageTitle == pageTitle).OrderBy(x => x.ChapterTitle).ThenByDescending(x => x.CreatedTime).Distinct(
                 (first, second) => { return first.ChapterTitle == second.ChapterTitle; }).ToList();
@@ -377,7 +377,7 @@ namespace src.Service.iSwarm
                
                 var chapterChanges =
                     this.jsonContentChangesSearchResultMongoRepository.Find(x => x.ChapterTitle == chapter.ChapterTitle && x.PageTitle == chapter.PageTitle).ToList();
-                var stringBuilder = new StringBuilder();
+                
                 this.ParseParagraphsToString(stringBuilder, chapter.JsonContent, chapterChanges);
             }
 
@@ -386,7 +386,7 @@ namespace src.Service.iSwarm
                 result.Replace(".", ".<br>");
             }*/
 
-            return result.ToString();
+            return stringBuilder.ToString();
         }
 
         private void ParseParagraphsToString(StringBuilder result, Paragraph paragraph, List<JsonContentChangesSearchEntity> changes)
