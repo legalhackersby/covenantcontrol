@@ -24,6 +24,13 @@ namespace src.Controllers
             return result;
         }
 
+        [HttpGet("getJson")]
+        public string GetPageForJsonContent()
+        {
+            var result = this.service.GetPageForJsonContent("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools");
+            return result;
+        }
+
         [HttpGet("getWeb")]
         
         public string GetWeb()
