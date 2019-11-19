@@ -109,7 +109,8 @@ namespace src.Service.iSwarm
                             CreatedTime = DateTime.Now,
                             Id = ObjectId.GenerateNewId(),
                             PageTitle = item.PageTitle,
-                            Source = item.Source
+                            Source = item.Source,
+                            JsonContent = item.JsonContent
                         };
 
                         this.FindChanges(newEntity, existingItem);
