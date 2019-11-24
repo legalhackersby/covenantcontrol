@@ -109,7 +109,8 @@ namespace src.Service.iSwarm
                             CreatedTime = DateTime.Now,
                             Id = ObjectId.GenerateNewId(),
                             PageTitle = item.PageTitle,
-                            Source = item.Source
+                            Source = item.Source,
+                            JsonContent = item.JsonContent
                         };
 
                         this.FindChanges(newEntity, existingItem);
@@ -294,9 +295,39 @@ namespace src.Service.iSwarm
 
             if (newSubParagraphs.Count > 0 && oldSubParagraphs.Count > 0)
             {
+                if (newSubParagraphs.Count == oldSubParagraphs.Count)
+                {
+                    for (int i = 0; i < newSubParagraphs.Count; i++)
+                    {
+                        this.FindJsonContentChangesInternal(resultList, newSubParagraphs[i], oldSubParagraphs[i], chapterTitle, pageTitle);
+                    }
+                }
+                else
+                {
+                    foreach (var subParagraph in newSubParagraphs)
+                    {
+                        this.MarkAllParagraphsAsChanged(resultList, subParagraph, chapterTitle, pageTitle);
+                    }
+                }
+               
+            }
+        }
+
+        private void MarkAllParagraphsAsChanged(List<JsonContentChangesSearchEntity> resultList, Paragraph newParagraph, string chapterTitle, string pageTitle)
+        {
+            var changes = new JsonContentChangesSearchEntity();
+            changes.NewParagraphId = newParagraph.Id;
+            changes.OldParagraphId = newParagraph.Id;
+            changes.ChapterTitle = chapterTitle;
+            changes.PageTitle = pageTitle;
+            resultList.Add(changes);
+
+            var newSubParagraphs = newParagraph.SubParagraphs.ToList();
+            if (newSubParagraphs.Count > 0)
+            {
                 for (int i = 0; i < newSubParagraphs.Count; i++)
                 {
-                    this.FindJsonContentChangesInternal(resultList, newSubParagraphs[i], oldSubParagraphs[i], chapterTitle, pageTitle);
+                    this.MarkAllParagraphsAsChanged(resultList, newSubParagraphs[i], chapterTitle, pageTitle);
                 }
             }
         }
