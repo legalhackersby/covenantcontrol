@@ -334,7 +334,7 @@ namespace src.Service.iSwarm
 
         public List<string> GetPageTitles()
         {
-            var result = this.chapterMongoRepository.GetAll().Select(x => x.PageTitle);
+            var result = this.chapterMongoRepository.GetAll().Select(x => x.PageTitle).Distinct();
             return result.ToList();
         }
 

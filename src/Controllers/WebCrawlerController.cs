@@ -86,5 +86,19 @@ namespace src.Controllers
             var result = this.service.GetPageWithCovenants("Liquidity Adequacy Requirements (LAR): Chapter 6 – Intraday Liquidity Monitoring Tools (changed)");
             return result;
         }
+
+        [HttpGet("getPages")]
+        public List<string> GetPages()
+        {
+            var result = this.service.GetPageTitles();
+            return result;
+        }
+
+        [HttpGet("getPage")]
+        public string GetPage([FromBody]string pageTitle)
+        {
+            var result = this.service.GetPageForJsonContent(pageTitle);
+            return result;
+        }
     }
 }

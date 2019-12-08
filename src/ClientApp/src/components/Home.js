@@ -51,6 +51,13 @@ export class Home extends Component {
         super(props);
 
         this.state = {};
+        this.state.pageTitles = []; 
+        axios.get(`${Config.apiHost}/api/WebCrawler/getPages`)
+                    .then(response => {
+                        this.setState({ ...this.state, pageTitles: response.data });                   
+                    })
+
+       
     }
 
     handleSelect(event) {
@@ -231,7 +238,12 @@ return;
                                 </Row>
                             </Panel.Heading>
                             <Panel.Body className={'full-text'}>
-                                <div dangerouslySetInnerHTML={{ __html: this.state.fileContent }}></div>
+                                <div>
+                            {this.state.pageTitles.map(pageTitle => (
+                                <li>{pageTitle}</li>
+                            ))
+                            }
+                            </div>
                             </Panel.Body>
                         </Panel>
                     </Col>
