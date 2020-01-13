@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using src.Models;
 using src.Service.iSwarm;
 
 namespace src.Controllers
@@ -94,10 +95,10 @@ namespace src.Controllers
             return result;
         }
 
-        [HttpGet("getPage")]
-        public string GetPage([FromBody]string pageTitle)
+        [HttpPost("getPage")]
+        public string GetPage([FromBody]GetPageRequest pageTitle)
         {
-            var result = this.service.GetPageForJsonContent(pageTitle);
+            var result = this.service.GetPageForJsonContent(pageTitle.PageTitle);
             return result;
         }
     }

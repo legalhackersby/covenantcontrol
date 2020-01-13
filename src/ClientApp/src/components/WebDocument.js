@@ -55,9 +55,10 @@ export class WebDocument extends Component {
     }
 
     handleSelect() {
-      
-                axios.get(`${Config.apiHost}/api/WebCrawler/getJson`)
-                    .then(response => {
+                axios.post(`${Config.apiHost}/api/WebCrawler/getPage`, {
+                    pageTitle: this.props.location.pageTitle
+                } )
+                    .then(response => { 
                         let fileContent = response.data;
 
                         this.setState({ ...this.state, fileContent: fileContent }, this.updateDocument);

@@ -202,7 +202,7 @@ return;
                     <Col sm={8}>
                         <Panel>
                             <Panel.Heading>
-                                <Row>
+                               <Row>
                                     <Col sm={2}>                                   
                                             
                                                 <button onClick={this.refreshData.bind(this)} className="file-upload btn btn-primary">
@@ -240,7 +240,9 @@ return;
                             <Panel.Body className={'full-text'}>
                                 <div>
                             {this.state.pageTitles.map(pageTitle => (
-                                <li>{pageTitle}</li>
+                                <Link to={{ pathname: '/webDocument/', pageTitle: pageTitle}}>
+                                    <li class="pageListItem">{pageTitle}</li>
+                                </Link>
                             ))
                             }
                             </div>
